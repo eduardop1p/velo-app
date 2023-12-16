@@ -34,7 +34,7 @@ export interface CryptoType {
 const getData = async (url: string, activeCrypto: ActiveCryptoType) => {
   const res = await fetch(url, {
     method: 'GET',
-    next: { revalidate: 10 },
+    next: { revalidate: 60 },
   });
   const metaData = await res.json();
   return formatDataCrypto(activeCrypto, metaData.RAW);

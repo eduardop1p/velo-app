@@ -15,3 +15,14 @@ svg{
   display: inline-block !important;
   fill: inherit;
 }
+
+.swiper-pagination{
+  bottom: -2px !important;
+}
+.swiper-pagination-bullet{
+  background-color: #b1d2ffff !important;
+  opacity: 1 !important;
+}
+.swiper-pagination-bullet-active{
+  background-color: #195ab4ff !important;
+}

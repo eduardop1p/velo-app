@@ -33,6 +33,19 @@ const config: Config = {
       borderWidth: {
         '1': '1px',
       },
+      keyframes: {
+        sliderUp: {
+          '0%': {
+            transform: 'translateY(100%)',
+          },
+          '100%': {
+            transform: 'translateY(0)',
+          },
+        },
+      },
+      animation: {
+        sliderUp: 'sliderUp 800ms ease-in-out 1',
+      },
     },
   },
   plugins: [],

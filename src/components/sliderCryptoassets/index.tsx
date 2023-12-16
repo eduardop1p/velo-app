@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
@@ -13,7 +13,7 @@ import {
   ReferenceLine,
   ResponsiveContainer,
 } from 'recharts';
-import { Autoplay, Pagination, Navigation } from 'swiper/modules';
+import { Autoplay, Pagination } from 'swiper/modules';
 import Link from 'next/link';
 
 import { CryptoType } from '../header';
@@ -40,22 +40,34 @@ export default function SliderCryptoassets({
     }
   }, [initialRender, data, dataCryptoassets]);
 
+  const handleonSlideChange = () => {
+    const lines = document.querySelectorAll('.recharts-line');
+    lines.forEach(line => {
+      line.classList.add('animate-sliderUp');
+      setTimeout(() => {
+        line.classList.remove('animate-sliderUp');
+      }, 800);
+    });
+  };
+
   return (
     <Swiper
       spaceBetween={30}
       centeredSlides={true}
       autoplay={{
-        delay: 2500,
+        delay: 4000,
         disableOnInteraction: false,
       }}
+      onSlideChange={handleonSlideChange}
       pagination={{
         clickable: true,
       }}
-      navigation={true}
+      navigation={false}
       loop={true}
-      modules={[Pagination, Navigation]}
+      modules={[Pagination, Autoplay]}
       style={{
         width: '100%',
+        height: '416px',
       }}
     >
       {data.map((valData, index) => (
@@ -230,6 +242,7 @@ function GraphicLine({ fsym }: { fsym: string }) {
           `${process.env.NEXT_PUBLIC_CRYPTO_API_URL_HISTOHOUR}&fsym=${fsym}&limit=${limit}`,
           {
             method: 'GET',
+            next: { revalidate: 60 },
           }
         );
         const data = await response.json();
@@ -271,11 +284,10 @@ function GraphicLine({ fsym }: { fsym: string }) {
       >
         <XAxis dataKey="timestamp" hide />
         <YAxis type="number" domain={['auto', 'auto']} hide />
-        {/* <Tooltip /> */}
-        {/* <CartesianGrid stroke="#f5f5f5" /> */}
         <Line
           type="monotone"
           dataKey="open"
+          // className="animate-sliderUp"
           stroke={
             cryptoData[0].open > cryptoData[cryptoData.length - 1].close
               ? '#f76970ff'
