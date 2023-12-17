@@ -11,6 +11,7 @@ export const metadata: Metadata = {
 };
 
 import Header from '@/components/header';
+import Footer from '@/components/footer';
 import AcceptCookies from '@/components/acceptCookies';
 
 const inter = Poppins({
@@ -36,6 +37,7 @@ export default function RootLayout({
         <Header />
         {!cookiesAccepted && <AcceptCookies />}
         {children}
+        <Footer />
       </body>
     </html>
   );

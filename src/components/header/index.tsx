@@ -81,7 +81,7 @@ export default async function Header() {
   return (
     <header className="h-20 fixed top-0 flex w-full flex-row items-center justify-between bg-primary px-24 z-10">
       <div className="flex flex-none items-center gap-20">
-        <LogoTitle fontSize="text-4xl" />
+        <LogoTitle fontSize="text-4xl" color="text-black" />
         <nav className="flex gap-8">
           <Link href="/who-we-are" className="cursor-pointer text-sm">
             Who we are

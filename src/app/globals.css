@@ -17,7 +17,7 @@ svg{
 }
 
 .swiper-pagination{
-  bottom: -2px !important;
+  bottom: 0 !important;
 }
 .swiper-pagination-bullet{
   background-color: #b1d2ffff !important;

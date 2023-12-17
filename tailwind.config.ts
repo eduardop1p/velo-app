@@ -25,10 +25,12 @@ const config: Config = {
         'blue-control-slider-active': '#195ab4ff',
         'red-graphic': '#f76970ff',
         'gray-section': '#f6f6f6',
+        'gray-section-2': '#f5f5f5ff',
         'black-section': '#101010ff',
         'gray-000000b3': '#000000b3',
         'gray-00000033': '#00000033',
         'rgba-0-0-0-1': 'rgba(0,0,0,.1)',
+        'footer-black': '#101010ff',
       },
       borderWidth: {
         '1': '1px',

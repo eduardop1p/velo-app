@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
@@ -57,6 +57,7 @@ export default function SliderCryptoassets({
       autoplay={{
         delay: 4000,
         disableOnInteraction: false,
+        pauseOnMouseEnter: true,
       }}
       onSlideChange={handleonSlideChange}
       pagination={{
@@ -67,7 +68,7 @@ export default function SliderCryptoassets({
       modules={[Pagination, Autoplay]}
       style={{
         width: '100%',
-        height: '416px',
+        height: '426px',
       }}
     >
       {data.map((valData, index) => (

@@ -1,3 +1,9 @@
-export default function LogoTitle({ fontSize }: { fontSize: string }) {
-  return <h1 className={`${fontSize} font-bold text-black`}>velo</h1>;
+export default function LogoTitle({
+  fontSize,
+  color,
+}: {
+  fontSize: string;
+  color: string;
+}) {
+  return <h1 className={`${fontSize} font-bold ${color}`}>velo</h1>;
 }
