@@ -44,7 +44,13 @@ export default function Products({
   const [showCrypto, setShowCrypto] = useState<ActiveCryptoType>('currencies');
 
   return (
-    <div>
+    <div
+      onBlur={event => {
+        if (!event.currentTarget.contains(event.relatedTarget))
+          setShowProducts(false);
+      }}
+      tabIndex={0}
+    >
       <div
         className="flex cursor-pointer items-center"
         onClick={() => setShowProducts(!showProducts)}

@@ -45,7 +45,7 @@ export default function TimeLineApp() {
         </div>
         <div className="absolute h-[164px] bg-blue w-1 left-[14px] -z-[1]"></div>
       </div>
-      <div className="flex gap-2 flex-col">
+      <div className="flex gap-4 flex-col">
         <span className="text-sm text-black">
           Or download our app and start your registration directly there.
         </span>

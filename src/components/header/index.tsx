@@ -79,7 +79,7 @@ export default async function Header() {
   )) as CryptoType[];
 
   return (
-    <header className="h-20 fixed top-0 flex w-full flex-row items-center justify-between bg-primary px-24 z-10">
+    <header className="h-20 fixed top-0 flex w-full flex-row items-center justify-between bg-primary px-20 z-10 border-b-2 border-black border-solid">
       <div className="flex flex-none items-center gap-20">
         <LogoTitle fontSize="text-4xl" color="text-black" />
         <nav className="flex gap-8">

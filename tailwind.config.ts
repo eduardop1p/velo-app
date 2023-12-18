@@ -48,6 +48,9 @@ const config: Config = {
       animation: {
         sliderUp: 'sliderUp 800ms ease-in-out 1',
       },
+      height: {
+        '-full-screen-80px': 'calc(100vh - 80px)',
+      },
     },
   },
   plugins: [],

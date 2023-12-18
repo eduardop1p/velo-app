@@ -8,10 +8,14 @@ import PrevUrl from '@/components/prevUrl';
 export default function Page() {
   return (
     <main className="mt-20">
-      <section className="w-full px-20 pt-16 pb-32 bg-black relative overflow-hidden">
-        <PrevUrl currentPage="About us" />
+      <section className="w-full px-20 py-14 h-[450px] bg-black relative overflow-hidden">
+        <PrevUrl
+          currentPage="About us"
+          color="text-primary"
+          fill="fill-primary"
+        />
         <div className="flex justify-between items-center gap-20">
-          <div className="mt-16 w-1/2 flex flex-col gap-4">
+          <div className="mt-16 w-1/3 flex flex-col gap-4">
             <h2 className="text-primary text-2xl font-normal">
               The platform that will facilitate your access to cryptocurrencies.
             </h2>
@@ -29,7 +33,7 @@ export default function Page() {
           alt="velo-img-8"
           width={440}
           height={460}
-          className="flex-none absolute bottom-0 right-28"
+          className="flex-none absolute bottom-0 right-24"
         />
       </section>
       <section className="bg-gray-section w-full flex flex-col gap-4 px-20 py-14">

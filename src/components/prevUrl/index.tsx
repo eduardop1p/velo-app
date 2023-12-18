@@ -1,10 +1,20 @@
 import { FaChevronRight } from 'react-icons/fa6';
 import Link from 'next/link';
 
-export default function PrevUrl({ currentPage }: { currentPage: string }) {
+export default function PrevUrl({
+  currentPage,
+  color,
+  fill,
+}: {
+  currentPage: string;
+  color: string;
+  fill: string;
+}) {
   return (
     <div className="flex items-center gap-1">
-      <div className="fill-primary w-4 h-4 flex justify-center items-center mb-[4px]">
+      <div
+        className={`${fill} w-4 h-4 flex justify-center items-center mb-[4px]`}
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           height="16"
@@ -16,14 +26,14 @@ export default function PrevUrl({ currentPage }: { currentPage: string }) {
       </div>
       <Link
         href="/"
-        className="text-primary text-[13px] font-normal leading-none"
+        className={`${color} text-[13px] font-normal leading-none`}
       >
         Home
       </Link>
-      <div className="fill-primary w-3 h-3 flex justify-center items-center  mb-1">
+      <div className={`${fill} w-3 h-3 flex justify-center items-center  mb-1`}>
         <FaChevronRight />
       </div>
-      <span className="text-primary text-[13px] font-normal leading-none">
+      <span className={`${color} text-[13px] font-normal leading-none`}>
         {currentPage}
       </span>
     </div>
