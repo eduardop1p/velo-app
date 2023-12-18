@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export default function LogoTitle({
   fontSize,
   color,
@@ -5,5 +7,9 @@ export default function LogoTitle({
   fontSize: string;
   color: string;
 }) {
-  return <h1 className={`${fontSize} font-bold ${color}`}>velo</h1>;
+  return (
+    <Link href="/" className={`${fontSize} font-bold ${color}`}>
+      velo
+    </Link>
+  );
 }

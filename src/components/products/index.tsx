@@ -131,46 +131,55 @@ export default function Products({
               cryptoActive="currencies"
               data={dataCurrencies}
               showCrypto={showCrypto}
+              setShowProducts={setShowProducts}
             />
             <ActiveCrypto
               cryptoActive="smart-contract"
               data={dataSmartContract}
               showCrypto={showCrypto}
+              setShowProducts={setShowProducts}
             />
             <ActiveCrypto
               cryptoActive="stablecoin"
               data={dataStablecoin}
               showCrypto={showCrypto}
+              setShowProducts={setShowProducts}
             />
             <ActiveCrypto
               cryptoActive="scalling"
               data={dataScalling}
               showCrypto={showCrypto}
+              setShowProducts={setShowProducts}
             />
             <ActiveCrypto
               cryptoActive="oracle"
               data={dataOracle}
               showCrypto={showCrypto}
+              setShowProducts={setShowProducts}
             />
             <ActiveCrypto
               cryptoActive="metaverse"
               data={dataMetaverse}
               showCrypto={showCrypto}
+              setShowProducts={setShowProducts}
             />
             <ActiveCrypto
               cryptoActive="defi"
               data={dataDefi}
               showCrypto={showCrypto}
+              setShowProducts={setShowProducts}
             />
             <ActiveCrypto
               cryptoActive="interoperability"
               data={dataInteroperability}
               showCrypto={showCrypto}
+              setShowProducts={setShowProducts}
             />
             <ActiveCrypto
               cryptoActive="nft"
               data={dataNFT}
               showCrypto={showCrypto}
+              setShowProducts={setShowProducts}
             />
           </div>
           <div className="flex w-1/4 justify-center pl-24">
@@ -238,10 +247,12 @@ function ActiveCrypto({
   data,
   showCrypto,
   cryptoActive,
+  setShowProducts,
 }: {
   data: CryptoType[];
   showCrypto: ActiveCryptoType;
   cryptoActive: ActiveCryptoType;
+  setShowProducts: Dispatch<SetStateAction<boolean>>;
 }) {
   const handleFormatNameCrypto = (val: string) =>
     val.toLowerCase().replaceAll(' ', '-');
@@ -256,6 +267,7 @@ function ActiveCrypto({
           key={handleFormatNameCrypto(val.NAME)}
           href={`/products/${handleFormatNameCrypto(val.NAME)}`}
           className="text-sm font-normal text-black transition-colors duration-200 hover:text-blue"
+          onClick={() => setShowProducts(state => !state)}
         >
           {val.NAME} - {val.FROMSYMBOL.toUpperCase()}
         </Link>

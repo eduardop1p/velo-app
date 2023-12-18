@@ -83,8 +83,8 @@ export default async function Header() {
       <div className="flex flex-none items-center gap-20">
         <LogoTitle fontSize="text-4xl" color="text-black" />
         <nav className="flex gap-8">
-          <Link href="/who-we-are" className="cursor-pointer text-sm">
-            Who we are
+          <Link href="/about-us" className="cursor-pointer text-sm text-black">
+            About us
           </Link>
           <Products
             dataCurrencies={dataCurrencies}
@@ -97,7 +97,10 @@ export default async function Header() {
             dataInteroperability={dataInteroperability}
             dataNFT={dataNFT}
           />
-          <Link href="/newsletter" className="cursor-pointer text-sm">
+          <Link
+            href="/newsletter"
+            className="cursor-pointer text-sm text-black"
+          >
             News
           </Link>
         </nav>

@@ -57,16 +57,16 @@ export default function Footer() {
             <Image
               width={126}
               height={68}
-              className="flex-none"
-              src="/assets/svg/velo-svg-6.svg"
-              alt="velo-svg-6"
+              className="flex-none rounded"
+              src="/assets/imgs/velo-img-11.png"
+              alt="velo-img-11"
             />
             <Image
               width={126}
               height={68}
-              className="flex-none"
-              src="/assets/svg/velo-svg-7.svg"
-              alt="velo-svg-7"
+              className="flex-none rounded"
+              src="/assets/imgs/velo-img-12.png"
+              alt="velo-img-12"
             />
           </div>
         </div>
