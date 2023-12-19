@@ -8,6 +8,7 @@ import { ActiveCryptoType } from '../products';
 
 export interface CryptoType {
   NAME: string;
+  DESCRIPTION: string;
   FROMSYMBOL: string;
   MEDIAN: number;
   PRICE: number;

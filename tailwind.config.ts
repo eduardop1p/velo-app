@@ -29,8 +29,10 @@ const config: Config = {
         'black-section': '#101010ff',
         'gray-000000b3': '#000000b3',
         'gray-00000033': '#00000033',
+        'gray-b8bec4ff': '#b8bec4ff',
         'rgba-0-0-0-1': 'rgba(0,0,0,.1)',
         'footer-black': '#101010ff',
+        'footer-gray': '#373737ff',
       },
       borderWidth: {
         '1': '1px',

@@ -12,7 +12,7 @@ export default function SliderCompleteApp() {
     <div className="w-[380px] h-[610px]">
       <Swiper
         spaceBetween={30}
-        centeredSlides={true}
+        slidesPerView={1}
         autoplay={{
           delay: 4000,
           disableOnInteraction: false,
