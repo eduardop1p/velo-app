@@ -37,23 +37,23 @@ export default async function Page() {
         <InfoCrypto
           cryptoName="Bitcoin"
           cryptoOverview="Invest in the cryptocurrency of the century safely"
-          cryptoPoints={{
-            point1: {
+          cryptoPoints={[
+            {
               title: 'Diversification',
               description:
                 'Driven by different risk and return factors than traditional investments, bitcoin can be strategic in building an investment portfolio.',
             },
-            point2: {
+            {
               title: 'Empowerment',
               description:
                 'Bitcoin is an asymmetrically attractive asset, that is, the chances of capturing gains that will multiply the portion of your capital allocated to the asset are greater than the risk of losing the entire amount invested.',
             },
-            point3: {
+            {
               title: 'Decentralization and innovation',
               description:
                 'Support an asset that promotes global financial inclusion through decentralization. Buying bitcoin and other cryptoactives is a way to directly expose yourself and invest in innovation.',
             },
-          }}
+          ]}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -261,31 +261,31 @@ export default async function Page() {
         <InvestOtherCryptos dataCryptoassets={dataCryptoassets} />
         <RegisterNewsletterCrypto />
         <CryptoDoubts
-          doubts={{
-            doubts1: {
+          doubts={[
+            {
               title: 'What is Bitcoin?',
               description:
                 'Bitcoin is a decentralized digital currency, allowing direct transactions between users without intermediaries. It works with blockchain technology, ensuring security and privacy.',
             },
-            doubts2: {
+            {
               title: 'How to buy Bitcoin?',
               description: `To acquire Bitcoin, you need a digital wallet and you can buy it from specialized brokers. Sign up, deposit money, choose the desired amount and that's it!`,
             },
-            doubts3: {
+            {
               title: 'How does Bitcoin security work?',
               description: `Bitcoin's security comes from the blockchain, a public, immutable record of transactions. Advanced encryption protects transactions and decentralization prevents fraud.`,
             },
-            doubts4: {
+            {
               title: 'What is the appreciation potential of Bitcoin?',
               description:
                 'The value of Bitcoin is volatile and can vary greatly. Their limited supply and growing interest can lead to significant appreciation, but remember that investments have risks.',
             },
-            doubts5: {
+            {
               title: 'Is it possible to use Bitcoin in everyday life?',
               description:
                 'Yes, more and more businesses are accepting Bitcoin as payment. However, its adoption is still limited compared to traditional currencies.',
             },
-          }}
+          ]}
         />
       </main>
       <Footer footerAddress />

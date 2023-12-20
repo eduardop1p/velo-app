@@ -1,6 +1,7 @@
 'use client';
 
 import { FaChevronDown, FaChevronRight } from 'react-icons/fa6';
+// import { useEffect, useState } from 'react';
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -43,6 +44,17 @@ export default function Products({
 }) {
   const [showProducts, setShowProducts] = useState(false);
   const [showCrypto, setShowCrypto] = useState<ActiveCryptoType>('currencies');
+
+  // const valueSession = sessionStorage.getItem(
+  //   'showCrypto'
+  // ) as ActiveCryptoType | null;
+  // const [showCrypto, setShowCrypto] = useState<ActiveCryptoType>(
+  //   valueSession || 'currencies'
+  // );
+
+  // useEffect(() => {
+  //   sessionStorage.setItem('showCrypto', showCrypto);
+  // }, [showCrypto]);
 
   return (
     <div
