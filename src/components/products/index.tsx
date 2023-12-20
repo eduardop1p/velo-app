@@ -5,6 +5,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import type { Dispatch, SetStateAction, ReactNode } from 'react';
+import { usePathname } from 'next/navigation';
 
 import { CryptoType } from '../header';
 
@@ -260,6 +261,8 @@ function ActiveCrypto({
   cryptoActive: ActiveCryptoType;
   setShowProducts: Dispatch<SetStateAction<boolean>>;
 }) {
+  const pathName = usePathname();
+
   const handleFormatNameCrypto = (val: string) =>
     val.toLowerCase().replaceAll(' ', '-');
 
@@ -272,7 +275,8 @@ function ActiveCrypto({
         <Link
           key={handleFormatNameCrypto(val.NAME)}
           href={`/products/${handleFormatNameCrypto(val.NAME)}`}
-          className="text-sm font-normal text-black transition-colors duration-200 hover:text-blue"
+          // eslint-disable-next-line
+          className={`text-sm font-normal transition-colors duration-200 hover:text-blue ${pathName === `/products/${handleFormatNameCrypto(val.NAME)}` ? 'text-blue' : 'text-black'}`}
           onClick={() => setShowProducts(state => !state)}
         >
           {val.NAME} - {val.FROMSYMBOL.toUpperCase()}

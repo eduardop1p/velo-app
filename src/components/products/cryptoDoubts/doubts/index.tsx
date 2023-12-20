@@ -3,7 +3,32 @@
 import { FaChevronDown } from 'react-icons/fa6';
 import type { MouseEvent } from 'react';
 
-export default function Doubts() {
+export default function Doubts({
+  doubts,
+}: {
+  doubts: {
+    doubts1: {
+      title: string;
+      description: string;
+    };
+    doubts2?: {
+      title: string;
+      description: string;
+    };
+    doubts3?: {
+      title: string;
+      description: string;
+    };
+    doubts4?: {
+      title: string;
+      description: string;
+    };
+    doubts5?: {
+      title: string;
+      description: string;
+    };
+  };
+}) {
   const handleClickDoubts = (event: MouseEvent<HTMLDivElement>) => {
     const p = event.currentTarget.querySelector('p');
     const button = event.currentTarget.querySelector('button');
@@ -25,7 +50,7 @@ export default function Doubts() {
       >
         <div className="w-full flex justify-between items-center cursor-pointer">
           <span className="text-black text-[15px] font-normal leading-none">
-            What is Bitcoin?
+            {doubts.doubts1?.title}
           </span>
           <button
             type="button"
@@ -35,9 +60,7 @@ export default function Doubts() {
           </button>
         </div>
         <p className="text-sm font-normal text-black hidden">
-          Bitcoin is a decentralized digital currency, allowing direct
-          transactions between users without intermediaries. It works with
-          blockchain technology, ensuring security and privacy.
+          {doubts.doubts1?.description}
         </p>
         <div className="w-full border-gray-00000033 border-solid border-b-[1.5px] flex-none"></div>
       </div>
@@ -47,7 +70,7 @@ export default function Doubts() {
       >
         <div className="w-full flex justify-between items-center cursor-pointer">
           <span className="text-black text-[15px] font-normal leading-none">
-            How to buy Bitcoin?
+            {doubts.doubts2?.title}
           </span>
           <button
             type="button"
@@ -57,9 +80,7 @@ export default function Doubts() {
           </button>
         </div>
         <p className="text-sm font-normal text-black hidden">
-          To acquire Bitcoin, you need a digital wallet and you can buy it from
-          specialized brokers. Sign up, deposit money, choose the desired amount
-          and {`that's`} it!
+          {doubts.doubts2?.description}
         </p>
         <div className="w-full border-gray-00000033 border-solid border-b-[1.5px] flex-none"></div>
       </div>
@@ -69,7 +90,7 @@ export default function Doubts() {
       >
         <div className="w-full flex justify-between items-center cursor-pointer">
           <span className="text-black text-[15px] font-normal leading-none">
-            How does Bitcoin security work?
+            {doubts.doubts3?.title}
           </span>
           <button
             type="button"
@@ -79,9 +100,7 @@ export default function Doubts() {
           </button>
         </div>
         <p className="text-sm font-normal text-black hidden">
-          {`Bitcoin's`} security comes from the blockchain, a public, immutable
-          record of transactions. Advanced encryption protects transactions and
-          decentralization prevents fraud.
+          {doubts.doubts3?.description}
         </p>
         <div className="w-full border-gray-00000033 border-solid border-b-[1.5px] flex-none"></div>
       </div>
@@ -91,7 +110,7 @@ export default function Doubts() {
       >
         <div className="w-full flex justify-between items-center cursor-pointer">
           <span className="text-black text-[15px] font-normal leading-none">
-            What is the appreciation potential of Bitcoin?
+            {doubts.doubts4?.title}
           </span>
           <button
             type="button"
@@ -101,9 +120,7 @@ export default function Doubts() {
           </button>
         </div>
         <p className="text-sm font-normal text-black hidden">
-          The value of Bitcoin is volatile and can vary greatly. Their limited
-          supply and growing interest can lead to significant appreciation, but
-          remember that investments have risks.
+          {doubts.doubts4?.description}
         </p>
         <div className="w-full border-gray-00000033 border-solid border-b-[1.5px] flex-none"></div>
       </div>
@@ -113,7 +130,7 @@ export default function Doubts() {
       >
         <div className="w-full flex justify-between items-center cursor-pointer">
           <span className="text-black text-[15px] font-normal leading-none">
-            Is it possible to use Bitcoin in everyday life?
+            {doubts.doubts5?.title}
           </span>
           <button
             type="button"
@@ -123,9 +140,7 @@ export default function Doubts() {
           </button>
         </div>
         <p className="text-sm font-normal text-black hidden">
-          Yes, more and more businesses are accepting Bitcoin as payment.
-          However, its adoption is still limited compared to traditional
-          currencies.
+          {doubts.doubts5?.description}
         </p>
         <div className="w-full border-gray-00000033 border-solid border-b-[1.5px] flex-none"></div>
       </div>
