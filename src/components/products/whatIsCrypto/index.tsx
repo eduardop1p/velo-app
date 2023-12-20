@@ -16,8 +16,9 @@ export default function WhatIsCrypto({
           <h2 className="text-2xl text-black font-normal mb-5">
             What is{' '}
             <span className="text-blue text-2xl font-semibold">
-              {cryptoName}?
+              {cryptoName}
             </span>
+            ?
           </h2>
           <p className="text-gray-000000b3 font-normal text-sm">
             {cryptoOverview}
@@ -52,7 +53,8 @@ export default function WhatIsCrypto({
       <div className="mt-16">
         <h2 className="text-black font-normal text-2xl">
           Why Velo is the best platform to buy{' '}
-          <span className="text-blue font-normal text-2xl">{cryptoName}</span>?
+          <span className="text-blue font-semibold text-2xl">{cryptoName}</span>
+          ?
         </h2>
         <p className="mt-8 text-[15px] text-gray-000000b3">
           Velo is a Finnish cryptocurrency platform for you to invest with
