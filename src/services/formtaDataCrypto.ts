@@ -41,8 +41,8 @@ export default function formatDataCrypto(
       return [sand, mana];
     }
     case 'defi': {
-      const crv = { NAME: 'Lido', ...metaData.CRV.USD };
-      const ldo = { NAME: 'Decentraland', ...metaData.LDO.USD };
+      const crv = { NAME: 'Curve', ...metaData.CRV.USD };
+      const ldo = { NAME: 'Lido', ...metaData.LDO.USD };
       const aave = { NAME: 'Aave', ...metaData.AAVE.USD };
       const uni = { NAME: 'Uniswap', ...metaData.UNI.USD };
       const mkr = { NAME: 'MakerDAO', ...metaData.MKR.USD };
