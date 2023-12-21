@@ -16,6 +16,7 @@ const config: Config = {
       },
       colors: {
         primary: '#fff',
+        'primary-2': '#ffffffb3',
         secondary: '#1a1c1fff',
         black: '#000',
         blue: '#549cffff',
@@ -27,6 +28,9 @@ const config: Config = {
         'gray-section': '#f6f6f6',
         'gray-section-2': '#f5f5f5ff',
         'black-section': '#101010ff',
+        'black-section-2': '#1b1e20ff',
+        'black-neutral': '#61686eff',
+        'black-neutral-383b3eff': '#383b3eff',
         'gray-000000b3': '#000000b3',
         'gray-00000033': '#00000033',
         'gray-b8bec4ff': '#b8bec4ff',
