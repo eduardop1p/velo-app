@@ -3,7 +3,9 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod';
-import type { FocusEvent } from 'react';
+import { useState, type FocusEvent } from 'react';
+import AlertMsg from '../alertMsg';
+import { OpenAlertType } from '../alertMsg';
 
 import FormErrorMsg from '../formErrorMsg';
 
@@ -30,7 +32,46 @@ export default function NewsletterForm() {
     resolver: zodResolver(zodSchema),
   });
 
+  const [isLoading, setIsLoading] = useState(false);
+  const [openAlert, setOpenAlert] = useState<OpenAlertType>({
+    open: false,
+    msg: '',
+    severity: 'success',
+  });
+
+  const handleDelay = async (ms: number) => {
+    // eslint-disable-next-line
+    return new Promise((rs, rj) => {
+      setTimeout(() => {
+        rs('success');
+      }, ms);
+    });
+  };
+
   const handleFormSubmit: SubmitHandler<Body> = async body => {
+    if (isLoading) return;
+
+    try {
+      setIsLoading(true);
+
+      // enviar email aqui de inscrição newsletter no lugar de delay
+      await handleDelay(3000);
+
+      setOpenAlert({
+        msg: 'Thanks for signing up',
+        open: true,
+        severity: 'success',
+      });
+    } catch {
+      setOpenAlert({
+        msg: 'An error occurred',
+        open: true,
+        severity: 'error',
+      });
+    } finally {
+      setIsLoading(false);
+    }
+
     console.log(body);
   };
 
@@ -53,6 +94,7 @@ export default function NewsletterForm() {
 
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)} className="mb-5">
+      <AlertMsg setOpenAlert={setOpenAlert} openAlert={openAlert} />
       <div className="flex flex-col gap-1">
         <div className="flex flex-col gap-[6px] h-[70px]">
           <div className="flex flex-col border-b-1 border-primary border-solid pb-2">
@@ -152,9 +194,57 @@ export default function NewsletterForm() {
       <button
         type="submit"
         // eslint-disable-next-line
-        className={`${!isValid ? 'bg-black-neutral-383b3eff text-black-neutral cursor-default' : 'bg-blue text-black hover:bg-bluehover hover:text-primary cursor-pointer'} text-sm font-medium h-10 w-64 rounded mt-10 transition-colors duration-200`}
+        className={`${!isValid ? 'bg-black-neutral-383b3eff text-black-neutral cursor-default' : 'bg-blue text-black hover:bg-bluehover hover:text-primary cursor-pointer'} text-sm font-medium h-10 w-64 rounded mt-10 transition-colors duration-200 relative`}
       >
         Send
+        {isLoading && (
+          <div className="w-full h-full bg-blue rounded cursor-default absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 flex items-center justify-center">
+            <div className="w-6 h-6 flex-none">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                style={{
+                  margin: 'auto',
+                  background: 'transparent',
+                  display: 'block',
+                  shapeRendering: 'auto',
+                  animationPlayState: 'running',
+                  animationDelay: '0s',
+                }}
+                width="100%"
+                height="100%"
+                viewBox="0 0 100 100"
+                preserveAspectRatio="xMidYMid"
+              >
+                <circle
+                  cx="50"
+                  cy="50"
+                  fill="none"
+                  stroke="#fff"
+                  stroke-width="10"
+                  r="35"
+                  stroke-dasharray="164.93361431346415 56.97787143782138"
+                  style={{
+                    animationPlayState: 'running',
+                    animationDelay: '0s',
+                  }}
+                >
+                  <animateTransform
+                    attributeName="transform"
+                    type="rotate"
+                    repeatCount="indefinite"
+                    dur="1s"
+                    values="0 50 50;360 50 50"
+                    keyTimes="0;1"
+                    style={{
+                      animationPlayState: 'running',
+                      animationDelay: '0s',
+                    }}
+                  ></animateTransform>
+                </circle>
+              </svg>
+            </div>
+          </div>
+        )}
       </button>
     </form>
   );
