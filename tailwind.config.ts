@@ -37,6 +37,7 @@ const config: Config = {
         'rgba-0-0-0-1': 'rgba(0,0,0,.1)',
         'footer-black': '#101010ff',
         'footer-gray': '#373737ff',
+        '3d3d3d': '#3d3d3d',
       },
       borderWidth: {
         '1': '1px',

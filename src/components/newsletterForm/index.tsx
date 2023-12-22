@@ -52,7 +52,7 @@ export default function NewsletterForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(handleFormSubmit)}>
+    <form onSubmit={handleSubmit(handleFormSubmit)} className="mb-5">
       <div className="flex flex-col gap-1">
         <div className="flex flex-col gap-[6px] h-[70px]">
           <div className="flex flex-col border-b-1 border-primary border-solid pb-2">
@@ -123,6 +123,30 @@ export default function NewsletterForm() {
           {errors['cell-number']?.message && (
             <FormErrorMsg msg={errors['cell-number'].message} />
           )}
+        </div>
+        <div className="flex gap-5 mt-2 flex-col">
+          <div className="flex gap-3">
+            <input
+              type="checkbox"
+              name="direct"
+              id="direct"
+              className="w-5 h-5 cursor-pointer"
+            />
+            <p className="text-sm text-primary font-normal">
+              I want to receive Velo Direct
+            </p>
+          </div>
+          <div className="flex gap-3">
+            <input
+              type="checkbox"
+              name="overview"
+              id="overview"
+              className="w-5 h-5 cursor-pointer"
+            />
+            <p className="text-sm text-primary font-normal">
+              I want to receive the Market Overview
+            </p>
+          </div>
         </div>
       </div>
       <button
