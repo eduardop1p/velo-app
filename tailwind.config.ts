@@ -38,6 +38,7 @@ const config: Config = {
         'footer-black': '#101010ff',
         'footer-gray': '#373737ff',
         '3d3d3d': '#3d3d3d',
+        ffffff33: '#ffffff33',
       },
       borderWidth: {
         '1': '1px',
