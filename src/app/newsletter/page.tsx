@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import Image from 'next/image';
 
 import PrevUrl from '@/components/prevUrl';
-import NewsletterForm from '@/components/newsletterForm';
+import FormNewsletter from '@/components/formNewsletter';
 import Footer from '@/components/footer';
 
 export const metadata: Metadata = {
@@ -43,7 +43,7 @@ export default function Page() {
                 simple way.
               </p>
             </div>
-            <NewsletterForm />
+            <FormNewsletter />
           </div>
         </section>
         <section className="flex gap-40 p-20 items-center justify-center">

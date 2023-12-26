@@ -6,14 +6,15 @@ import z from 'zod';
 import { useState, type FocusEvent } from 'react';
 import AlertMsg from '../alertMsg';
 import { OpenAlertType } from '../alertMsg';
-
 import FormErrorMsg from '../formErrorMsg';
+import FormLoading from '../formLoading';
 
 const zodSchema = z.object({
   'full-name': z.string().trim().min(1, 'Required field'),
-  email: z.string().min(1, 'Required field').email('Invalid email'),
+  email: z.string().trim().min(1, 'Required field').email('Invalid email'),
   'cell-number': z
     .string()
+    .trim()
     .min(1, 'Required field')
     .refine(val => {
       const regex = /^\s*\d+(\s+\d+)*\s*$/;
@@ -21,14 +22,14 @@ const zodSchema = z.object({
     }, 'Invalid cell number'),
 });
 
-type Body = z.infer<typeof zodSchema>;
+type BodyType = z.infer<typeof zodSchema>;
 
-export default function NewsletterForm() {
+export default function FormNewsletter() {
   const {
     register,
     handleSubmit,
     formState: { errors, isValid }, // a propriedade isValid vai me indicar se o vomulario é valido ou não
-  } = useForm<Body>({
+  } = useForm<BodyType>({
     resolver: zodResolver(zodSchema),
   });
 
@@ -48,7 +49,7 @@ export default function NewsletterForm() {
     });
   };
 
-  const handleFormSubmit: SubmitHandler<Body> = async body => {
+  const handleFormSubmit: SubmitHandler<BodyType> = async body => {
     if (isLoading) return;
 
     try {
@@ -197,54 +198,7 @@ export default function NewsletterForm() {
         className={`${!isValid ? 'bg-black-neutral-383b3eff text-black-neutral cursor-default' : 'bg-blue text-black hover:bg-bluehover hover:text-primary cursor-pointer'} text-sm font-medium h-10 w-64 rounded mt-10 transition-colors duration-200 relative`}
       >
         Send
-        {isLoading && (
-          <div className="w-full h-full bg-blue rounded cursor-default absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 flex items-center justify-center">
-            <div className="w-6 h-6 flex-none">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                style={{
-                  margin: 'auto',
-                  background: 'transparent',
-                  display: 'block',
-                  shapeRendering: 'auto',
-                  animationPlayState: 'running',
-                  animationDelay: '0s',
-                }}
-                width="100%"
-                height="100%"
-                viewBox="0 0 100 100"
-                preserveAspectRatio="xMidYMid"
-              >
-                <circle
-                  cx="50"
-                  cy="50"
-                  fill="none"
-                  stroke="#fff"
-                  stroke-width="10"
-                  r="35"
-                  stroke-dasharray="164.93361431346415 56.97787143782138"
-                  style={{
-                    animationPlayState: 'running',
-                    animationDelay: '0s',
-                  }}
-                >
-                  <animateTransform
-                    attributeName="transform"
-                    type="rotate"
-                    repeatCount="indefinite"
-                    dur="1s"
-                    values="0 50 50;360 50 50"
-                    keyTimes="0;1"
-                    style={{
-                      animationPlayState: 'running',
-                      animationDelay: '0s',
-                    }}
-                  ></animateTransform>
-                </circle>
-              </svg>
-            </div>
-          </div>
-        )}
+        {isLoading && <FormLoading />}
       </button>
     </form>
   );

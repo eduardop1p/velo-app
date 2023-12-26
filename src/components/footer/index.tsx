@@ -75,18 +75,18 @@ export default function Footer({ footerAddress }: { footerAddress?: boolean }) {
       </section>
       {footerAddress && (
         <section className="bg-footer-gray w-full px-20 py-5 flex justify-between items-center">
-          <div className="text-primary text-base font-normal">
+          <div className="text-primary text-sm font-normal">
             <p className="text-inherit">@{new Date().getFullYear()} Velo</p>
             <p className="text-inherit">VELO CRYPTO TECHNOLOGY</p>
           </div>
-          <div className="text-primary text-base font-normal">
+          <div className="text-primary text-sm font-normal">
             <p className="text-inherit">
               Lönnrotinkatu 31, 00180 Helsinki, Finland
             </p>
           </div>
           <Link
             href="/privacy-policy"
-            className="text-base text-primary font-normal hover:text-blue transition-colors duration-200"
+            className="text-sm text-primary font-normal hover:text-blue transition-colors duration-200"
           >
             Terms and Policies | Disclaimer
           </Link>

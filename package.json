@@ -13,7 +13,10 @@
     "@emotion/styled": "^11.11.0",
     "@hookform/resolvers": "^3.3.2",
     "@mui/material": "^5.15.1",
+    "inputmask": "^5.0.8",
     "js-cookie": "^3.0.5",
+    "lodash": "^4.17.21",
+    "mongoose": "^8.0.3",
     "next": "14.0.4",
     "react": "^18",
     "react-dom": "^18",
@@ -24,7 +27,9 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@types/inputmask": "^5.0.7",
     "@types/js-cookie": "^3.0.6",
+    "@types/lodash": "^4.14.202",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
