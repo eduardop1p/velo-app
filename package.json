@@ -15,6 +15,7 @@
     "@mui/material": "^5.15.1",
     "inputmask": "^5.0.8",
     "js-cookie": "^3.0.5",
+    "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "mongoose": "^8.0.3",
     "next": "14.0.4",
@@ -29,6 +30,7 @@
   "devDependencies": {
     "@types/inputmask": "^5.0.7",
     "@types/js-cookie": "^3.0.6",
+    "@types/jsonwebtoken": "^9.0.5",
     "@types/lodash": "^4.14.202",
     "@types/node": "^20",
     "@types/react": "^18",

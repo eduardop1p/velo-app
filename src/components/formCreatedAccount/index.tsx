@@ -13,6 +13,7 @@ import { OpenAlertType } from '../alertMsg';
 import FormErrorMsg from '../formErrorMsg';
 import FormLoading from '../formLoading';
 import { CountriesType } from '@/app/create-account/page';
+import ShowPassword, { ShowPasswordType } from '../showPassword';
 
 const zodSchema = z
   .object({
@@ -67,6 +68,8 @@ export default function FormCreatedAccount({
     msg: '',
     severity: 'success',
   });
+  const [passwordType, setPasswordType] =
+    useState<ShowPasswordType>('password');
 
   const {
     register,
@@ -136,7 +139,7 @@ export default function FormCreatedAccount({
         severity: 'success',
       });
 
-      // redirecionar para login ou logar aqui logo
+      // redirecionar para login ou logar ou enviar email de confirmação e dai só depois logar aqui
     } catch (err) {
       // response.data.error
       // console.log(err);
@@ -327,14 +330,22 @@ export default function FormCreatedAccount({
                   *
                 </span>
               </label>
-              <input
-                type="text"
-                id="password"
-                placeholder="Enter your password"
-                {...register('password')}
-                // eslint-disable-next-line
-                className={`text-[15px] text-black font-normal border-1 ${errors.password?.message ? 'border-red-600' : 'border-ced4da'} border-solid rounded-md p-3 focus:shadow-effect-1 transition-shadow duration-200`}
-              />
+              <div className="relative w-full">
+                <input
+                  type={passwordType}
+                  id="password"
+                  placeholder="Enter your password"
+                  {...register('password')}
+                  // eslint-disable-next-line
+                  className={`text-[15px] w-full text-black font-normal border-1 ${errors.password?.message ? 'border-red-600' : 'border-ced4da'} border-solid rounded-md p-3 focus:shadow-effect-1 transition-shadow duration-200`}
+                />
+                <ShowPassword
+                  passwordType={passwordType}
+                  setPasswordType={setPasswordType}
+                  fill="fill-495057"
+                  right="right-3"
+                />
+              </div>
             </div>
             {errors.password?.message && (
               <FormErrorMsg msg={errors.password.message} fontSize="text-xs" />
@@ -372,14 +383,22 @@ export default function FormCreatedAccount({
                   *
                 </span>
               </label>
-              <input
-                type="text"
-                id="repeatPassword"
-                placeholder="confirm your password"
-                {...register('repeatPassword')}
-                // eslint-disable-next-line
-                className={`text-[15px] text-black font-normal border-1 ${errors.repeatPassword?.message ? 'border-red-600' : 'border-ced4da'} border-solid rounded-md p-3 focus:shadow-effect-1 transition-shadow duration-200`}
-              />
+              <div className="relative w-full">
+                <input
+                  type={passwordType}
+                  id="repeatPassword"
+                  placeholder="confirm your password"
+                  {...register('repeatPassword')}
+                  // eslint-disable-next-line
+                  className={`text-[15px] w-full text-black font-normal border-1 ${errors.repeatPassword?.message ? 'border-red-600' : 'border-ced4da'} border-solid rounded-md p-3 focus:shadow-effect-1 transition-shadow duration-200`}
+                />
+                <ShowPassword
+                  passwordType={passwordType}
+                  setPasswordType={setPasswordType}
+                  fill="fill-495057"
+                  right="right-3"
+                />
+              </div>
             </div>
             {errors.repeatPassword?.message && (
               <FormErrorMsg

@@ -8,7 +8,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
   await dbConnect();
 
   const body = (await req.json()) as UserType;
-  const { email } = body;
 
   if (!body)
     return NextResponse.json(
@@ -20,6 +19,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     );
 
   try {
+    const { email } = body;
     const useExist = await usersModel.findOne({ email });
     if (useExist) {
       return NextResponse.json(
