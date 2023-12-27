@@ -46,7 +46,7 @@ export default function SectionNewsletter() {
           </div>
         </div>
         <Link
-          href="/newsletter"
+          href="/newsletters"
           className="flex items-center justify-center text-sm rounded h-14 w-[300px] bg-primary text-black hover:bg-blue hover:text-primary transition-colors duration-200"
         >
           I want to sign up

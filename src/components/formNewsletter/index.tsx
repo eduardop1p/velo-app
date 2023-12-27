@@ -3,7 +3,7 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod';
-import { useState, type FocusEvent } from 'react';
+import { useState, type FocusEvent, useEffect } from 'react';
 
 import AlertMsg from '../alertMsg';
 import { OpenAlertType } from '../alertMsg';
@@ -29,6 +29,7 @@ export default function FormNewsletter() {
   const {
     register,
     handleSubmit,
+    getValues,
     formState: { errors, isValid }, // a propriedade isValid vai me indicar se o vomulario é valido ou não
   } = useForm<BodyType>({
     resolver: zodResolver(zodSchema),
@@ -40,6 +41,26 @@ export default function FormNewsletter() {
     msg: '',
     severity: 'success',
   });
+  const [initialRender, setInitialRender] = useState(true);
+
+  useEffect(() => {
+    if (initialRender) {
+      const emailValue = getValues('email');
+      const cellNumberValue = getValues('cell-number');
+      const fullNameValue = getValues('full-name');
+
+      if (emailValue) {
+        handleFocusInput('email');
+      }
+      if (cellNumberValue) {
+        handleFocusInput('cell-number');
+      }
+      if (fullNameValue) {
+        handleFocusInput('full-name');
+      }
+      setInitialRender(false);
+    }
+  }, [getValues, initialRender]);
 
   const handleDelay = async (ms: number) => {
     // eslint-disable-next-line
@@ -64,6 +85,7 @@ export default function FormNewsletter() {
         open: true,
         severity: 'success',
       });
+      return body;
     } catch {
       setOpenAlert({
         msg: 'An error occurred',
@@ -73,22 +95,27 @@ export default function FormNewsletter() {
     } finally {
       setIsLoading(false);
     }
-
-    console.log(body);
   };
 
-  const handleFocusInput = (event: FocusEvent<HTMLInputElement>) => {
-    const label = event.currentTarget
-      .previousElementSibling as HTMLLabelElement;
+  const handleFocusInput = (type: keyof BodyType) => {
+    const label = document.querySelector(
+      `label[for="${type}"]`
+    ) as HTMLLabelElement;
+
     label.style.transform = 'translateY(0px)';
     label.style.fontSize = '12px';
     label.style.color = '#61686eff';
   };
 
-  const handleBlurInput = (event: FocusEvent<HTMLInputElement>) => {
+  const handleBlurInput = (
+    event: FocusEvent<HTMLInputElement>,
+    type: keyof BodyType
+  ) => {
     if (event.currentTarget.value) return;
-    const label = event.currentTarget
-      .previousElementSibling as HTMLLabelElement;
+    const label = document.querySelector(
+      `label[for="${type}"]`
+    ) as HTMLLabelElement;
+
     label.style.transform = 'translateY(21px)';
     label.style.fontSize = '14px';
     label.style.color = '#fff';
@@ -99,7 +126,7 @@ export default function FormNewsletter() {
       <AlertMsg setOpenAlert={setOpenAlert} openAlert={openAlert} />
       <div className="flex flex-col gap-1">
         <div className="flex flex-col gap-[6px] h-[70px]">
-          <div className="flex flex-col border-b-1 border-primary border-solid pb-2">
+          <div className="flex flex-col">
             <label
               htmlFor="full-name"
               className="translate-y-[21px] text-primary font-normal text-sm cursor-text w-full transition-all duration-200"
@@ -109,13 +136,14 @@ export default function FormNewsletter() {
             <input
               type="text"
               id="full-name"
-              className="bg-transparent relative z-[2] text-primary font-normal text-sm"
+              // eslint-disable-next-line
+              className={`bg-transparent pb-2 relative z-[2] text-primary border-b-1 border-solid font-normal text-sm ${errors['full-name']?.message ? 'border-red-600' : 'border-primary focus:border-f217deff'} transition-colors duration-200`}
               {...register('full-name', {
                 onBlur(event) {
-                  handleBlurInput(event);
+                  handleBlurInput(event, 'full-name');
                 },
               })}
-              onFocus={handleFocusInput}
+              onFocus={() => handleFocusInput('full-name')}
             />
           </div>
           {errors['full-name']?.message && (
@@ -123,7 +151,7 @@ export default function FormNewsletter() {
           )}
         </div>
         <div className="flex flex-col gap-[6px] h-[70px]">
-          <div className="flex flex-col border-b-1 border-primary border-solid pb-2">
+          <div className="flex flex-col">
             <label
               htmlFor="email"
               className="translate-y-[21px] text-primary font-normal text-sm cursor-text w-full transition-all duration-200"
@@ -133,19 +161,20 @@ export default function FormNewsletter() {
             <input
               type="text"
               id="email"
-              className="bg-transparent relative z-[2] text-primary font-normal text-sm"
+              // eslint-disable-next-line
+              className={`bg-transparent pb-2 relative z-[2] text-primary border-b-1 border-solid font-normal text-sm ${errors.email?.message ? 'border-red-600' : 'border-primary focus:border-f217deff'} transition-colors duration-200`}
               {...register('email', {
                 onBlur(event) {
-                  handleBlurInput(event);
+                  handleBlurInput(event, 'email');
                 },
               })}
-              onFocus={handleFocusInput}
+              onFocus={() => handleFocusInput('email')}
             />
           </div>
           {errors.email?.message && <FormErrorMsg msg={errors.email.message} />}
         </div>
         <div className="flex flex-col gap-[6px] h-[70px]">
-          <div className="flex flex-col border-b-1 border-primary border-solid pb-2">
+          <div className="flex flex-col">
             <label
               htmlFor="cell-number"
               className="translate-y-[21px] text-primary font-normal text-sm cursor-text w-full transition-all duration-200"
@@ -155,13 +184,14 @@ export default function FormNewsletter() {
             <input
               type="text"
               id="cell-number"
-              className="bg-transparent relative z-[2] text-primary font-normal text-sm"
+              // eslint-disable-next-line
+              className={`bg-transparent pb-2 relative z-[2] text-primary border-b-1 border-solid font-normal text-sm ${errors['cell-number']?.message ? 'border-red-600' : 'border-primary focus:border-f217deff'} transition-colors duration-200`}
               {...register('cell-number', {
                 onBlur(event) {
-                  handleBlurInput(event);
+                  handleBlurInput(event, 'cell-number');
                 },
               })}
-              onFocus={handleFocusInput}
+              onFocus={() => handleFocusInput('cell-number')}
             />
           </div>
           {errors['cell-number']?.message && (

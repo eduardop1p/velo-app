@@ -3,7 +3,7 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState, type FocusEvent } from 'react';
+import { useState, type FocusEvent, useEffect } from 'react';
 import Link from 'next/link';
 
 import AlertMsg from '../alertMsg';
@@ -28,15 +28,32 @@ export default function FormLogin() {
     open: false,
     severity: 'success',
   });
+  const [initialRender, setInitialRender] = useState(true);
 
   const {
     register,
     handleSubmit,
     formState: { errors, isValid },
     setError,
+    getValues,
   } = useForm<BodyType>({
     resolver: zodResolver(zodSchema),
   });
+
+  useEffect(() => {
+    if (initialRender) {
+      const emailValue = getValues('email');
+      const passWordValue = getValues('password');
+
+      if (emailValue) {
+        handleFocusInput('email');
+      }
+      if (passWordValue) {
+        handleFocusInput('password');
+      }
+      setInitialRender(false);
+    }
+  }, [getValues, initialRender]);
 
   const handleFormSubmit: SubmitHandler<BodyType> = async body => {
     if (isLoading) return;
@@ -83,7 +100,7 @@ export default function FormLogin() {
     }
   };
 
-  const handleFocusInput = (type: 'email' | 'password') => {
+  const handleFocusInput = (type: keyof BodyType) => {
     const label = document.querySelector(
       `label[for="${type}"]`
     ) as HTMLLabelElement;
@@ -95,7 +112,7 @@ export default function FormLogin() {
 
   const handleBlurInput = (
     event: FocusEvent<HTMLInputElement>,
-    type: 'email' | 'password'
+    type: keyof BodyType
   ) => {
     if (event.currentTarget.value) return;
 

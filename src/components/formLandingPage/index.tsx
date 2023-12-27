@@ -12,7 +12,7 @@ export default function FormLandingPage() {
   const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const emailValue = emailRef.current?.value;
-    if (!emailValue) return;
+    // if (!emailValue) return;
     router.push(`/create-account?email=${emailValue}`);
   };
 

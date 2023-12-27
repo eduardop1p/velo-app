@@ -53,7 +53,7 @@ export default function SliderCryptoassets({
   return (
     <Swiper
       spaceBetween={30}
-      slidesPerView={1}
+      // slidesPerView={1}
       autoplay={{
         delay: 4000,
         disableOnInteraction: false,

@@ -7,6 +7,7 @@ import { useState, useEffect, type MouseEvent } from 'react';
 import Inputmask from 'inputmask';
 import { FaChevronDown } from 'react-icons/fa6';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 
 import AlertMsg from '../alertMsg';
 import { OpenAlertType } from '../alertMsg';
@@ -70,6 +71,8 @@ export default function FormCreatedAccount({
   });
   const [passwordType, setPasswordType] =
     useState<ShowPasswordType>('password');
+
+  const searchParams = useSearchParams();
 
   const {
     register,
@@ -198,6 +201,11 @@ export default function FormCreatedAccount({
               <input
                 type="text"
                 id="email"
+                defaultValue={
+                  searchParams.get('email')
+                    ? searchParams.get('email')?.toString()
+                    : ''
+                }
                 placeholder="Enter your best email"
                 {...register('email')}
                 // eslint-disable-next-line

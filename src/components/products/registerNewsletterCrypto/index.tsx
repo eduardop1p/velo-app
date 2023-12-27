@@ -22,7 +22,7 @@ export default function RegisterNewsletterCrypto() {
           </div>
         </div>
         <Link
-          href="/newsletter"
+          href="/newsletters"
           className="bg-primary text-black font-normal text-sm flex items-center justify-center h-14 w-fit px-8 rounded hover:text-primary hover:bg-blue transition-colors duration-200"
         >
           Sign up for Velo newsletter

@@ -53,7 +53,7 @@ export default function Headers({
             dataNFT={dataNFT}
           />
           <Link
-            href="/newsletter"
+            href="/newsletters"
             className="cursor-pointer text-sm text-black"
           >
             News
