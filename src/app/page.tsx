@@ -191,7 +191,7 @@ export default async function Page() {
         </section>
         <SectionNewsletter />
       </main>
-      <Footer />
+      <Footer footerAddress />
     </>
   );
 }

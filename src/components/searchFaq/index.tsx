@@ -251,7 +251,7 @@ export default function SearchFaq() {
     index: number,
     type: FaqCategorieType
   ): 'block' | 'none' => {
-    if (!searchValue) return 'block';
+    // if (!searchValue) return 'block';
     const newArr = [...arr.map(val => val.title.toLowerCase())];
     handleSearchNoItems(type, newArr);
 

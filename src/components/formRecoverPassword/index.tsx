@@ -5,23 +5,23 @@ import z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState, type FocusEvent, useEffect } from 'react';
 import Link from 'next/link';
+import { FaArrowLeft } from 'react-icons/fa6';
+import { useRouter } from 'next/navigation';
 
 import AlertMsg from '../alertMsg';
 import { OpenAlertType } from '../alertMsg';
 import FormErrorMsg from '../formErrorMsg';
 import FormLoading from '../formLoading';
-import ShowPassword, { ShowPasswordType } from '../showPassword';
 
 const zodSchema = z.object({
   email: z.string().trim().min(1, 'Required field').email('Invalid email'),
-  password: z.string().trim().min(1, 'Required field'),
 });
 
 type BodyType = z.infer<typeof zodSchema>;
 
 export default function FormLogin() {
-  const [passwordType, setPasswordType] =
-    useState<ShowPasswordType>('password');
+  const router = useRouter();
+
   const [isLoading, setIsLoading] = useState(false);
   const [openAlert, setOpenAlert] = useState<OpenAlertType>({
     msg: '',
@@ -43,13 +43,9 @@ export default function FormLogin() {
   useEffect(() => {
     if (initialRender) {
       const emailValue = getValues('email');
-      const passWordValue = getValues('password');
 
       if (emailValue) {
         handleFocusInput('email');
-      }
-      if (passWordValue) {
-        handleFocusInput('password');
       }
       setInitialRender(false);
     }
@@ -60,15 +56,17 @@ export default function FormLogin() {
 
     try {
       setIsLoading(true);
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
-        method: 'POST',
-        body: JSON.stringify(body),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        cache: 'no-cache',
-        credentials: 'include',
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/recover-password`, // essa rota de api vai enviar um email para o email do body
+        {
+          method: 'POST',
+          body: JSON.stringify(body),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          cache: 'no-cache',
+        }
+      );
       const data = await res.json();
       if (!res.ok) {
         if (data.type !== 'server') {
@@ -82,7 +80,7 @@ export default function FormLogin() {
         return;
       }
       setOpenAlert({
-        msg: `Welcome ${data.name}`,
+        msg: 'An email has been sent with instructions',
         open: true,
         severity: 'success',
       });
@@ -133,7 +131,15 @@ export default function FormLogin() {
       <div className="absolute">
         <AlertMsg openAlert={openAlert} setOpenAlert={setOpenAlert} />
       </div>
-      <h2 className="text-primary text-2xl font-semibold">Login</h2>
+      <button
+        className="w-4 h-4 cursor-pointer flex justify-center items-center fill-primary self-start"
+        onClick={() => router.back()}
+      >
+        <FaArrowLeft />
+      </button>
+      <h2 className="text-primary text-2xl font-normal">
+        Enter your email to receive the password recovery link
+      </h2>
       <div className="flex flex-col gap-[6px] mi-h-[80px] w-full">
         <div className="flex flex-col">
           <label
@@ -157,61 +163,20 @@ export default function FormLogin() {
         </div>
         {errors.email?.message && <FormErrorMsg msg={errors.email.message} />}
       </div>
-      <div className="flex flex-col gap-[6px] min-h-[80px] w-full">
-        <div className="flex flex-col">
-          <label
-            htmlFor="password"
-            className="translate-y-[21px] text-primary font-normal text-sm cursor-text w-full transition-all duration-200"
-          >
-            Password
-          </label>
-          <div className="relative w-full">
-            <input
-              type={passwordType}
-              id="password"
-              // eslint-disable-next-line
-              className={`bg-transparent w-full relative z-[2] text-primary font-normal text-sm border-b-1 border-solid ${errors.password?.message ? 'border-red-600' : 'border-primary focus:border-f217deff'} transition-colors duration-200 pb-2`}
-              {...register('password', {
-                onBlur(event) {
-                  handleBlurInput(event, 'password');
-                },
-              })}
-              onFocus={() => handleFocusInput('password')}
-            />
-            <ShowPassword
-              passwordType={passwordType}
-              setPasswordType={setPasswordType}
-              fill="fill-primary-2"
-              right="right-[2px]"
-            />
-          </div>
-        </div>
-        {errors.password?.message && (
-          <FormErrorMsg msg={errors.password.message} />
-        )}
-      </div>
       <button
         type="submit"
         // eslint-disable-next-line
         className={`${isValid ? 'bg-blue text-primary cursor-pointer hover:bg-bluehover' : 'bg-black-neutral-383b3eff text-ffffff4d cursor-default'} h-14 w-full rounded text-[15px] font-normal transition-colors duration-200 relative`}
       >
-        Login
+        Send
         {isLoading && <FormLoading />}
       </button>
-      <div className="flex flex-col gap-1 w-full justify-start">
-        <Link
-          href="/create-account"
-          className="text-xs text-blue font-normal underline w-fit"
-        >
-          {`I'm`} not a customer, I want to open my account
-        </Link>
-        <Link
-          href="/recover-password"
-          className="text-xs text-blue font-normal underline w-fit"
-        >
-          I forgot my password
-        </Link>
-      </div>
+      <Link
+        href="/create-account"
+        className="text-xs text-blue font-normal underline w-fit self-start"
+      >
+        {`I'm`} not a customer, I want to open my account
+      </Link>
     </form>
   );
 }

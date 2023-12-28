@@ -36,7 +36,7 @@ export default function Page() {
           <div className="bg-black-section-2 min-h-full-screen-80px flex flex-col justify-between w-1/2 px-20 py-14">
             <div>
               <h2 className="text-primary font-semibold text-3xl mb-3">
-                sign up
+                Sign up
               </h2>
               <p className="text-primary font-normal text-sm">
                 Do like thousands of people who are learning about crypto in a
