@@ -1,20 +1,17 @@
 'use client';
 
-import { useState } from 'react';
 import Link from 'next/link';
-import {
-  FaSearch,
-  FaUser,
-  FaBell,
-  FaComments,
-  FaChevronDown,
-} from 'react-icons/fa';
+import { FaSearch, FaUser, FaComments, FaChevronDown } from 'react-icons/fa';
 import { usePathname } from 'next/navigation';
+import dynamic from 'next/dynamic';
 
 import LogoTitle from '@/components/logoTitle';
 import Products from '@/components/products';
 import { CryptoType } from '..';
 import { ShowUserType } from '..';
+const Notifications = dynamic(() => import('./notifications'), {
+  ssr: false,
+});
 
 interface Props {
   dataCurrencies: CryptoType[];
@@ -44,8 +41,6 @@ export default function Headers({
   userData,
 }: Props) {
   const pathName = usePathname();
-
-  const [showNotifications, setShowNotifications] = useState(false);
 
   const handleFormatNameProfile = (name: string) => {
     return name
@@ -97,18 +92,7 @@ export default function Headers({
           </div>
         </div>
         <div className="flex items-center gap-8">
-          <div>
-            <button
-              className="w-5 h-w-5 flex items-center justify-center fill-primary"
-              onClick={() => setShowNotifications(!showNotifications)}
-            >
-              <FaBell />
-            </button>
-            <div
-              // eslint-disable-next-line
-              className={`h-full-screen-80px fixed top-[90px] w-[500px] rounded bg-1b1e20ff right-0 ${showNotifications ? 'flex' : 'hidden'}`}
-            ></div>
-          </div>
+          <Notifications />
           <div>
             <button className="w-5 h-w-5 flex items-center justify-center fill-primary">
               <FaComments />
