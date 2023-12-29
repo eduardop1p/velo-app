@@ -41,7 +41,7 @@ export default function Notifications() {
   return (
     <div>
       <button
-        className="w-5 h-w-5 flex items-center justify-center fill-primary"
+        className="w-5 h-w-5 flex items-center justify-center fill-primary hover:fill-blue transition-colors duration-200"
         onClick={() => setShowNotifications(!showNotifications)}
       >
         <FaBell />

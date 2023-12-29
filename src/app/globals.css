@@ -9,7 +9,7 @@
   outline: none;
 }
 
-svg:not(.MuiSvgIcon-root){
+svg:not(.MuiSvgIcon-root, .loading){
   width: 100% !important;
   height: 100% !important;
   display: inline-block !important;

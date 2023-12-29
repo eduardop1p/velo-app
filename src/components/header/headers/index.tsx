@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { FaSearch, FaUser, FaComments, FaChevronDown } from 'react-icons/fa';
+import { FaSearch, FaUser, FaComments } from 'react-icons/fa';
 import { usePathname } from 'next/navigation';
 import dynamic from 'next/dynamic';
 
@@ -12,6 +12,7 @@ import { ShowUserType } from '..';
 const Notifications = dynamic(() => import('./notifications'), {
   ssr: false,
 });
+import Settings from './settings';
 
 interface Props {
   dataCurrencies: CryptoType[];
@@ -67,25 +68,29 @@ export default function Headers({
           <div className="flex gap-2">
             <Link
               href="/portfolio"
-              className="text-primary font-normal text-sm h-9 px-4 flex items-center justify-center rounded hover:bg-383b3eff transition-colors duration-200"
+              // eslint-disable-next-line
+              className={`text-primary font-normal text-sm h-9 px-4 flex items-center justify-center rounded ${pathName === '/portfolio' ? 'bg-383b3eff' : 'hover:bg-383b3eff'} transition-colors duration-200`}
             >
               Portfolio
             </Link>
             <Link
               href="/negotiate"
-              className="text-primary font-normal text-sm h-9 px-4 flex items-center justify-center rounded hover:bg-383b3eff transition-colors duration-200"
+              // eslint-disable-next-line
+              className={`text-primary font-normal text-sm h-9 px-4 flex items-center justify-center rounded ${pathName === '/negotiate' ? 'bg-383b3eff' : 'hover:bg-383b3eff'} transition-colors duration-200`}
             >
               Negotiate
             </Link>
             <Link
               href="/historic"
-              className="text-primary font-normal text-sm h-9 px-4 flex items-center justify-center rounded hover:bg-383b3eff transition-colors duration-200"
+              // eslint-disable-next-line
+              className={`text-primary font-normal text-sm h-9 px-4 flex items-center justify-center rounded ${pathName === '/historic' ? 'bg-383b3eff' : 'hover:bg-383b3eff'} transition-colors duration-200`}
             >
               Historic
             </Link>
             <Link
               href="/content"
-              className="text-primary font-normal text-sm h-9 px-4 flex items-center justify-center rounded hover:bg-383b3eff transition-colors duration-200"
+              // eslint-disable-next-line
+              className={`text-primary font-normal text-sm h-9 px-4 flex items-center justify-center rounded ${pathName === '/content' ? 'bg-383b3eff' : 'hover:bg-383b3eff'} transition-colors duration-200`}
             >
               Content
             </Link>
@@ -93,11 +98,13 @@ export default function Headers({
         </div>
         <div className="flex items-center gap-8">
           <Notifications />
-          <div>
-            <button className="w-5 h-w-5 flex items-center justify-center fill-primary">
-              <FaComments />
-            </button>
-          </div>
+          <Link
+            href="/faq"
+            // eslint-disable-next-line
+            className={`w-5 h-w-5 flex items-center justify-center ${pathName === '/faq' ? 'fill-blue' : 'fill-primary hover:fill-blue'}  transition-colors duration-200`}
+          >
+            <FaComments />
+          </Link>
           <div className="bg-ffffff33 h-[40px] w-[2px] flex-none"></div>
           <div className="flex items-center gap-3">
             <div className="cursor-default w-8 h-8 bg-272a2eff rounded-full flex items-center justify-center text-primary font-normal text-sm">
@@ -109,9 +116,8 @@ export default function Headers({
             >
               {handleFormatName(userData.name)}
             </h3>
-            <button className="w-[14px] h-[14px] flex justify-center items-center fill-primary cursor-pointer">
-              <FaChevronDown />
-            </button>
+
+            <Settings />
           </div>
         </div>
       </div>

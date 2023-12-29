@@ -1,20 +1,28 @@
 import { Metadata } from 'next';
+import { cookies } from 'next/headers';
 
 import SearchFaq from '@/components/searchFaq';
 import Footer from '@/components/footer';
+import Back from '@/components/searchFaq/back';
 
 export const metadata: Metadata = {
   title: 'Ask your questions in our FAQ | Velo',
 };
 
 export default function Page() {
+  const cookie = cookies();
+  const isAuth = cookie.has('token');
+
   return (
     <>
       <main className="mt-20">
         <section className="flex flex-col px-20 py-14 items-center gap-4 bg-black-section">
-          <h1 className="text-4xl font-medium text-primary">
-            Common questions
-          </h1>
+          <div className="flex w-full">
+            {isAuth && <Back />}
+            <h1 className="text-4xl font-medium text-primary mx-auto">
+              Common questions
+            </h1>
+          </div>
           <div className="w-[350px] h-[290px] flex-none">
             <svg
               xmlns="http://www.w3.org/2000/svg"

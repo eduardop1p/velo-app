@@ -93,7 +93,7 @@ export default function FormLogin() {
       setTimeout(() => {
         router.push('/home');
         router.refresh();
-      }, 2000);
+      }, 1000);
     } catch (err) {
       // console.log(err);
       setOpenAlert({

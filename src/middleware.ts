@@ -6,6 +6,8 @@ export function middleware(req: NextRequest, res: NextResponse) {
   const response = NextResponse.next();
   const isAuth = req.cookies.has('token');
   const { pathname } = req.nextUrl;
+
+  // yes auth
   if (isAuth && pathname === '/') {
     return NextResponse.redirect(new URL('/home', req.url));
   }
@@ -25,7 +27,23 @@ export function middleware(req: NextRequest, res: NextResponse) {
     return NextResponse.redirect(new URL('/home', req.url));
   }
 
+  // no auth
   if (!isAuth && pathname.startsWith('/home')) {
+    return NextResponse.redirect(new URL('/login', req.url));
+  }
+  if (!isAuth && pathname.startsWith('/portfolio')) {
+    return NextResponse.redirect(new URL('/login', req.url));
+  }
+  if (!isAuth && pathname.startsWith('/negotiate')) {
+    return NextResponse.redirect(new URL('/login', req.url));
+  }
+  if (!isAuth && pathname.startsWith('/historic')) {
+    return NextResponse.redirect(new URL('/login', req.url));
+  }
+  if (!isAuth && pathname.startsWith('/content')) {
+    return NextResponse.redirect(new URL('/login', req.url));
+  }
+  if (!isAuth && pathname.startsWith('/settings')) {
     return NextResponse.redirect(new URL('/login', req.url));
   }
 
