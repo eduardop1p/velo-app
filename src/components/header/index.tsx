@@ -1,3 +1,5 @@
+import { cookies } from 'next/headers';
+
 import formatDataCrypto from '@/services/formtaDataCrypto';
 import { ActiveCryptoType } from '../products';
 import Headers from './headers';
@@ -28,6 +30,14 @@ export interface CryptoType {
   IMAGEURL: string;
 }
 
+export interface ShowUserType {
+  name: string;
+  email: string;
+  dateBirth: string;
+  cellPhone: string;
+  country: string;
+}
+
 const getData = async (url: string, activeCrypto: ActiveCryptoType) => {
   const res = await fetch(url, {
     method: 'GET',
@@ -38,6 +48,22 @@ const getData = async (url: string, activeCrypto: ActiveCryptoType) => {
 };
 
 export default async function Header() {
+  const cookie = cookies();
+  const isAuth = cookie.has('token');
+  let userData: ShowUserType | undefined;
+  if (isAuth) {
+    const token = cookie.get('token')?.value;
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/show-user`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      cache: 'no-cache',
+    });
+    userData = await res.json();
+  }
+
   const dataCurrencies = (await getData(
     `${process.env.CRYPTO_API_URL}&fsyms=BTC,DOGE,XLM,LTC`,
     'currencies'
@@ -86,6 +112,8 @@ export default async function Header() {
       dataScalling={dataScalling}
       dataSmartContract={dataSmartContract}
       dataStablecoin={dataStablecoin}
+      isAuth={isAuth}
+      userData={userData}
     />
   );
 }

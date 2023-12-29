@@ -5,6 +5,7 @@ import z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState, type FocusEvent, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 import AlertMsg from '../alertMsg';
 import { OpenAlertType } from '../alertMsg';
@@ -20,6 +21,8 @@ const zodSchema = z.object({
 type BodyType = z.infer<typeof zodSchema>;
 
 export default function FormLogin() {
+  const router = useRouter();
+
   const [passwordType, setPasswordType] =
     useState<ShowPasswordType>('password');
   const [isLoading, setIsLoading] = useState(false);
@@ -82,12 +85,15 @@ export default function FormLogin() {
         return;
       }
       setOpenAlert({
-        msg: `Welcome ${data.name}`,
+        msg: `Welcome ${data.name.split(' ')[0]}`,
         open: true,
         severity: 'success',
       });
 
-      // redirecionar usuário para página principal de negociações aqui
+      setTimeout(() => {
+        router.push('/home');
+        router.refresh();
+      }, 2000);
     } catch (err) {
       // console.log(err);
       setOpenAlert({

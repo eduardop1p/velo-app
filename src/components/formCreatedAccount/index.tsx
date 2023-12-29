@@ -15,6 +15,7 @@ import FormErrorMsg from '../formErrorMsg';
 import FormLoading from '../formLoading';
 import { CountriesType } from '@/app/create-account/page';
 import ShowPassword, { ShowPasswordType } from '../showPassword';
+import { useRouter } from 'next/navigation';
 
 const zodSchema = z
   .object({
@@ -62,6 +63,8 @@ export default function FormCreatedAccount({
 }: {
   dataCountries: CountriesType[];
 }) {
+  const router = useRouter();
+
   const [isLoading, setIsLoading] = useState(false);
   const [showCountries, setShowCountries] = useState(false);
   const [openAlert, setOpenAlert] = useState<OpenAlertType>({
@@ -136,12 +139,13 @@ export default function FormCreatedAccount({
         });
         return;
       }
-      setOpenAlert({
-        msg: data.success,
-        open: true,
-        severity: 'success',
-      });
+      // setOpenAlert({
+      //   msg: data.success,
+      //   open: true,
+      //   severity: 'success',
+      // });
 
+      await handleLogin(email, password);
       // redirecionar para login ou logar ou enviar email de confirmação e dai só depois logar aqui
     } catch (err) {
       // response.data.error
@@ -154,6 +158,26 @@ export default function FormCreatedAccount({
       });
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleLogin = async (email: string, password: string) => {
+    try {
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
+        method: 'POST',
+        body: JSON.stringify({ email, password }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        cache: 'no-cache',
+        credentials: 'include',
+      });
+
+      router.push('/home');
+      router.refresh();
+    } catch (err) {
+      // console.log(err);
+      router.push('/login');
     }
   };
 
@@ -182,6 +206,7 @@ export default function FormCreatedAccount({
                 id="name"
                 placeholder="Enter your full name"
                 {...register('name')}
+                maxLength={100}
                 // eslint-disable-next-line
                 className={`text-[15px] text-black font-normal border-1 ${errors.name?.message ? 'border-red-600' : 'border-ced4da'} border-solid rounded-md p-3 focus:shadow-effect-1 transition-shadow duration-200`}
               />

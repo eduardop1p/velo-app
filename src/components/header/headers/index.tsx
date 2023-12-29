@@ -1,12 +1,20 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
-import { FaSearch, FaUser } from 'react-icons/fa';
+import {
+  FaSearch,
+  FaUser,
+  FaBell,
+  FaComments,
+  FaChevronDown,
+} from 'react-icons/fa';
 import { usePathname } from 'next/navigation';
 
 import LogoTitle from '@/components/logoTitle';
 import Products from '@/components/products';
 import { CryptoType } from '..';
+import { ShowUserType } from '..';
 
 interface Props {
   dataCurrencies: CryptoType[];
@@ -18,6 +26,8 @@ interface Props {
   dataDefi: CryptoType[];
   dataInteroperability: CryptoType[];
   dataNFT: CryptoType[];
+  isAuth: boolean;
+  userData?: ShowUserType;
 }
 
 export default function Headers({
@@ -30,10 +40,99 @@ export default function Headers({
   dataDefi,
   dataInteroperability,
   dataNFT,
+  isAuth,
+  userData,
 }: Props) {
   const pathName = usePathname();
 
-  return pathName !== '/create-account' ? (
+  const [showNotifications, setShowNotifications] = useState(false);
+
+  const handleFormatNameProfile = (name: string) => {
+    return name
+      .split(' ')
+      .slice(0, 2)
+      .map(val => val.at(0))
+      .join('')
+      ?.toUpperCase();
+  };
+
+  const handleFormatName = (name: string) => {
+    return name.split(' ').slice(0, 2).join(' ').length <= 30
+      ? name.split(' ').slice(0, 2).join(' ')
+      : `${name.split(' ').slice(0, 2).join(' ').slice(0, 30)}...`;
+  };
+
+  return isAuth && userData ? (
+    <header className="h-20 flex items-center w-full fixed z-10 bg-191919 top-0 px-16 justify-center">
+      <div className="w-full flex justify-between items-center">
+        <div className="flex items-center gap-14">
+          <Link href="/home" className="text-primary text-4xl font-semibold">
+            velo
+          </Link>
+          <div className="flex gap-2">
+            <Link
+              href="/portfolio"
+              className="text-primary font-normal text-sm h-9 px-4 flex items-center justify-center rounded hover:bg-383b3eff transition-colors duration-200"
+            >
+              Portfolio
+            </Link>
+            <Link
+              href="/negotiate"
+              className="text-primary font-normal text-sm h-9 px-4 flex items-center justify-center rounded hover:bg-383b3eff transition-colors duration-200"
+            >
+              Negotiate
+            </Link>
+            <Link
+              href="/historic"
+              className="text-primary font-normal text-sm h-9 px-4 flex items-center justify-center rounded hover:bg-383b3eff transition-colors duration-200"
+            >
+              Historic
+            </Link>
+            <Link
+              href="/content"
+              className="text-primary font-normal text-sm h-9 px-4 flex items-center justify-center rounded hover:bg-383b3eff transition-colors duration-200"
+            >
+              Content
+            </Link>
+          </div>
+        </div>
+        <div className="flex items-center gap-8">
+          <div>
+            <button
+              className="w-5 h-w-5 flex items-center justify-center fill-primary"
+              onClick={() => setShowNotifications(!showNotifications)}
+            >
+              <FaBell />
+            </button>
+            <div
+              // eslint-disable-next-line
+              className={`h-full-screen-80px fixed top-[90px] w-[500px] rounded bg-1b1e20ff right-0 ${showNotifications ? 'flex' : 'hidden'}`}
+            ></div>
+          </div>
+          <div>
+            <button className="w-5 h-w-5 flex items-center justify-center fill-primary">
+              <FaComments />
+            </button>
+          </div>
+          <div className="bg-ffffff33 h-[40px] w-[2px] flex-none"></div>
+          <div className="flex items-center gap-3">
+            <div className="cursor-default w-8 h-8 bg-272a2eff rounded-full flex items-center justify-center text-primary font-normal text-sm">
+              {handleFormatNameProfile(userData.name)}
+            </div>
+            <h3
+              className="text-primary text-[15px] font-medium"
+              title={userData.name}
+            >
+              {handleFormatName(userData.name)}
+            </h3>
+            <button className="w-[14px] h-[14px] flex justify-center items-center fill-primary cursor-pointer">
+              <FaChevronDown />
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+  ) : pathName !== '/create-account' ? (
     <header className="h-20 fixed top-0 flex w-full flex-row items-center justify-between bg-primary px-20 z-10 border-b-2 border-black border-solid">
       <div className="flex flex-none items-center gap-20">
         <LogoTitle fontSize="text-4xl" color="text-black" />
