@@ -1,7 +1,10 @@
 import { Metadata } from 'next';
 import { cookies } from 'next/headers';
+import dynamic from 'next/dynamic';
 
-import UserPatrimony from '@/components/userPatrimony';
+const UserPatrimony = dynamic(() => import('@/components/userPatrimony'), {
+  ssr: false,
+});
 import { ShowUserType } from '@/components/header';
 
 export const metadata: Metadata = {

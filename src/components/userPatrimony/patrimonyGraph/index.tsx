@@ -13,9 +13,9 @@ import {
 import { UserBalanceType } from '@/app/home/page';
 
 export default function PatrimonyGraph({
-  userBalance,
+  stUserBalance,
 }: {
-  userBalance: UserBalanceType;
+  stUserBalance: UserBalanceType & { hide: boolean };
 }) {
   const data = [{ name: 'patrimony', value: 100 }];
 
@@ -34,7 +34,7 @@ export default function PatrimonyGraph({
         </Pie>
         <Tooltip />
         <Legend
-          content={<CustomLegend invested={userBalance.invested} />}
+          content={<CustomLegend stUserBalance={stUserBalance} />}
           align="center"
           verticalAlign="middle"
         />
@@ -43,14 +43,26 @@ export default function PatrimonyGraph({
   );
 }
 
-const CustomLegend = ({ invested }: { invested: string }) => (
-  <div className="flex flex-col items-center">
-    <span className="text-gray-b8bec4ff text-base font-medium">
-      {(+invested).toLocaleString('en-US', {
-        style: 'currency',
-        currency: 'USD',
-      })}
-    </span>
-    <span className="text-[11px] text-gray-b8bec4ff">Total invested</span>
-  </div>
-);
+const CustomLegend = ({
+  stUserBalance,
+}: {
+  stUserBalance: UserBalanceType & { hide: boolean };
+}) => {
+  const handleFormatPrice = (value: string) => {
+    return (+value).toLocaleString('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    });
+  };
+
+  return (
+    <div className="flex flex-col items-center">
+      <span className="text-gray-b8bec4ff text-base font-medium">
+        {stUserBalance.hide
+          ? stUserBalance.invested
+          : handleFormatPrice(stUserBalance.invested)}
+      </span>
+      <span className="text-[11px] text-gray-b8bec4ff">Total invested</span>
+    </div>
+  );
+};
