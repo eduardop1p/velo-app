@@ -34,6 +34,8 @@ export async function GET(req: NextRequest, res: NextResponse) {
       dateBirth: user.dateBirth,
       cellPhone: user.cellPhone,
       country: user.country,
+      balance: user.balance,
+      invested: user.invested,
     });
   } catch (err) {
     // console.log(err);

@@ -8,6 +8,7 @@ export interface UserType {
   country: string;
   password: string;
   balance?: string;
+  invested?: string;
 }
 
 const usersSchema = new Schema<UserType>({
@@ -18,6 +19,7 @@ const usersSchema = new Schema<UserType>({
   country: { type: String, required: true },
   password: { type: String, required: true },
   balance: { type: String, required: false },
+  invested: { type: String, required: false },
 });
 
 const usersModel = models.Users || model<UserType>('Users', usersSchema);

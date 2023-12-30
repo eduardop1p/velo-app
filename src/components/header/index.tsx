@@ -36,6 +36,8 @@ export interface ShowUserType {
   dateBirth: string;
   cellPhone: string;
   country: string;
+  balance: string;
+  invested: string;
 }
 
 const getData = async (url: string, activeCrypto: ActiveCryptoType) => {

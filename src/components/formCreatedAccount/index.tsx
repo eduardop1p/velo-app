@@ -120,6 +120,8 @@ export default function FormCreatedAccount({
             cellPhone,
             country,
             password,
+            balance: '0',
+            invested: '0',
           }),
           headers: {
             'Content-Type': 'application/json',

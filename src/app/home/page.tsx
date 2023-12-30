@@ -1,4 +1,8 @@
 import { Metadata } from 'next';
+import { cookies } from 'next/headers';
+
+import UserPatrimony from '@/components/userPatrimony';
+import { ShowUserType } from '@/components/header';
 
 export const metadata: Metadata = {
   title: 'Bitcoin, Ethereum and other cryptocurrencies | Velo',
@@ -6,13 +10,34 @@ export const metadata: Metadata = {
     'Buying and selling bitcoin, ethereum and other cryptoactives with the credibility of OP Financial Group. Open your account.',
 };
 
-export default function Page() {
+export interface UserBalanceType {
+  patrimony: string;
+  invested: string;
+}
+
+export default async function Page() {
+  const token = cookies().get('token')?.value;
+
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/show-user`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    cache: 'no-cache',
+  });
+  const userData = (await res.json()) as ShowUserType;
+  const userBalance = {
+    patrimony: userData.balance,
+    invested: userData.invested,
+  };
+
   return (
     <>
       <main className="mt-20">
-        <section className="h-full-screen-80px bg-black">
-          <h1 className="text-black">Home wallet</h1>
-        </section>
+        <div className="bg-black-section min-h-full-screen-80px px-20 py-10 flex flex-col items-center w-full">
+          <UserPatrimony userBalance={userBalance} />
+        </div>
       </main>
     </>
   );
