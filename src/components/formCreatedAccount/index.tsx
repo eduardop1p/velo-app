@@ -3,7 +3,7 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod';
-import { useState, useEffect, type MouseEvent } from 'react';
+import { useState, useEffect, type MouseEvent, useRef } from 'react';
 import Inputmask from 'inputmask';
 import { FaChevronDown } from 'react-icons/fa6';
 import Link from 'next/link';
@@ -74,6 +74,7 @@ export default function FormCreatedAccount({
   });
   const [passwordType, setPasswordType] =
     useState<ShowPasswordType>('password');
+  const refDataCountries = useRef<HTMLDivElement | null>(null);
 
   const searchParams = useSearchParams();
 
@@ -102,6 +103,30 @@ export default function FormCreatedAccount({
       if (dateBirth.inputmask) dateBirth.inputmask.remove();
     };
   }, []);
+
+  useEffect(() => {
+    const eventOnKeyup = (event: KeyboardEvent) => {
+      const elParentCountries = refDataCountries.current;
+      if (!elParentCountries) return;
+      const key = event.key.toLowerCase();
+      const searchInList = dataCountries
+        .map((val, index) => {
+          if (val.name.toLowerCase().startsWith(key)) {
+            return { name: val.name, index };
+          }
+        })
+        .filter(val => typeof val !== 'undefined') as { name: string, index: number }[] // eslint-disable-line
+      if (!searchInList.length) return;
+      const spans = elParentCountries.childNodes as NodeListOf<HTMLSpanElement>;
+      elParentCountries.scrollTop = spans[searchInList[0].index].offsetTop;
+    };
+
+    if (showCountries && refDataCountries.current) {
+      window.addEventListener('keyup', eventOnKeyup);
+    }
+
+    return () => window.removeEventListener('keyup', eventOnKeyup);
+  }, [showCountries, dataCountries]);
 
   const handleFormSubmit: SubmitHandler<BodyType> = async body => {
     if (isLoading) return;
@@ -317,6 +342,7 @@ export default function FormCreatedAccount({
             </label>
             <div className="relative w-full">
               <div
+                ref={refDataCountries}
                 // eslint-disable-next-line
                 className={`absolute -top-52 py-2 rounded-lg w-full ${showCountries ? 'flex' : 'hidden'} gap-1 flex-col bg-primary h-52 overflow-auto shadow-effect-2`}
               >

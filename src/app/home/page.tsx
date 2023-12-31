@@ -6,6 +6,7 @@ const UserPatrimony = dynamic(() => import('@/components/userPatrimony'), {
   ssr: false,
 });
 import { ShowUserType } from '@/components/header';
+import SlideMarketOverview from '@/components/slideMarketOverview';
 
 export const metadata: Metadata = {
   title: 'Bitcoin, Ethereum and other cryptocurrencies | Velo',
@@ -38,8 +39,9 @@ export default async function Page() {
   return (
     <>
       <main className="mt-20">
-        <div className="bg-black-section min-h-full-screen-80px px-20 py-10 flex flex-col items-center w-full">
+        <div className="bg-black-section min-h-full-screen-80px px-20 py-10 flex flex-col gap-16 items-center w-full">
           <UserPatrimony userBalance={userBalance} />
+          <SlideMarketOverview />
         </div>
       </main>
     </>
