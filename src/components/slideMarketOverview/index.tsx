@@ -9,7 +9,7 @@ import { Autoplay, Pagination } from 'swiper/modules';
 
 export default function SlideMarketOverview() {
   return (
-    <div className="w-full h-[330px]">
+    <div className="w-full max-h-[300px]">
       <Swiper
         spaceBetween={30}
         slidesPerView={1}
@@ -19,6 +19,7 @@ export default function SlideMarketOverview() {
         }}
         pagination={{
           clickable: true,
+          modifierClass: 'swiper-pagination-market-overview-',
         }}
         navigation={false}
         loop={true}
@@ -29,46 +30,66 @@ export default function SlideMarketOverview() {
         }}
       >
         <SwiperSlide>
-          <div className="border-1 border-solid border-272a2eff rounded-lg overflow-hidden relative w-full h-[291px]">
+          <div className="border-1 border-solid border-272a2eff rounded-lg overflow-hidden">
             <Image
               src="/assets/imgs/velo-img-16.png"
               alt="velo-img-16"
-              fill
-              sizes="100%"
-              objectFit="cover"
+              sizes="100vw"
+              style={{
+                width: '100%',
+                maxHeight: '300px',
+                objectFit: 'cover',
+              }}
+              width={500}
+              height={300}
             />
           </div>
         </SwiperSlide>
         <SwiperSlide>
-          <div className="border-1 border-solid border-272a2eff rounded-lg overflow-hidden relative w-full h-[291px]">
+          <div className="border-1 border-solid border-272a2eff rounded-lg overflow-hidden">
             <Image
               src="/assets/imgs/velo-img-17.png"
               alt="velo-img-17"
-              fill
-              sizes="100%"
-              objectFit="cover"
+              sizes="100vw"
+              style={{
+                width: '100%',
+                maxHeight: '300px',
+                objectFit: 'cover',
+              }}
+              width={500}
+              height={300}
             />
           </div>
         </SwiperSlide>
         <SwiperSlide>
-          <div className="border-1 border-solid border-272a2eff rounded-lg overflow-hidden relative w-full h-[291px]">
+          <div className="border-1 border-solid border-272a2eff rounded-lg overflow-hidden">
             <Image
               src="/assets/imgs/velo-img-18.png"
               alt="velo-img-18"
-              fill
-              sizes="100%"
-              objectFit="cover"
+              sizes="100vw"
+              style={{
+                width: '100%',
+                maxHeight: '300px',
+                objectFit: 'cover',
+              }}
+              width={500}
+              height={300}
             />
           </div>
         </SwiperSlide>
         <SwiperSlide>
-          <div className="border-1 border-solid border-272a2eff rounded-lg overflow-hidden relative w-full h-[291px]">
+          <div className="border-1 border-solid border-272a2eff rounded-lg overflow-hidden">
             <Image
               src="/assets/imgs/velo-img-19.png"
               alt="velo-img-19"
-              fill
-              sizes="100%"
-              objectFit="cover"
+              sizes="100vw"
+              style={{
+                width: '100%',
+                maxHeight: '300px',
+                objectFit: 'cover',
+              }}
+              width={500}
+              height={300}
             />
           </div>
         </SwiperSlide>

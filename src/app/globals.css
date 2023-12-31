@@ -26,3 +26,14 @@ svg:not(.MuiSvgIcon-root, .loading){
 .swiper-pagination-bullet-active{
   background-color: #195ab4ff !important;
 }
+
+.swiper-pagination-market-overview-bullets{
+  width: 100%;
+  position: relative !important;
+  left: 50%;
+  margin-top: 8px;
+  transform: translateX(-50%) !important;
+}
+.swiper-pagination-market-overview-bullets > :not(:last-child){
+  margin-right: 8px;
+}
