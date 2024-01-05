@@ -14,6 +14,7 @@ svg:not(.MuiSvgIcon-root, .loading){
   height: 100% !important;
   display: inline-block !important;
   fill: inherit;
+  stroke: inherit;
 }
 
 .swiper-pagination{

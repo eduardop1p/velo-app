@@ -1,7 +1,7 @@
 import { ActiveCryptoType } from '@/components/products';
 
 export default function formatDataCrypto(
-  activeCrypto: ActiveCryptoType | 'full-data',
+  activeCrypto: ActiveCryptoType | 'full-data' | 'follow-market',
   metaData: any
 ) {
   switch (activeCrypto) {
@@ -59,6 +59,14 @@ export default function formatDataCrypto(
       const ape = { NAME: 'ApeCoin', ...metaData.APE.USD };
       return [ape];
     }
+    case 'follow-market': {
+      const btc = { NAME: 'Bitcoin', ...metaData.BTC.USD };
+      const usdt = { NAME: 'Tether', ...metaData.USDT.USD };
+      const eth = { NAME: 'Ethereum', ...metaData.ETH.USD };
+      const sol = { NAME: 'Solana', ...metaData.SOL.USD };
+      const xrp = { NAME: 'Ripple', ...metaData.XRP.USD };
+      return [btc, usdt, eth, sol, xrp];
+    }
     case 'full-data': {
       const btc = {
         NAME: 'Bitcoin',
@@ -77,6 +85,12 @@ export default function formatDataCrypto(
         DESCRIPTION:
           'Stellar is a fast and affordable global payment network, facilitating cross-border transactions.',
         ...metaData.XLM.USD,
+      };
+      const xrp = {
+        NAME: 'Ripple',
+        DESCRIPTION:
+          'XRP: Fast, low-cost cryptocurrency for global payments by Ripple Labs. Widely used in finance.',
+        ...metaData.XRP.USD,
       };
       const ltc = {
         NAME: 'LiteCoin',
@@ -225,6 +239,7 @@ export default function formatDataCrypto(
         btc,
         doge,
         xlm,
+        xrp,
         ltc,
         eth,
         ada,

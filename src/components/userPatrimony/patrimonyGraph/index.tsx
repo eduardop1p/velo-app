@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
 import React from 'react';
@@ -32,7 +33,7 @@ export default function PatrimonyGraph({
         >
           <Cell fill="#272a2eff" />
         </Pie>
-        <Tooltip />
+        {/* <Tooltip /> */}
         <Legend
           content={<CustomLegend stUserBalance={stUserBalance} />}
           align="center"

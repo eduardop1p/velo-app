@@ -227,7 +227,7 @@ function SliderGraphicLine({ valData }: { valData: CryptoType[] }) {
     </div>
   );
 }
-function GraphicLine({ fsym }: { fsym: string }) {
+export function GraphicLine({ fsym }: { fsym: string }) {
   const [cryptoData, setcryptoData] = useState<
     {
       timestamp: number;
@@ -236,7 +236,8 @@ function GraphicLine({ fsym }: { fsym: string }) {
     }[]
   >([]);
 
-  const limit = new Date().getUTCHours();
+  const hourHtc = new Date().getUTCHours();
+  const limit = !hourHtc ? 1 : hourHtc;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -266,6 +267,7 @@ function GraphicLine({ fsym }: { fsym: string }) {
         );
         setcryptoData(chartData);
       } catch (error) {
+        // console.log(error);
         // console.error('Error fetching Bitcoin data:', error);
       }
     };
