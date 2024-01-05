@@ -151,8 +151,10 @@ function SliderPriceUsd({ valData }: { valData: CryptoType[] }) {
 
 function SliderChangePercent24Hr({ valData }: { valData: CryptoType[] }) {
   const handleFormatPriceAndPercent = (value: string) => {
-    const indexFloatPoint = value.indexOf('.') + 1;
-    const CHANGEDAYNextFloatPoint = value.slice(indexFloatPoint);
+    const indexFloatPoint = value.indexOf('.');
+    if (parseInt(value.slice(0, indexFloatPoint)) > 0) return 2;
+
+    const CHANGEDAYNextFloatPoint = value.slice(indexFloatPoint + 1);
     const minimumFractionDigits =
       CHANGEDAYNextFloatPoint.slice(0, 2) === '00'
         ? CHANGEDAYNextFloatPoint.slice(0, 3) === '000'
@@ -246,7 +248,6 @@ export function GraphicLine({ fsym }: { fsym: string }) {
           `${process.env.NEXT_PUBLIC_CRYPTO_API_URL_HISTOHOUR}&fsym=${fsym}&limit=${limit}`,
           {
             method: 'GET',
-            next: { revalidate: 60 },
           }
         );
         const data = await response.json();

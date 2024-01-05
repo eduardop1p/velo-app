@@ -73,8 +73,10 @@ export default function FollowMarket({
   };
 
   const handleFormatPriceAndPercent = (value: string) => {
-    const indexFloatPoint = value.indexOf('.') + 1;
-    const CHANGEDAYNextFloatPoint = value.slice(indexFloatPoint);
+    const indexFloatPoint = value.indexOf('.');
+    if (parseInt(value.slice(0, indexFloatPoint)) > 0) return 2;
+
+    const CHANGEDAYNextFloatPoint = value.slice(indexFloatPoint + 1);
     const minimumFractionDigits =
       CHANGEDAYNextFloatPoint.slice(0, 2) === '00'
         ? CHANGEDAYNextFloatPoint.slice(0, 3) === '000'
