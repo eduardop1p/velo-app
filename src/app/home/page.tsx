@@ -44,7 +44,7 @@ export default async function Page() {
     {
       method: 'GET',
       next: {
-        revalidate: 30,
+        revalidate: 60,
       },
     }
   );
