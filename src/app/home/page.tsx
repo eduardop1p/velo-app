@@ -64,11 +64,11 @@ export default async function Page() {
   ) as CryptoType[];
 
   const hourHtc = new Date().getUTCHours();
-  const limit = !hourHtc ? 60 : hourHtc * 60;
+  const limit = !hourHtc ? 1 : hourHtc;
   const newDataHistoHour = [];
   for (let i = 0; i < dataCryptos.length; i++) {
     const resHistoHour = await fetch(
-      `${process.env.NEXT_PUBLIC_CRYPTO_API_URL_HISTOMINUTE}&fsym=${dataCryptos[i].FROMSYMBOL}&limit=${limit}`,
+      `${process.env.NEXT_PUBLIC_CRYPTO_API_URL_HISTOHOUR}&fsym=${dataCryptos[i].FROMSYMBOL}&limit=${limit}`,
       {
         method: 'GET',
         next: { revalidate: 60 },

@@ -245,6 +245,7 @@ function SliderGraphicLine({
         <GraphicLine
           key={index.toString()}
           cryptoData={handleClearDataHistoHour(val.FROMSYMBOL)}
+          CHANGEPCTDAY={val.CHANGEPCTDAY}
           border
         />
       ))}
@@ -254,9 +255,11 @@ function SliderGraphicLine({
 export function GraphicLine({
   cryptoData,
   border,
+  CHANGEPCTDAY,
 }: {
   cryptoData: HistorHourType[];
   border?: boolean;
+  CHANGEPCTDAY: number;
 }) {
   if (!cryptoData.length) return;
   // console.log(cryptoData[cryptoData.length - 1].close, cryptoData[0].open);
@@ -264,9 +267,12 @@ export function GraphicLine({
   const handleStrokeLineGraph = () => {
     if (cryptoData[cryptoData.length - 1].close === cryptoData[0].open)
       return '#999';
-    return cryptoData[cryptoData.length - 1].close > cryptoData[0].open
-      ? '#549cffff'
-      : '#f76970ff';
+    if (
+      cryptoData[cryptoData.length - 1].close > cryptoData[0].open &&
+      CHANGEPCTDAY > 0
+    )
+      return '#549cffff';
+    return '#f76970ff';
   };
 
   return (

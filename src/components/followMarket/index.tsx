@@ -239,6 +239,7 @@ export default function FollowMarket({
                 cryptoData={handleClearDataHistoHour(
                   stDataCryptos[0].FROMSYMBOL
                 )}
+                CHANGEPCTDAY={stDataCryptos[0].CHANGEPCTDAY}
               />
             </th>
           </tr>
@@ -279,6 +280,7 @@ export default function FollowMarket({
                 cryptoData={handleClearDataHistoHour(
                   stDataCryptos[1].FROMSYMBOL
                 )}
+                CHANGEPCTDAY={stDataCryptos[1].CHANGEPCTDAY}
               />
             </th>
           </tr>
@@ -319,6 +321,7 @@ export default function FollowMarket({
                 cryptoData={handleClearDataHistoHour(
                   stDataCryptos[2].FROMSYMBOL
                 )}
+                CHANGEPCTDAY={stDataCryptos[2].CHANGEPCTDAY}
               />
             </th>
           </tr>
@@ -359,6 +362,7 @@ export default function FollowMarket({
                 cryptoData={handleClearDataHistoHour(
                   stDataCryptos[3].FROMSYMBOL
                 )}
+                CHANGEPCTDAY={stDataCryptos[3].CHANGEPCTDAY}
               />
             </th>
           </tr>
@@ -399,6 +403,7 @@ export default function FollowMarket({
                 cryptoData={handleClearDataHistoHour(
                   stDataCryptos[4].FROMSYMBOL
                 )}
+                CHANGEPCTDAY={stDataCryptos[4].CHANGEPCTDAY}
               />
             </th>
           </tr>
