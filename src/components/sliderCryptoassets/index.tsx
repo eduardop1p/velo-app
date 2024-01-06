@@ -17,11 +17,14 @@ import { Autoplay, Pagination } from 'swiper/modules';
 import Link from 'next/link';
 
 import { CryptoType } from '../header';
+import { HistorHourType } from '@/app/home/page';
 
 export default function SliderCryptoassets({
   dataCryptoassets,
+  dataHistoHour,
 }: {
   dataCryptoassets: CryptoType[];
+  dataHistoHour: HistorHourType[][];
 }) {
   const [data, setData] = useState<CryptoType[][]>([]);
   const [initialRender, setInitialRender] = useState(true);
@@ -89,7 +92,10 @@ export default function SliderCryptoassets({
             />
             <SliderPriceUsd valData={valData} />
             <SliderChangePercent24Hr valData={valData} />
-            <SliderGraphicLine valData={valData} />
+            <SliderGraphicLine
+              valData={valData}
+              dataHistoHour={dataHistoHour}
+            />
             <SliderBuyNow valData={valData} />
           </div>
         </SwiperSlide>
@@ -217,65 +223,34 @@ function SliderChangePercent24Hr({ valData }: { valData: CryptoType[] }) {
   );
 }
 
-function SliderGraphicLine({ valData }: { valData: CryptoType[] }) {
+function SliderGraphicLine({
+  valData,
+  dataHistoHour,
+}: {
+  valData: CryptoType[];
+  dataHistoHour: HistorHourType[][];
+}) {
+  const handleClearDataHistoHour = (FROMSYMBOL: string) => {
+    return dataHistoHour
+      .map(mval => mval.filter(fval => fval.FROMSYMBOL === FROMSYMBOL))
+      .flat();
+  };
+
   return (
     <div className="flex flex-col pb-4 w-full items-center">
       <h3 className="text-black font-semibold text-base border-b-2 border-black border-solid w-full text-left pl-4 pb-3">
         Graphic
       </h3>
       {valData.map((val, index) => (
-        <GraphicLine key={index.toString()} fsym={val.FROMSYMBOL} />
+        <GraphicLine
+          key={index.toString()}
+          cryptoData={handleClearDataHistoHour(val.FROMSYMBOL)}
+        />
       ))}
     </div>
   );
 }
-export function GraphicLine({ fsym }: { fsym: string }) {
-  const [cryptoData, setcryptoData] = useState<
-    {
-      timestamp: number;
-      close: number;
-      open: number;
-    }[]
-  >([]);
-
-  const hourHtc = new Date().getUTCHours();
-  const limit = !hourHtc ? 1 : hourHtc;
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_CRYPTO_API_URL_HISTOHOUR}&fsym=${fsym}&limit=${limit}`,
-          {
-            method: 'GET',
-          }
-        );
-        const data = await response.json();
-        const chartData = data.Data.Data.map(
-          ({
-            time,
-            close,
-            open,
-          }: {
-            time: number;
-            close: number;
-            open: number;
-          }) => ({
-            timestamp: time * 1000,
-            close,
-            open,
-          })
-        );
-        setcryptoData(chartData);
-      } catch (error) {
-        // console.log(error);
-        // console.error('Error fetching Bitcoin data:', error);
-      }
-    };
-
-    fetchData();
-  }, [fsym, limit]);
-
+export function GraphicLine({ cryptoData }: { cryptoData: HistorHourType[] }) {
   if (!cryptoData.length) return;
 
   return (

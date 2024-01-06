@@ -9,6 +9,7 @@ import SliderCompleteApp from '@/components/sliderCompleteApp';
 import TimeLineApp from '@/components/TimeLineApp';
 import SectionNewsletter from '@/components/sectionNewsletter';
 import Footer from '@/components/footer';
+import { HistorHourType } from './home/page';
 
 export default async function Page() {
   const resCryptoassets = await fetch(
@@ -25,6 +26,29 @@ export default async function Page() {
     'full-data',
     metaData.RAW
   ) as CryptoType[];
+
+  const hourHtc = new Date().getUTCHours();
+  const limit = !hourHtc ? 1 : hourHtc;
+  const newDataHistoHour = [];
+  for (let i = 0; i < dataCryptoassets.length; i++) {
+    const resHistoHour = await fetch(
+      `${process.env.NEXT_PUBLIC_CRYPTO_API_URL_HISTOHOUR}&fsym=${dataCryptoassets[i].FROMSYMBOL}&limit=${limit}`,
+      {
+        method: 'GET',
+        next: { revalidate: 60 },
+      }
+    );
+    const metaDataHistoHour = await resHistoHour.json();
+    const dataHistoHour = metaDataHistoHour.Data.Data.map(
+      ({ time, close, open }: HistorHourType) => ({
+        timestamp: time * 1000,
+        close,
+        open,
+        FROMSYMBOL: dataCryptoassets[i].FROMSYMBOL,
+      })
+    ) as HistorHourType[];
+    newDataHistoHour.push(dataHistoHour);
+  }
 
   return (
     <>
@@ -79,7 +103,10 @@ export default async function Page() {
           <p className="text-gray-000000b3 text-sm font-medium">
             Check out the products available at Velo and their current prices:
           </p>
-          <SliderCryptoassets dataCryptoassets={dataCryptoassets} />
+          <SliderCryptoassets
+            dataCryptoassets={dataCryptoassets}
+            dataHistoHour={newDataHistoHour}
+          />
         </section>
         <section className="bg-black w-full flex justify-between items-center gap-20 px-20 py-14">
           <SliderCompleteApp />

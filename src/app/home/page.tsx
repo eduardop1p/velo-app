@@ -24,6 +24,13 @@ export interface UserBalanceType {
   invested: string;
 }
 
+export interface HistorHourType {
+  time: number;
+  close: number;
+  open: number;
+  FROMSYMBOL: string;
+}
+
 export default async function Page() {
   const token = cookies().get('token')?.value;
 
@@ -55,6 +62,29 @@ export default async function Page() {
     'full-data',
     metaData.RAW
   ) as CryptoType[];
+
+  const hourHtc = new Date().getUTCHours();
+  const limit = !hourHtc ? 1 : hourHtc;
+  const newDataHistoHour = [];
+  for (let i = 0; i < dataCryptos.length; i++) {
+    const resHistoHour = await fetch(
+      `${process.env.NEXT_PUBLIC_CRYPTO_API_URL_HISTOHOUR}&fsym=${dataCryptos[i].FROMSYMBOL}&limit=${limit}`,
+      {
+        method: 'GET',
+        next: { revalidate: 60 },
+      }
+    );
+    const metaDataHistoHour = await resHistoHour.json();
+    const dataHistoHour = metaDataHistoHour.Data.Data.map(
+      ({ time, close, open }: HistorHourType) => ({
+        timestamp: time * 1000,
+        close,
+        open,
+        FROMSYMBOL: dataCryptos[i].FROMSYMBOL,
+      })
+    ) as HistorHourType[];
+    newDataHistoHour.push(dataHistoHour);
+  }
 
   const layer1Cryptos = dataCryptos.filter(val => {
     if (
@@ -92,7 +122,10 @@ export default async function Page() {
         <div className="bg-black-section min-h-full-screen-80px px-20 py-10 flex flex-col gap-16 items-center w-full">
           <UserPatrimony userBalance={userBalance} />
           <SlideMarketOverview />
-          <FollowMarket dataCryptos={dataCryptos} />
+          <FollowMarket
+            dataCryptos={dataCryptos}
+            dataHistoHour={newDataHistoHour}
+          />
           <section className="w-full flex flex-col gap-4">
             <h2 className="text-primary text-2xl font-normal">
               Crypto recommendations

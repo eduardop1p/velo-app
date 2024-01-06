@@ -13,13 +13,16 @@ import Link from 'next/link';
 
 import { CryptoType } from '../header';
 import { GraphicLine } from '../sliderCryptoassets';
+import { HistorHourType } from '@/app/home/page';
 
 type OrderType = 'desc' | 'asc' | 'default';
 
 export default function FollowMarket({
   dataCryptos,
+  dataHistoHour,
 }: {
   dataCryptos: CryptoType[];
+  dataHistoHour: HistorHourType[][];
 }) {
   const [stDataCryptos, setStDataCryptos] = useState(dataCryptos.slice(0, 5));
   const [orderPrices, setOrderPrices] = useState<OrderType>('default');
@@ -100,6 +103,12 @@ export default function FollowMarket({
   const hanldeAddpercentColor = (val: number) => {
     // eslint-disable-next-line
     return `${!handleCalcVwap24HrAndPercent(val).includes('-') ? 'text-blue' : 'text-red-graphic'}`;
+  };
+
+  const handleClearDataHistoHour = (FROMSYMBOL: string) => {
+    return dataHistoHour
+      .map(mval => mval.filter(fval => fval.FROMSYMBOL === FROMSYMBOL))
+      .flat();
   };
 
   return (
@@ -220,7 +229,11 @@ export default function FollowMarket({
                 {handleCalcVwap24HrAndPercent(stDataCryptos[0].CHANGEPCTDAY)}
               </th>
               <th className="w-1/4 flex items-center border-t-1 border-solid border-34383cff px-4 py-6 bg-inherit text-primary font-normal text-sm h-[79px]">
-                <GraphicLine fsym={stDataCryptos[0].FROMSYMBOL} />
+                <GraphicLine
+                  cryptoData={handleClearDataHistoHour(
+                    stDataCryptos[0].FROMSYMBOL
+                  )}
+                />
               </th>
             </Link>
           </tr>
@@ -254,7 +267,11 @@ export default function FollowMarket({
                 {handleCalcVwap24HrAndPercent(stDataCryptos[1].CHANGEPCTDAY)}
               </th>
               <th className="w-1/4 flex items-center border-t-1 border-solid border-34383cff px-4 py-6 bg-inherit text-primary font-normal text-sm h-[79px]">
-                <GraphicLine fsym={stDataCryptos[1].FROMSYMBOL} />
+                <GraphicLine
+                  cryptoData={handleClearDataHistoHour(
+                    stDataCryptos[1].FROMSYMBOL
+                  )}
+                />
               </th>
             </Link>
           </tr>
@@ -288,7 +305,11 @@ export default function FollowMarket({
                 {handleCalcVwap24HrAndPercent(stDataCryptos[2].CHANGEPCTDAY)}
               </th>
               <th className="w-1/4 flex items-center border-t-1 border-solid border-34383cff px-4 py-6 bg-inherit text-primary font-normal text-sm h-[79px]">
-                <GraphicLine fsym={stDataCryptos[2].FROMSYMBOL} />
+                <GraphicLine
+                  cryptoData={handleClearDataHistoHour(
+                    stDataCryptos[2].FROMSYMBOL
+                  )}
+                />
               </th>
             </Link>
           </tr>
@@ -322,7 +343,11 @@ export default function FollowMarket({
                 {handleCalcVwap24HrAndPercent(stDataCryptos[3].CHANGEPCTDAY)}
               </th>
               <th className="w-1/4 flex items-center border-t-1 border-solid border-34383cff px-4 py-6 bg-inherit text-primary font-normal text-sm h-[79px]">
-                <GraphicLine fsym={stDataCryptos[3].FROMSYMBOL} />
+                <GraphicLine
+                  cryptoData={handleClearDataHistoHour(
+                    stDataCryptos[3].FROMSYMBOL
+                  )}
+                />
               </th>
             </Link>
           </tr>
@@ -356,7 +381,11 @@ export default function FollowMarket({
                 {handleCalcVwap24HrAndPercent(stDataCryptos[4].CHANGEPCTDAY)}
               </th>
               <th className="w-1/4 flex items-center border-t-1 border-solid border-34383cff px-4 py-6 bg-inherit text-primary font-normal text-sm h-[79px]">
-                <GraphicLine fsym={stDataCryptos[4].FROMSYMBOL} />
+                <GraphicLine
+                  cryptoData={handleClearDataHistoHour(
+                    stDataCryptos[4].FROMSYMBOL
+                  )}
+                />
               </th>
             </Link>
           </tr>
