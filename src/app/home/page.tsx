@@ -64,11 +64,11 @@ export default async function Page() {
   ) as CryptoType[];
 
   const hourHtc = new Date().getUTCHours();
-  const limit = !hourHtc ? 1 : hourHtc;
+  const limit = !hourHtc ? 60 : hourHtc * 60;
   const newDataHistoHour = [];
   for (let i = 0; i < dataCryptos.length; i++) {
     const resHistoHour = await fetch(
-      `${process.env.NEXT_PUBLIC_CRYPTO_API_URL_HISTOHOUR}&fsym=${dataCryptos[i].FROMSYMBOL}&limit=${limit}`,
+      `${process.env.NEXT_PUBLIC_CRYPTO_API_URL_HISTOMINUTE}&fsym=${dataCryptos[i].FROMSYMBOL}&limit=${limit}`,
       {
         method: 'GET',
         next: { revalidate: 60 },
@@ -222,7 +222,6 @@ export default async function Page() {
                     width={35}
                     height={35}
                     alt={defiCryptos[1].NAME}
-                    objectFit="none"
                     className="relative z-[2] -ml-2 rounded-full !object-none"
                   />
                   <div className="relative z-[2] -ml-2 rounded-full flex items-center justify-center bg-primary w-[35px] h-[35px]">
@@ -246,7 +245,6 @@ export default async function Page() {
                     width={35}
                     height={35}
                     alt={defiCryptos[4].NAME}
-                    objectFit="none"
                     className="relative z-[2] -ml-2 rounded-full !object-none"
                   />
                 </div>
@@ -281,7 +279,6 @@ export default async function Page() {
                     width={35}
                     height={35}
                     alt={recommendedWallet1[0].NAME}
-                    objectFit="none"
                     className="rounded-full !object-none"
                   />
                   <div className="relative z-[2] -ml-2 rounded-full flex items-center justify-center bg-primary w-[35px] h-[35px]">

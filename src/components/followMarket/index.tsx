@@ -10,6 +10,7 @@ import {
   type MouseEventHandler,
 } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 import { CryptoType } from '../header';
 import { GraphicLine } from '../sliderCryptoassets';
@@ -24,6 +25,8 @@ export default function FollowMarket({
   dataCryptos: CryptoType[];
   dataHistoHour: HistorHourType[][];
 }) {
+  const router = useRouter();
+
   const [stDataCryptos, setStDataCryptos] = useState(dataCryptos.slice(0, 5));
   const [orderPrices, setOrderPrices] = useState<OrderType>('default');
   const [orderPercent, setOrderPercent] = useState<OrderType>('default');
@@ -199,195 +202,205 @@ export default function FollowMarket({
           </tr>
         </thead>
         <tbody>
-          <tr className="w-full hover:bg-383b3eff transition-colors duration-200 cursor-pointer bg-black-section-2">
-            <Link
-              className="bg-inherit w-full flex"
-              href={`/negotiate/crypto/${stDataCryptos[0].FROMSYMBOL.toLowerCase()}`}
+          <tr
+            className="w-full flex hover:bg-383b3eff transition-colors duration-200 cursor-pointer bg-black-section-2"
+            onClick={() =>
+              router.push(
+                `/negotiate/crypto/${stDataCryptos[0].FROMSYMBOL.toLowerCase()}`
+              )
+            }
+          >
+            <th className="flex w-1/4 items-center gap-[5px] border-t-1 border-solid border-34383cff px-4 py-6 bg-inherit h-[79px]">
+              <Image
+                width={30}
+                height={30}
+                src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}${stDataCryptos[0].IMAGEURL}`}
+                alt={stDataCryptos[0].NAME}
+              />
+              <span className="text-primary text-[15px] font-medium">
+                {stDataCryptos[0].FROMSYMBOL}
+              </span>
+              <span className="text-primary text-sm font-normal opacity-70">
+                {stDataCryptos[0].NAME}
+              </span>
+            </th>
+            <th className="w-1/4 flex items-center border-t-1 border-solid border-34383cff bg-inherit px-4 py-6 text-primary font-normal text-sm h-[79px]">
+              {handleFormatPrice(stDataCryptos[0].PRICE)}
+            </th>
+            <th
+              className={`w-1/4 flex items-center border-t-1 border-solid border-34383cff px-4 py-6 bg-inherit ${hanldeAddpercentColor(
+                stDataCryptos[0].CHANGEPCTDAY
+              )} font-normal text-sm h-[79px]`}
             >
-              <th className="flex w-1/4 items-center gap-[5px] border-t-1 border-solid border-34383cff px-4 py-6 bg-inherit h-[79px]">
-                <Image
-                  width={30}
-                  height={30}
-                  src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}${stDataCryptos[0].IMAGEURL}`}
-                  alt={stDataCryptos[0].NAME}
-                />
-                <span className="text-primary text-[15px] font-medium">
-                  {stDataCryptos[0].FROMSYMBOL}
-                </span>
-                <span className="text-primary text-sm font-normal opacity-70">
-                  {stDataCryptos[0].NAME}
-                </span>
-              </th>
-              <th className="w-1/4 flex items-center border-t-1 border-solid border-34383cff bg-inherit px-4 py-6 text-primary font-normal text-sm h-[79px]">
-                {handleFormatPrice(stDataCryptos[0].PRICE)}
-              </th>
-              <th
-                className={`w-1/4 flex items-center border-t-1 border-solid border-34383cff px-4 py-6 bg-inherit ${hanldeAddpercentColor(
-                  stDataCryptos[0].CHANGEPCTDAY
-                )} font-normal text-sm h-[79px]`}
-              >
-                {handleCalcVwap24HrAndPercent(stDataCryptos[0].CHANGEPCTDAY)}
-              </th>
-              <th className="w-1/4 flex items-center border-t-1 border-solid border-34383cff px-4 py-6 bg-inherit text-primary font-normal text-sm h-[79px]">
-                <GraphicLine
-                  cryptoData={handleClearDataHistoHour(
-                    stDataCryptos[0].FROMSYMBOL
-                  )}
-                />
-              </th>
-            </Link>
+              {handleCalcVwap24HrAndPercent(stDataCryptos[0].CHANGEPCTDAY)}
+            </th>
+            <th className="w-1/4 flex items-center border-t-1 border-solid border-34383cff px-4 py-6 bg-inherit text-primary font-normal text-sm h-[79px]">
+              <GraphicLine
+                cryptoData={handleClearDataHistoHour(
+                  stDataCryptos[0].FROMSYMBOL
+                )}
+              />
+            </th>
           </tr>
-          <tr className="w-full hover:bg-383b3eff transition-colors duration-200 cursor-pointer bg-black-section-2">
-            <Link
-              className="bg-inherit w-full flex"
-              href={`/negotiate/crypto/${stDataCryptos[1].FROMSYMBOL.toLowerCase()}`}
+          <tr
+            className="w-full flex hover:bg-383b3eff transition-colors duration-200 cursor-pointer bg-black-section-2"
+            onClick={() =>
+              router.push(
+                `/negotiate/crypto/${stDataCryptos[1].FROMSYMBOL.toLowerCase()}`
+              )
+            }
+          >
+            <th className="flex w-1/4 items-center gap-[5px] border-t-1 border-solid border-34383cff px-4 py-6 bg-inherit h-[79px]">
+              <Image
+                width={30}
+                height={30}
+                src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}${stDataCryptos[1].IMAGEURL}`}
+                alt={stDataCryptos[1].NAME}
+              />
+              <span className="text-primary text-[15px] font-medium">
+                {stDataCryptos[1].FROMSYMBOL}
+              </span>
+              <span className="text-primary text-sm font-normal opacity-70">
+                {stDataCryptos[1].NAME}
+              </span>
+            </th>
+            <th className="w-1/4 flex items-center border-t-1 border-solid border-34383cff bg-inherit px-4 py-6 text-primary font-normal text-sm h-[79px]">
+              {handleFormatPrice(stDataCryptos[1].PRICE)}
+            </th>
+            <th
+              className={`w-1/4 flex items-center border-t-1 border-solid border-34383cff px-4 py-6 bg-inherit ${hanldeAddpercentColor(
+                stDataCryptos[1].CHANGEPCTDAY
+              )} font-normal text-sm h-[79px]`}
             >
-              <th className="flex w-1/4 items-center gap-[5px] border-t-1 border-solid border-34383cff px-4 py-6 bg-inherit h-[79px]">
-                <Image
-                  width={30}
-                  height={30}
-                  src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}${stDataCryptos[1].IMAGEURL}`}
-                  alt={stDataCryptos[1].NAME}
-                />
-                <span className="text-primary text-[15px] font-medium">
-                  {stDataCryptos[1].FROMSYMBOL}
-                </span>
-                <span className="text-primary text-sm font-normal opacity-70">
-                  {stDataCryptos[1].NAME}
-                </span>
-              </th>
-              <th className="w-1/4 flex items-center border-t-1 border-solid border-34383cff bg-inherit px-4 py-6 text-primary font-normal text-sm h-[79px]">
-                {handleFormatPrice(stDataCryptos[1].PRICE)}
-              </th>
-              <th
-                className={`w-1/4 flex items-center border-t-1 border-solid border-34383cff px-4 py-6 bg-inherit ${hanldeAddpercentColor(
-                  stDataCryptos[1].CHANGEPCTDAY
-                )} font-normal text-sm h-[79px]`}
-              >
-                {handleCalcVwap24HrAndPercent(stDataCryptos[1].CHANGEPCTDAY)}
-              </th>
-              <th className="w-1/4 flex items-center border-t-1 border-solid border-34383cff px-4 py-6 bg-inherit text-primary font-normal text-sm h-[79px]">
-                <GraphicLine
-                  cryptoData={handleClearDataHistoHour(
-                    stDataCryptos[1].FROMSYMBOL
-                  )}
-                />
-              </th>
-            </Link>
+              {handleCalcVwap24HrAndPercent(stDataCryptos[1].CHANGEPCTDAY)}
+            </th>
+            <th className="w-1/4 flex items-center border-t-1 border-solid border-34383cff px-4 py-6 bg-inherit text-primary font-normal text-sm h-[79px]">
+              <GraphicLine
+                cryptoData={handleClearDataHistoHour(
+                  stDataCryptos[1].FROMSYMBOL
+                )}
+              />
+            </th>
           </tr>
-          <tr className="w-full hover:bg-383b3eff transition-colors duration-200 cursor-pointer bg-black-section-2">
-            <Link
-              className="bg-inherit w-full flex"
-              href={`/negotiate/crypto/${stDataCryptos[2].FROMSYMBOL.toLowerCase()}`}
+          <tr
+            className="w-full flex hover:bg-383b3eff transition-colors duration-200 cursor-pointer bg-black-section-2"
+            onClick={() =>
+              router.push(
+                `/negotiate/crypto/${stDataCryptos[2].FROMSYMBOL.toLowerCase()}`
+              )
+            }
+          >
+            <th className="flex w-1/4 items-center gap-[5px] border-t-1 border-solid border-34383cff px-4 py-6 bg-inherit h-[79px]">
+              <Image
+                width={30}
+                height={30}
+                src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}${stDataCryptos[2].IMAGEURL}`}
+                alt={stDataCryptos[2].NAME}
+              />
+              <span className="text-primary text-[15px] font-medium">
+                {stDataCryptos[2].FROMSYMBOL}
+              </span>
+              <span className="text-primary text-sm font-normal opacity-70">
+                {stDataCryptos[2].NAME}
+              </span>
+            </th>
+            <th className="w-1/4 flex items-center border-t-1 border-solid border-34383cff bg-inherit px-4 py-6 text-primary font-normal text-sm h-[79px]">
+              {handleFormatPrice(stDataCryptos[2].PRICE)}
+            </th>
+            <th
+              className={`w-1/4 flex items-center border-t-1 border-solid border-34383cff px-4 py-6 bg-inherit ${hanldeAddpercentColor(
+                stDataCryptos[2].CHANGEPCTDAY
+              )} font-normal text-sm h-[79px]`}
             >
-              <th className="flex w-1/4 items-center gap-[5px] border-t-1 border-solid border-34383cff px-4 py-6 bg-inherit h-[79px]">
-                <Image
-                  width={30}
-                  height={30}
-                  src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}${stDataCryptos[2].IMAGEURL}`}
-                  alt={stDataCryptos[2].NAME}
-                />
-                <span className="text-primary text-[15px] font-medium">
-                  {stDataCryptos[2].FROMSYMBOL}
-                </span>
-                <span className="text-primary text-sm font-normal opacity-70">
-                  {stDataCryptos[2].NAME}
-                </span>
-              </th>
-              <th className="w-1/4 flex items-center border-t-1 border-solid border-34383cff bg-inherit px-4 py-6 text-primary font-normal text-sm h-[79px]">
-                {handleFormatPrice(stDataCryptos[2].PRICE)}
-              </th>
-              <th
-                className={`w-1/4 flex items-center border-t-1 border-solid border-34383cff px-4 py-6 bg-inherit ${hanldeAddpercentColor(
-                  stDataCryptos[2].CHANGEPCTDAY
-                )} font-normal text-sm h-[79px]`}
-              >
-                {handleCalcVwap24HrAndPercent(stDataCryptos[2].CHANGEPCTDAY)}
-              </th>
-              <th className="w-1/4 flex items-center border-t-1 border-solid border-34383cff px-4 py-6 bg-inherit text-primary font-normal text-sm h-[79px]">
-                <GraphicLine
-                  cryptoData={handleClearDataHistoHour(
-                    stDataCryptos[2].FROMSYMBOL
-                  )}
-                />
-              </th>
-            </Link>
+              {handleCalcVwap24HrAndPercent(stDataCryptos[2].CHANGEPCTDAY)}
+            </th>
+            <th className="w-1/4 flex items-center border-t-1 border-solid border-34383cff px-4 py-6 bg-inherit text-primary font-normal text-sm h-[79px]">
+              <GraphicLine
+                cryptoData={handleClearDataHistoHour(
+                  stDataCryptos[2].FROMSYMBOL
+                )}
+              />
+            </th>
           </tr>
-          <tr className="w-full hover:bg-383b3eff transition-colors duration-200 cursor-pointer bg-black-section-2">
-            <Link
-              className="bg-inherit w-full flex"
-              href={`/negotiate/crypto/${stDataCryptos[3].FROMSYMBOL.toLowerCase()}`}
+          <tr
+            className="w-full flex hover:bg-383b3eff transition-colors duration-200 cursor-pointer bg-black-section-2"
+            onClick={() =>
+              router.push(
+                `/negotiate/crypto/${stDataCryptos[3].FROMSYMBOL.toLowerCase()}`
+              )
+            }
+          >
+            <th className="flex w-1/4 items-center gap-[5px] border-t-1 border-solid border-34383cff px-4 py-6 bg-inherit h-[79px]">
+              <Image
+                width={30}
+                height={30}
+                src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}${stDataCryptos[3].IMAGEURL}`}
+                alt={stDataCryptos[3].NAME}
+              />
+              <span className="text-primary text-[15px] font-medium">
+                {stDataCryptos[3].FROMSYMBOL}
+              </span>
+              <span className="text-primary text-sm font-normal opacity-70">
+                {stDataCryptos[3].NAME}
+              </span>
+            </th>
+            <th className="w-1/4 flex items-center border-t-1 border-solid border-34383cff bg-inherit px-4 py-6 text-primary font-normal text-sm h-[79px]">
+              {handleFormatPrice(stDataCryptos[3].PRICE)}
+            </th>
+            <th
+              className={`w-1/4 flex items-center border-t-1 border-solid border-34383cff px-4 py-6 bg-inherit ${hanldeAddpercentColor(
+                stDataCryptos[3].CHANGEPCTDAY
+              )} font-normal text-sm h-[79px]`}
             >
-              <th className="flex w-1/4 items-center gap-[5px] border-t-1 border-solid border-34383cff px-4 py-6 bg-inherit h-[79px]">
-                <Image
-                  width={30}
-                  height={30}
-                  src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}${stDataCryptos[3].IMAGEURL}`}
-                  alt={stDataCryptos[3].NAME}
-                />
-                <span className="text-primary text-[15px] font-medium">
-                  {stDataCryptos[3].FROMSYMBOL}
-                </span>
-                <span className="text-primary text-sm font-normal opacity-70">
-                  {stDataCryptos[3].NAME}
-                </span>
-              </th>
-              <th className="w-1/4 flex items-center border-t-1 border-solid border-34383cff bg-inherit px-4 py-6 text-primary font-normal text-sm h-[79px]">
-                {handleFormatPrice(stDataCryptos[3].PRICE)}
-              </th>
-              <th
-                className={`w-1/4 flex items-center border-t-1 border-solid border-34383cff px-4 py-6 bg-inherit ${hanldeAddpercentColor(
-                  stDataCryptos[3].CHANGEPCTDAY
-                )} font-normal text-sm h-[79px]`}
-              >
-                {handleCalcVwap24HrAndPercent(stDataCryptos[3].CHANGEPCTDAY)}
-              </th>
-              <th className="w-1/4 flex items-center border-t-1 border-solid border-34383cff px-4 py-6 bg-inherit text-primary font-normal text-sm h-[79px]">
-                <GraphicLine
-                  cryptoData={handleClearDataHistoHour(
-                    stDataCryptos[3].FROMSYMBOL
-                  )}
-                />
-              </th>
-            </Link>
+              {handleCalcVwap24HrAndPercent(stDataCryptos[3].CHANGEPCTDAY)}
+            </th>
+            <th className="w-1/4 flex items-center border-t-1 border-solid border-34383cff px-4 py-6 bg-inherit text-primary font-normal text-sm h-[79px]">
+              <GraphicLine
+                cryptoData={handleClearDataHistoHour(
+                  stDataCryptos[3].FROMSYMBOL
+                )}
+              />
+            </th>
           </tr>
-          <tr className="w-full hover:bg-383b3eff transition-colors duration-200 cursor-pointer bg-black-section-2">
-            <Link
-              className="bg-inherit w-full flex"
-              href={`/negotiate/crypto/${stDataCryptos[4].FROMSYMBOL.toLowerCase()}`}
+          <tr
+            className="w-full flex hover:bg-383b3eff transition-colors duration-200 cursor-pointer bg-black-section-2"
+            onClick={() =>
+              router.push(
+                `/negotiate/crypto/${stDataCryptos[4].FROMSYMBOL.toLowerCase()}`
+              )
+            }
+          >
+            <th className="flex w-1/4 items-center gap-[5px] border-t-1 border-solid border-34383cff px-4 py-6 bg-inherit h-[79px]">
+              <Image
+                width={30}
+                height={30}
+                src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}${stDataCryptos[4].IMAGEURL}`}
+                alt={stDataCryptos[4].NAME}
+              />
+              <span className="text-primary text-[15px] font-medium">
+                {stDataCryptos[4].FROMSYMBOL}
+              </span>
+              <span className="text-primary text-sm font-normal opacity-70">
+                {stDataCryptos[4].NAME}
+              </span>
+            </th>
+            <th className="w-1/4 flex items-center border-t-1 border-solid border-34383cff bg-inherit px-4 py-6 text-primary font-normal text-sm h-[79px]">
+              {handleFormatPrice(stDataCryptos[4].PRICE)}
+            </th>
+            <th
+              className={`w-1/4 flex items-center border-t-1 border-solid border-34383cff px-4 py-6 bg-inherit ${hanldeAddpercentColor(
+                stDataCryptos[4].CHANGEPCTDAY
+              )} font-normal text-sm h-[79px]`}
             >
-              <th className="flex w-1/4 items-center gap-[5px] border-t-1 border-solid border-34383cff px-4 py-6 bg-inherit h-[79px]">
-                <Image
-                  width={30}
-                  height={30}
-                  src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}${stDataCryptos[4].IMAGEURL}`}
-                  alt={stDataCryptos[4].NAME}
-                />
-                <span className="text-primary text-[15px] font-medium">
-                  {stDataCryptos[4].FROMSYMBOL}
-                </span>
-                <span className="text-primary text-sm font-normal opacity-70">
-                  {stDataCryptos[4].NAME}
-                </span>
-              </th>
-              <th className="w-1/4 flex items-center border-t-1 border-solid border-34383cff bg-inherit px-4 py-6 text-primary font-normal text-sm h-[79px]">
-                {handleFormatPrice(stDataCryptos[4].PRICE)}
-              </th>
-              <th
-                className={`w-1/4 flex items-center border-t-1 border-solid border-34383cff px-4 py-6 bg-inherit ${hanldeAddpercentColor(
-                  stDataCryptos[4].CHANGEPCTDAY
-                )} font-normal text-sm h-[79px]`}
-              >
-                {handleCalcVwap24HrAndPercent(stDataCryptos[4].CHANGEPCTDAY)}
-              </th>
-              <th className="w-1/4 flex items-center border-t-1 border-solid border-34383cff px-4 py-6 bg-inherit text-primary font-normal text-sm h-[79px]">
-                <GraphicLine
-                  cryptoData={handleClearDataHistoHour(
-                    stDataCryptos[4].FROMSYMBOL
-                  )}
-                />
-              </th>
-            </Link>
+              {handleCalcVwap24HrAndPercent(stDataCryptos[4].CHANGEPCTDAY)}
+            </th>
+            <th className="w-1/4 flex items-center border-t-1 border-solid border-34383cff px-4 py-6 bg-inherit text-primary font-normal text-sm h-[79px]">
+              <GraphicLine
+                cryptoData={handleClearDataHistoHour(
+                  stDataCryptos[4].FROMSYMBOL
+                )}
+              />
+            </th>
           </tr>
         </tbody>
       </table>
@@ -407,13 +420,13 @@ function OrderClick({
   orderPercent,
 }: {
   textFiled: string;
-  onClick: MouseEventHandler<HTMLTableRowElement>;
+  onClick: MouseEventHandler<HTMLElement>;
   children: ReactNode;
   orderPrices?: OrderType;
   orderPercent?: OrderType;
 }) {
   return (
-    <tr
+    <th
       // eslint-disable-next-line
       className={`w-1/4 flex gap-2 px-4 py-6 items-center cursor-pointer ${(orderPrices || orderPercent) !== 'default' ? 'bg-black-section-2' : 'hover:bg-black-section-2 transition-colors duration-200 bg-272a2eff'}`}
       onClick={onClick}
@@ -425,6 +438,6 @@ function OrderClick({
       >
         {children}
       </div>
-    </tr>
+    </th>
   );
 }

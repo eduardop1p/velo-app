@@ -245,35 +245,48 @@ function SliderGraphicLine({
         <GraphicLine
           key={index.toString()}
           cryptoData={handleClearDataHistoHour(val.FROMSYMBOL)}
+          border
         />
       ))}
     </div>
   );
 }
-export function GraphicLine({ cryptoData }: { cryptoData: HistorHourType[] }) {
+export function GraphicLine({
+  cryptoData,
+  border,
+}: {
+  cryptoData: HistorHourType[];
+  border?: boolean;
+}) {
   if (!cryptoData.length) return;
+  // console.log(cryptoData[cryptoData.length - 1].close, cryptoData[0].open);
+
+  const handleStrokeLineGraph = () => {
+    if (cryptoData[cryptoData.length - 1].close === cryptoData[0].open)
+      return '#999';
+    return cryptoData[cryptoData.length - 1].close > cryptoData[0].open
+      ? '#549cffff'
+      : '#f76970ff';
+  };
 
   return (
     <ResponsiveContainer
       width="100%"
       height={63.3}
-      className="border-b-1 border-gray-00000033 border-solid"
+      // eslint-disable-next-line
+      className={`${border ? 'border-b-1 border-gray-00000033 border-solid' : 'border-none'}`}
     >
       <LineChart
         data={cryptoData}
         margin={{ top: 20, left: 16, bottom: 20, right: 16 }}
       >
-        <XAxis dataKey="timestamp" hide />
+        <XAxis dataKey="open" hide />
         <YAxis type="number" domain={['auto', 'auto']} hide />
         <Line
           type="monotone"
           dataKey="open"
           // className="animate-sliderUp"
-          stroke={
-            cryptoData[0].open > cryptoData[cryptoData.length - 1].close
-              ? '#f76970ff'
-              : '#549cffff'
-          }
+          stroke={handleStrokeLineGraph()}
           dot={false}
         />
         <ReferenceLine
