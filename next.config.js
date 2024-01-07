@@ -4,10 +4,22 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'www.cryptocompare.com',
+        hostname: '**.cryptocompare.com',
         port: '',
         pathname: '/**',
       },
+      // {
+      //   protocol: 'https',
+      //   hostname: 'images.cryptocompare.com',
+      //   port: '',
+      //   pathname: '/**',
+      // },
+      // {
+      //   protocol: 'https',
+      //   hostname: 'resources.cryptocompare.com',
+      //   port: '',
+      //   pathname: '/**',
+      // },
     ],
   },
 };

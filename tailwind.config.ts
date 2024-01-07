@@ -66,6 +66,7 @@ const config: Config = {
         ff0420: '#ff0420',
         '123570ff': '#123570ff',
         '12d2b0': '#12d2b0',
+        '484848ff': '#484848ff',
       },
       boxShadow: {
         'effect-1': '0 0 0 0.2rem #bfdbfe',

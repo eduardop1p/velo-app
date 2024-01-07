@@ -255,7 +255,7 @@ function SliderGraphicLine({
 export function GraphicLine({
   cryptoData,
   border,
-  CHANGEPCTDAY,
+  CHANGEPCTDAY, // eslint-disable-line
 }: {
   cryptoData: HistorHourType[];
   border?: boolean;
@@ -265,12 +265,10 @@ export function GraphicLine({
   // console.log(cryptoData[cryptoData.length - 1].close, cryptoData[0].open);
 
   const handleStrokeLineGraph = () => {
+    // console.log(CHANGEPCTDAY > 0);
     if (cryptoData[cryptoData.length - 1].close === cryptoData[0].open)
       return '#999';
-    if (
-      cryptoData[cryptoData.length - 1].close > cryptoData[0].open &&
-      CHANGEPCTDAY > 0
-    )
+    if (cryptoData[cryptoData.length - 1].close > cryptoData[0].open)
       return '#549cffff';
     return '#f76970ff';
   };
