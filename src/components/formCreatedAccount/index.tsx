@@ -8,14 +8,15 @@ import Inputmask from 'inputmask';
 import { FaChevronDown } from 'react-icons/fa6';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 import AlertMsg from '../alertMsg';
 import { OpenAlertType } from '../alertMsg';
 import FormErrorMsg from '../formErrorMsg';
-import FormLoading from '../formLoading';
+// import FormLoading from '../formLoading';
 import { CountriesType } from '@/app/create-account/page';
 import ShowPassword, { ShowPasswordType } from '../showPassword';
-import { useRouter } from 'next/navigation';
+import Loading from '../loading';
 
 const zodSchema = z
   .object({
@@ -145,8 +146,6 @@ export default function FormCreatedAccount({
             cellPhone,
             country,
             password,
-            balance: '0',
-            invested: '0',
           }),
           headers: {
             'Content-Type': 'application/json',
@@ -211,6 +210,7 @@ export default function FormCreatedAccount({
   return (
     <div className="flex flex-col gap-5 w-3/5">
       <AlertMsg openAlert={openAlert} setOpenAlert={setOpenAlert} />
+      {isLoading && <Loading />}
       <h2 className="text-black text-3xl font-normal">Open your account</h2>
       <p className="text-xl text-black font-normal">
         Start here, it only takes a few minutes
@@ -486,7 +486,6 @@ export default function FormCreatedAccount({
             className={`w-full relative text-[15px] font-normal h-12 flex justify-center items-center transition-all duration-200 ${isValid ? 'bg-blue text-primary hover:bg-bluehover cursor-pointer' : 'bg-b1d2ffff text-black-neutral cursor-default'} rounded`}
           >
             Send
-            {isLoading && <FormLoading />}
           </button>
         </div>
       </form>

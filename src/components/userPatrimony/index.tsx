@@ -6,59 +6,63 @@ import Link from 'next/link';
 import { useState } from 'react';
 
 import PatrimonyGraph from './patrimonyGraph';
-import { UserBalanceType } from '@/app/home/page';
+import { UserPatrimonyInvestedType } from '@/app/home/page';
 
 export default function UserPatrimony({
-  userBalance,
+  userPatrimonyInvested,
 }: {
-  userBalance: UserBalanceType;
+  userPatrimonyInvested: UserPatrimonyInvestedType<number>;
 }) {
-  const hideBalance = { hide: true, invested: '••••••', patrimony: '••••••' };
-  const showBalance = { hide: false, ...userBalance };
+  const hidePatrimonyInvested = {
+    hide: true,
+    invested: '••••••',
+    patrimony: '••••••',
+  };
+  const showPatrimonyInvested = { hide: false, ...userPatrimonyInvested };
 
   // eslint-disable-next-line
-  const [stUserBalance, setStUserBalance] = useState(localStorage.getItem('hide-balance') == 'true' ? hideBalance : showBalance);
+  const [stUserPatrimonyInvested, setStUserPatrimonyInvested] = useState(localStorage.getItem('hide-patrimony-invested') == 'true' ? hidePatrimonyInvested : showPatrimonyInvested);
 
-  const handleFormatPrice = (value: string) => {
-    return (+value).toLocaleString('en-US', {
+  const handleFormatPrice = (value: number) => {
+    return value.toLocaleString('en-US', {
       style: 'currency',
       currency: 'USD',
     });
   };
 
-  const handleHideBalance = () => {
-    setStUserBalance(hideBalance);
-    localStorage.setItem('hide-balance', 'true');
+  const handlePatrimonyInvested = () => {
+    setStUserPatrimonyInvested(hidePatrimonyInvested);
+    localStorage.setItem('hide-patrimony-invested', 'true');
   };
 
-  const handleShowBalance = () => {
-    setStUserBalance(showBalance);
-    localStorage.removeItem('hide-balance');
+  const handleShowPatrimonyInvested = () => {
+    setStUserPatrimonyInvested(showPatrimonyInvested);
+    localStorage.removeItem('hide-patrimony-invested');
   };
 
   return (
-    <section className="bg-secondary w-full p-7 rounded-lg flex justify-between h-[220px]">
+    <section className="bg-secondary w-full p-7 rounded-lg flex justify-between h-[250px]">
       <div className="w-1/2 flex flex-col justify-between">
         <div className="flex w-1/2 items-center justify-between">
           <div className="flex flex-col ">
             <h2 className="text-959ca2ff font-normal text-sm">Patrimony</h2>
             <span className="text-[25px] text-primary font-medium">
-              {stUserBalance.hide
-                ? stUserBalance.patrimony
-                : handleFormatPrice(stUserBalance.patrimony)}
+              {stUserPatrimonyInvested.hide
+                ? stUserPatrimonyInvested.patrimony
+                : handleFormatPrice(+stUserPatrimonyInvested.patrimony)}
             </span>
           </div>
-          {!stUserBalance.hide ? (
+          {!stUserPatrimonyInvested.hide ? (
             <button
               className=" h-5 w-5 flex items-center justify-center cursor-pointer fill-primary "
-              onClick={() => handleHideBalance()}
+              onClick={() => handlePatrimonyInvested()}
             >
               <FaEyeSlash />
             </button>
           ) : (
             <button
               className=" h-5 w-5 flex items-center justify-center cursor-pointer fill-primary "
-              onClick={() => handleShowBalance()}
+              onClick={() => handleShowPatrimonyInvested()}
             >
               <FaEye />
             </button>
@@ -72,7 +76,7 @@ export default function UserPatrimony({
       </div>
       <div className="mx-10 w-[0.8px] h-full bg-ffffff33"></div>
       <div className="w-1/2">
-        <PatrimonyGraph stUserBalance={stUserBalance} />
+        <PatrimonyGraph stUserPatrimonyInvested={stUserPatrimonyInvested} />
       </div>
     </section>
   );

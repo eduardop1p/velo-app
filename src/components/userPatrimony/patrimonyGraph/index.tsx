@@ -11,18 +11,24 @@ import {
   Legend,
 } from 'recharts';
 
-import { UserBalanceType } from '@/app/home/page';
+import { UserPatrimonyInvestedType } from '@/app/home/page';
 
 export default function PatrimonyGraph({
-  stUserBalance,
+  stUserPatrimonyInvested,
 }: {
-  stUserBalance: UserBalanceType & { hide: boolean };
+  stUserPatrimonyInvested: UserPatrimonyInvestedType<number | string> & {
+    hide: boolean;
+  };
 }) {
   const data = [{ name: 'patrimony', value: 100 }];
 
   return (
     <ResponsiveContainer>
-      <PieChart>
+      <PieChart
+        style={{
+          scale: '1.15',
+        }}
+      >
         <Pie
           data={data}
           innerRadius={68}
@@ -35,7 +41,9 @@ export default function PatrimonyGraph({
         </Pie>
         {/* <Tooltip /> */}
         <Legend
-          content={<CustomLegend stUserBalance={stUserBalance} />}
+          content={
+            <CustomLegend stUserPatrimonyInvested={stUserPatrimonyInvested} />
+          }
           align="center"
           verticalAlign="middle"
         />
@@ -45,12 +53,14 @@ export default function PatrimonyGraph({
 }
 
 const CustomLegend = ({
-  stUserBalance,
+  stUserPatrimonyInvested,
 }: {
-  stUserBalance: UserBalanceType & { hide: boolean };
+  stUserPatrimonyInvested: UserPatrimonyInvestedType<number | string> & {
+    hide: boolean;
+  };
 }) => {
-  const handleFormatPrice = (value: string) => {
-    return (+value).toLocaleString('en-US', {
+  const handleFormatPrice = (value: number) => {
+    return value.toLocaleString('en-US', {
       style: 'currency',
       currency: 'USD',
     });
@@ -59,9 +69,9 @@ const CustomLegend = ({
   return (
     <div className="flex flex-col items-center">
       <span className="text-gray-b8bec4ff text-base font-medium">
-        {stUserBalance.hide
-          ? stUserBalance.invested
-          : handleFormatPrice(stUserBalance.invested)}
+        {stUserPatrimonyInvested.hide
+          ? stUserPatrimonyInvested.invested
+          : handleFormatPrice(+stUserPatrimonyInvested.invested)}
       </span>
       <span className="text-[11px] text-gray-b8bec4ff">Total invested</span>
     </div>

@@ -3,6 +3,10 @@ import { cookies } from 'next/headers';
 import formatDataCrypto from '@/services/formtaDataCrypto';
 import { ActiveCryptoType } from '../products';
 import Headers from './headers';
+import {
+  ActiveVeliabilitiesType,
+  TransactionsType,
+} from '@/app/api/models/users';
 
 export interface CryptoType {
   NAME: string;
@@ -36,8 +40,11 @@ export interface ShowUserType {
   dateBirth: string;
   cellPhone: string;
   country: string;
-  balance: string;
-  invested: string;
+  invested: number;
+  traffic: number;
+  active: ActiveVeliabilitiesType[];
+  veliabilities: ActiveVeliabilitiesType[];
+  transactions: TransactionsType[];
 }
 
 const getData = async (url: string, activeCrypto: ActiveCryptoType) => {

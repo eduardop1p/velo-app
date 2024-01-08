@@ -30,10 +30,15 @@ export async function POST(req: NextRequest, res: NextResponse) {
         { status: 400 }
       );
     }
-
-    await usersModel.create(body);
+    const defaultMoney = {
+      traffic: 0,
+      active: [],
+      veliabilities: [],
+      transactions: [],
+    };
+    await usersModel.create({ ...body, ...defaultMoney });
   } catch (err) {
-    // console.log(err);
+    console.log(err);
     return NextResponse.json(
       {
         error: 'Internal server error',

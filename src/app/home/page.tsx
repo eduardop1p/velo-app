@@ -14,6 +14,9 @@ import { CryptoType, ShowUserType } from '@/components/header';
 import SlideMarketOverview from '@/components/slideMarketOverview';
 import FollowMarket from '@/components/followMarket';
 import formatDataCrypto from '@/services/formtaDataCrypto';
+import calcPatrimonyTotal from '@/services/calcPatrimonyTotal';
+import calBalance from '@/services/calcBalance';
+import calInvested from '@/services/calcInvested';
 
 export const metadata: Metadata = {
   title: 'Bitcoin, Ethereum and other cryptocurrencies | Velo',
@@ -21,9 +24,9 @@ export const metadata: Metadata = {
     'Buying and selling bitcoin, ethereum and other cryptoactives with the credibility of OP Financial Group. Open your account.',
 };
 
-export interface UserBalanceType {
-  patrimony: string;
-  invested: string;
+export interface UserPatrimonyInvestedType<T> {
+  patrimony: T;
+  invested: T;
 }
 
 export interface HistorHourType {
@@ -60,9 +63,13 @@ export default async function Page() {
     cache: 'no-cache',
   });
   const userData = (await userRes.json()) as ShowUserType;
-  const userBalance = {
-    patrimony: userData.balance,
-    invested: userData.invested,
+  const userPatrimonyInvested = {
+    patrimony: calcPatrimonyTotal(
+      userData.active,
+      userData.veliabilities,
+      calBalance(userData.transactions)
+    ),
+    invested: calInvested(userData.active),
   };
 
   const resCryptos = await fetch(
@@ -170,7 +177,7 @@ export default async function Page() {
     <>
       <main className="mt-20">
         <div className="bg-black-section min-h-full-screen-80px px-20 py-10 flex flex-col gap-16 items-center w-full">
-          <UserPatrimony userBalance={userBalance} />
+          <UserPatrimony userPatrimonyInvested={userPatrimonyInvested} />
           <SlideMarketOverview />
           <FollowMarket
             dataCryptos={dataCryptos}

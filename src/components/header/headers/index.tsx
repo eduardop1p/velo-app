@@ -69,28 +69,28 @@ export default function Headers({
             <Link
               href="/portfolio"
               // eslint-disable-next-line
-              className={`text-primary font-normal text-sm h-9 px-4 flex items-center justify-center rounded ${pathName === '/portfolio' ? 'bg-383b3eff' : 'hover:bg-383b3eff'} transition-colors duration-200`}
+              className={`text-primary font-normal text-sm h-9 px-4 flex items-center justify-center relative rounded ${pathName === '/portfolio' ? 'before:content-[""] before:absolute before:w-full before:h-[3px] before:bg-blue before:top-[55px] before:left-1/2 before:-translate-x-1/2' : 'hover:bg-383b3eff'} transition-colors duration-200`}
             >
               Portfolio
             </Link>
             <Link
               href="/negotiate"
               // eslint-disable-next-line
-              className={`text-primary font-normal text-sm h-9 px-4 flex items-center justify-center rounded ${pathName === '/negotiate' ? 'bg-383b3eff' : 'hover:bg-383b3eff'} transition-colors duration-200`}
+              className={`text-primary font-normal text-sm h-9 px-4 flex items-center justify-center rounded relative ${pathName === '/negotiate' ? 'before:content-[""] before:absolute before:w-full before:h-[3px] before:bg-blue before:top-[55px] before:left-1/2 before:-translate-x-1/2' : 'hover:bg-383b3eff'} transition-colors duration-200`}
             >
               Negotiate
             </Link>
             <Link
               href="/historic"
               // eslint-disable-next-line
-              className={`text-primary font-normal text-sm h-9 px-4 flex items-center justify-center rounded ${pathName === '/historic' ? 'bg-383b3eff' : 'hover:bg-383b3eff'} transition-colors duration-200`}
+              className={`text-primary font-normal text-sm h-9 px-4 flex items-center justify-center rounded relative ${pathName === '/historic' ? 'before:content-[""] before:absolute before:w-full before:h-[3px] before:bg-blue before:top-[55px] before:left-1/2 before:-translate-x-1/2' : 'hover:bg-383b3eff'} transition-colors duration-200`}
             >
               Historic
             </Link>
             <Link
               href="/content"
               // eslint-disable-next-line
-              className={`text-primary font-normal text-sm h-9 px-4 flex items-center justify-center rounded ${pathName === '/content' ? 'bg-383b3eff' : 'hover:bg-383b3eff'} transition-colors duration-200`}
+              className={`text-primary font-normal text-sm h-9 px-4 flex items-center justify-center rounded relative ${pathName === '/content' ? 'before:content-[""] before:absolute before:w-full before:h-[3px] before:bg-blue before:top-[55px] before:left-1/2 before:-translate-x-1/2' : 'hover:bg-383b3eff'} transition-colors duration-200`}
             >
               Content
             </Link>
