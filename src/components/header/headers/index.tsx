@@ -67,11 +67,11 @@ export default function Headers({
           </Link>
           <div className="flex gap-2">
             <Link
-              href="/portfolio"
+              href="/wallet"
               // eslint-disable-next-line
-              className={`text-primary font-normal text-sm h-9 px-4 flex items-center justify-center relative rounded ${pathName === '/portfolio' ? 'before:content-[""] before:absolute before:w-full before:h-[3px] before:bg-blue before:top-[55px] before:left-1/2 before:-translate-x-1/2' : 'hover:bg-383b3eff'} transition-colors duration-200`}
+              className={`text-primary font-normal text-sm h-9 px-4 flex items-center justify-center relative rounded ${pathName === '/wallet' ? 'before:content-[""] before:absolute before:w-full before:h-[3px] before:bg-blue before:top-[55px] before:left-1/2 before:-translate-x-1/2' : 'hover:bg-383b3eff'} transition-colors duration-200`}
             >
-              Portfolio
+              Wallet
             </Link>
             <Link
               href="/negotiate"

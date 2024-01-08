@@ -31,7 +31,7 @@ export function middleware(req: NextRequest, res: NextResponse) {
   if (!isAuth && pathname.startsWith('/home')) {
     return NextResponse.redirect(new URL('/login', req.url));
   }
-  if (!isAuth && pathname.startsWith('/portfolio')) {
+  if (!isAuth && pathname.startsWith('/wallet')) {
     return NextResponse.redirect(new URL('/login', req.url));
   }
   if (!isAuth && pathname.startsWith('/negotiate')) {

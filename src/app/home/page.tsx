@@ -547,7 +547,7 @@ export default async function Page() {
             <Link
               href="/market-news"
               className="text-sm text-primary hover:underline font-normal hover:text-blue transition-colors duration-200 w-fit"
-            >{`see more news >`}</Link>
+            >{`See more news >`}</Link>
           </section>
         </div>
       </main>

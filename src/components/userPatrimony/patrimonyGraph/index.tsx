@@ -20,7 +20,20 @@ export default function PatrimonyGraph({
     hide: boolean;
   };
 }) {
-  const data = [{ name: 'patrimony', value: 100 }];
+  const data = [
+    {
+      name: 'patrimony',
+      value: !+stUserPatrimonyInvested.patrimony
+        ? 100
+        : +stUserPatrimonyInvested.patrimony,
+      fill: '#272a2eff',
+    },
+    {
+      name: 'invested',
+      value: +stUserPatrimonyInvested.invested,
+      fill: '#549cffff',
+    },
+  ];
 
   return (
     <ResponsiveContainer>
@@ -37,9 +50,13 @@ export default function PatrimonyGraph({
           stroke="#272a2eff"
           dataKey="value"
         >
-          <Cell fill="#272a2eff" />
+          {data.map((val, index) => (
+            <Cell key={index.toString()} fill={val.fill} />
+          ))}
         </Pie>
-        {/* <Tooltip /> */}
+        {+stUserPatrimonyInvested.patrimony && (
+          <Tooltip content={<CustomTooltip />} />
+        )}
         <Legend
           content={
             <CustomLegend stUserPatrimonyInvested={stUserPatrimonyInvested} />
@@ -51,6 +68,27 @@ export default function PatrimonyGraph({
     </ResponsiveContainer>
   );
 }
+
+const CustomTooltip = (props: {
+  active?: boolean;
+  payload?: { value: number }[];
+}) => {
+  const handleFormatPrice = (value: number) => {
+    return value.toLocaleString('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    });
+  };
+
+  const { active, payload } = props;
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-495057 text-xs text-primary font-normal flex items-center justify-center rounded px-2 py-1">
+        {handleFormatPrice(payload[0].value)}
+      </div>
+    );
+  }
+};
 
 const CustomLegend = ({
   stUserPatrimonyInvested,

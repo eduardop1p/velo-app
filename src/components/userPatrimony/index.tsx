@@ -70,9 +70,9 @@ export default function UserPatrimony({
         </div>
         <div className="w-full h-[1px] bg-ffffff33"></div>
         <Link
-          href="/portfolio"
+          href="/wallet"
           className="text-sm text-primary hover:underline font-normal hover:text-blue transition-colors duration-200 w-fit"
-        >{`See full portfolio >`}</Link>
+        >{`See full wallet >`}</Link>
       </div>
       <div className="mx-10 w-[0.8px] h-full bg-ffffff33"></div>
       <div className="w-1/2">
