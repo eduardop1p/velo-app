@@ -54,8 +54,8 @@ export default function Headers({
 
   const handleFormatName = (name: string) => {
     return name.split(' ').slice(0, 2).join(' ').length <= 30
-      ? name.split(' ').slice(0, 2).join(' ')
-      : `${name.split(' ').slice(0, 2).join(' ').slice(0, 30)}...`;
+      ? name.split(' ').slice(0, 2).join(' ').toUpperCase()
+      : `${name.split(' ').slice(0, 2).join(' ').slice(0, 30).toUpperCase()}...`; // eslint-disable-line
   };
 
   return isAuth && userData ? (

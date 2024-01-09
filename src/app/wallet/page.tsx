@@ -4,6 +4,7 @@ import { ShowUserType } from '@/components/header';
 import calBalance from '@/services/calcBalance';
 import calcPatrimonyTotal from '@/services/calcPatrimonyTotal';
 import calInvested from '@/services/calcInvested';
+import WalletGraphic from '@/components/walletGraphic';
 
 export default async function Page() {
   const token = cookies().get('token')?.value;
@@ -24,12 +25,16 @@ export default async function Page() {
       calBalance(userData.transactions)
     ),
     invested: calInvested(userData.active),
+    balance: calBalance(userData.transactions),
+    traffic: userData.traffic,
   };
 
   return (
     <>
       <main className="mt-20">
-        <div className="min-h-full-screen-80px bg-black-section px-20 py-14"></div>
+        <div className="min-h-full-screen-80px bg-black-section px-20 py-14">
+          <WalletGraphic userPatrimonyInvested={userPatrimonyInvested} />
+        </div>
       </main>
     </>
   );

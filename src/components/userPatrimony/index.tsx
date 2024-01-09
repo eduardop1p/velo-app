@@ -76,7 +76,13 @@ export default function UserPatrimony({
       </div>
       <div className="mx-10 w-[0.8px] h-full bg-ffffff33"></div>
       <div className="w-1/2">
-        <PatrimonyGraph stUserPatrimonyInvested={stUserPatrimonyInvested} />
+        <PatrimonyGraph
+          stUserPatrimonyInvested={stUserPatrimonyInvested}
+          fontSizeValueInvested="text-lg"
+          fontSizeInvested="text-xs"
+          innerRadius={77}
+          outerRadius={90}
+        />
       </div>
     </section>
   );

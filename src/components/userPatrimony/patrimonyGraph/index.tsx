@@ -15,10 +15,18 @@ import { UserPatrimonyInvestedType } from '@/app/home/page';
 
 export default function PatrimonyGraph({
   stUserPatrimonyInvested,
+  fontSizeInvested,
+  fontSizeValueInvested,
+  innerRadius,
+  outerRadius,
 }: {
   stUserPatrimonyInvested: UserPatrimonyInvestedType<number | string> & {
     hide: boolean;
   };
+  fontSizeInvested: string;
+  fontSizeValueInvested: string;
+  innerRadius: number;
+  outerRadius: number;
 }) {
   const data = [
     {
@@ -37,15 +45,11 @@ export default function PatrimonyGraph({
 
   return (
     <ResponsiveContainer>
-      <PieChart
-        style={{
-          scale: '1.15',
-        }}
-      >
+      <PieChart>
         <Pie
           data={data}
-          innerRadius={68}
-          outerRadius={80}
+          innerRadius={innerRadius}
+          outerRadius={outerRadius}
           fill="#272a2eff"
           stroke="#272a2eff"
           dataKey="value"
@@ -59,7 +63,11 @@ export default function PatrimonyGraph({
         )}
         <Legend
           content={
-            <CustomLegend stUserPatrimonyInvested={stUserPatrimonyInvested} />
+            <CustomLegend
+              stUserPatrimonyInvested={stUserPatrimonyInvested}
+              fontSizeInvested={fontSizeInvested}
+              fontSizeValueInvested={fontSizeValueInvested}
+            />
           }
           align="center"
           verticalAlign="middle"
@@ -92,10 +100,14 @@ const CustomTooltip = (props: {
 
 const CustomLegend = ({
   stUserPatrimonyInvested,
+  fontSizeInvested,
+  fontSizeValueInvested,
 }: {
   stUserPatrimonyInvested: UserPatrimonyInvestedType<number | string> & {
     hide: boolean;
   };
+  fontSizeInvested: string;
+  fontSizeValueInvested: string;
 }) => {
   const handleFormatPrice = (value: number) => {
     return value.toLocaleString('en-US', {
@@ -106,12 +118,16 @@ const CustomLegend = ({
 
   return (
     <div className="flex flex-col items-center">
-      <span className="text-gray-b8bec4ff text-base font-medium">
+      <span
+        className={`text-gray-b8bec4ff ${fontSizeValueInvested} font-medium`}
+      >
         {stUserPatrimonyInvested.hide
           ? stUserPatrimonyInvested.invested
           : handleFormatPrice(+stUserPatrimonyInvested.invested)}
       </span>
-      <span className="text-[11px] text-gray-b8bec4ff">Total invested</span>
+      <span className={`${fontSizeInvested} text-959ca2ff`}>
+        Total invested
+      </span>
     </div>
   );
 };

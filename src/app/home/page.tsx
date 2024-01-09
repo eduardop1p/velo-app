@@ -27,6 +27,8 @@ export const metadata: Metadata = {
 export interface UserPatrimonyInvestedType<T> {
   patrimony: T;
   invested: T;
+  balance?: T;
+  traffic?: T;
 }
 
 export interface HistorHourType {
