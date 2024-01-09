@@ -145,7 +145,7 @@ export default function Headers({
             href="/newsletters"
             className="cursor-pointer text-sm text-black"
           >
-            News
+            Newsletters
           </Link>
         </nav>
       </div>

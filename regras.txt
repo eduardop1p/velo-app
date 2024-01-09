@@ -1,0 +1,10 @@
+# para deposito:
+tenho que acrescentar o valor a transções, exemplo: 512.99
+
+# para retirada:
+tenho que retirar o determinado valor das transções, exemplo: -465.74
+
+# para investimentos ativos:
+tenho que acrescentar o valor do investimento nos ativos e remover o valor das transções, exemplo: ativos 123.41, transções -123.41
+
+# para fundos em transito tenho acrescentar ou remover das transções dependendo caso com o estado de pendente
