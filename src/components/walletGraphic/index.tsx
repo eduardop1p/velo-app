@@ -41,8 +41,6 @@ export default function WalletGraphic({
   };
 
   const handleAccountBalance = () => {
-    if (typeof stUserPatrimonyInvested.balance === 'undefined') return;
-
     return stUserPatrimonyInvested.hide
       ? stUserPatrimonyInvested.balance
       : handleFormatPrice(+stUserPatrimonyInvested.balance);

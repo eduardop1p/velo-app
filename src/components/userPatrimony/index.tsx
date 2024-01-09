@@ -17,6 +17,7 @@ export default function UserPatrimony({
     hide: true,
     invested: '••••••',
     patrimony: '••••••',
+    balance: '••••••',
   };
   const showPatrimonyInvested = { hide: false, ...userPatrimonyInvested };
 

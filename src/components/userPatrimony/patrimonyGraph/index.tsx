@@ -30,10 +30,10 @@ export default function PatrimonyGraph({
 }) {
   const data = [
     {
-      name: 'patrimony',
-      value: !+stUserPatrimonyInvested.patrimony
+      name: 'balance',
+      value: !+stUserPatrimonyInvested.balance
         ? 100
-        : +stUserPatrimonyInvested.patrimony,
+        : +stUserPatrimonyInvested.balance,
       fill: '#272a2eff',
     },
     {
@@ -58,7 +58,7 @@ export default function PatrimonyGraph({
             <Cell key={index.toString()} fill={val.fill} />
           ))}
         </Pie>
-        {+stUserPatrimonyInvested.patrimony && (
+        {+stUserPatrimonyInvested.balance && (
           <Tooltip content={<CustomTooltip />} />
         )}
         <Legend

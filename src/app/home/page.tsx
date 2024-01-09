@@ -27,7 +27,7 @@ export const metadata: Metadata = {
 export interface UserPatrimonyInvestedType<T> {
   patrimony: T;
   invested: T;
-  balance?: T;
+  balance: T;
   transit?: T;
 }
 
@@ -72,6 +72,7 @@ export default async function Page() {
       calBalance(userData.transactions)
     ),
     invested: calInvested(userData.active),
+    balance: calBalance(userData.transactions),
   };
 
   const resCryptos = await fetch(
