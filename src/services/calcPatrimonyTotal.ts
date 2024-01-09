@@ -1,14 +1,14 @@
-import { ActiveVeliabilitiesType } from '@/app/api/models/users';
+import { ActiveType, VeliabilitiesType } from '@/app/api/models/users';
 
 export default function calcPatrimonyTotal(
-  active: ActiveVeliabilitiesType[],
-  veliabilities: ActiveVeliabilitiesType[],
+  active: ActiveType[],
+  veliabilities: VeliabilitiesType[],
   balance: number
 ) {
   const activeTotal =
     active.reduce((pv, active) => pv + active?.valueInvested, 0) + balance;
   const veliabilitiesTotal = veliabilities.reduce(
-    (pv, veliabilities) => pv + veliabilities?.valueInvested,
+    (pv, veliabilities) => pv + veliabilities?.value,
     0
   );
 

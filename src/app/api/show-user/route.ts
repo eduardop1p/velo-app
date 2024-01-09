@@ -34,7 +34,6 @@ export async function GET(req: NextRequest, res: NextResponse) {
       dateBirth: user.dateBirth,
       cellPhone: user.cellPhone,
       country: user.country,
-      traffic: user.traffic,
       active: user.active,
       veliabilities: user.veliabilities,
       transactions: user.transactions,

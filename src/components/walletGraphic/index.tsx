@@ -16,7 +16,7 @@ export default function WalletGraphic({
     invested: '••••••',
     patrimony: '••••••',
     balance: '••••••',
-    traffic: '••••••',
+    transit: '••••••',
   };
   const showPatrimonyInvested = { hide: false, ...userPatrimonyInvested };
 
@@ -48,12 +48,12 @@ export default function WalletGraphic({
       : handleFormatPrice(+stUserPatrimonyInvested.balance);
   };
 
-  const handleAccountTraffic = () => {
-    if (typeof stUserPatrimonyInvested.traffic === 'undefined') return;
+  const handleAccountTransit = () => {
+    if (typeof stUserPatrimonyInvested.transit === 'undefined') return;
 
     return stUserPatrimonyInvested.hide
-      ? stUserPatrimonyInvested.traffic
-      : handleFormatPrice(+stUserPatrimonyInvested.traffic);
+      ? stUserPatrimonyInvested.transit
+      : handleFormatPrice(+stUserPatrimonyInvested.transit);
   };
 
   return (
@@ -108,7 +108,7 @@ export default function WalletGraphic({
               Balance in transit:
             </h4>
             <h4 className="text-c1c5d0 text-[13px] font-normal">
-              {handleAccountTraffic()}
+              {handleAccountTransit()}
             </h4>
           </div>
         </div>

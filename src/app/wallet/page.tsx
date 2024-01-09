@@ -7,6 +7,7 @@ import calBalance from '@/services/calcBalance';
 import calcPatrimonyTotal from '@/services/calcPatrimonyTotal';
 import calInvested from '@/services/calcInvested';
 import WalletGraphic from '@/components/walletGraphic';
+import calTransit from '@/services/calcTransit';
 
 export default async function Page() {
   const token = cookies().get('token')?.value;
@@ -28,7 +29,7 @@ export default async function Page() {
     ),
     invested: calInvested(userData.active),
     balance: calBalance(userData.transactions),
-    traffic: userData.traffic,
+    transit: calTransit(userData.transactions),
   };
 
   return (

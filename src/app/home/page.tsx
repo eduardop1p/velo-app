@@ -28,7 +28,7 @@ export interface UserPatrimonyInvestedType<T> {
   patrimony: T;
   invested: T;
   balance?: T;
-  traffic?: T;
+  transit?: T;
 }
 
 export interface HistorHourType {

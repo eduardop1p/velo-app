@@ -31,7 +31,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
       );
     }
     const defaultMoney = {
-      traffic: 0,
       active: [],
       veliabilities: [],
       transactions: [],

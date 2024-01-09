@@ -40,8 +40,6 @@ export interface ShowUserType {
   dateBirth: string;
   cellPhone: string;
   country: string;
-  invested: number;
-  traffic: number;
   active: ActiveVeliabilitiesType[];
   veliabilities: ActiveVeliabilitiesType[];
   transactions: TransactionsType[];
