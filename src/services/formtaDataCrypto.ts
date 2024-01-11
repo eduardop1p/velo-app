@@ -3,7 +3,7 @@ import { ActiveCryptoType } from '@/components/products';
 export default function formatDataCrypto(
   activeCrypto: ActiveCryptoType | 'full-data' | 'follow-market',
   metaData: any
-) {
+): unknown[] {
   switch (activeCrypto) {
     case 'currencies': {
       const btc = { NAME: 'Bitcoin', ...metaData.BTC.USD };
@@ -267,7 +267,7 @@ export default function formatDataCrypto(
       ];
     }
     default: {
-      return;
+      return [];
     }
   }
 }

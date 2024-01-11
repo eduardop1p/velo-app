@@ -35,11 +35,13 @@ export default function PrevUrl({
 }) {
   return (
     <div className="flex items-center gap-1">
-      <div
-        className={`${fill} w-4 h-4 flex justify-center items-center mb-[4px]`}
-      >
-        {firstIcon}
-      </div>
+      {firstIcon && (
+        <div
+          className={`${fill} w-4 h-4 flex justify-center items-center mb-[4px]`}
+        >
+          {firstIcon}
+        </div>
+      )}
       {url1 && (
         <Link
           href={url1.url}
