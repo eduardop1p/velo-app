@@ -2,12 +2,11 @@
 
 import { FaSearch } from 'react-icons/fa';
 import { IoIosClose } from 'react-icons/io';
-import { useState, type ChangeEvent, useEffect } from 'react';
+import { useState, type FormEvent, useEffect } from 'react';
 import Image from 'next/image';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod';
-import Inputmask from 'inputmask';
 
 import { CryptoType } from '../header';
 
@@ -16,9 +15,37 @@ interface Props {
   balance: number;
 }
 
-const zodSchema = z.object({
-  currency: z.string().transform(val => +val.replaceAll('$', '')),
-});
+const zodSchema = z
+  .object({
+    balance: z.number(),
+    currency: z
+      .string()
+      .trim()
+      .min(1, 'The field is mandatory')
+      .transform(val => +val.replace(/[$,]/g, ''))
+      .superRefine((val, ctx) => {
+        if (!val) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: 'The field is mandatory',
+            fatal: true,
+          });
+          return;
+        }
+        if (val < 10) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: 'Amount less than the minimum withdrawal',
+            fatal: true,
+          });
+          return;
+        }
+      }),
+  })
+  .refine(val => val.currency <= val.balance, {
+    path: ['currency'],
+    message: 'Insufficient funds',
+  });
 
 type BodyType = z.infer<typeof zodSchema>;
 
@@ -27,8 +54,6 @@ export default function CryptosSend({ dataCryptos, balance }: Props) {
     register,
     handleSubmit,
     formState: { errors, isValid },
-    setValue,
-    getValues,
     setError,
   } = useForm<BodyType>({
     resolver: zodResolver(zodSchema),
@@ -36,6 +61,12 @@ export default function CryptosSend({ dataCryptos, balance }: Props) {
 
   const [searchValue, setSearchValue] = useState('');
   const [showSendDollar, setShowSendDollar] = useState(false);
+
+  useEffect(() => {
+    register('balance', {
+      value: balance,
+    });
+  }, [register, balance]);
 
   const handleSearchCrypto = (name: string, symbol: string) => {
     if (!searchValue) return 'flex';
@@ -56,26 +87,15 @@ export default function CryptosSend({ dataCryptos, balance }: Props) {
     console.log(body);
   };
 
-  useEffect(() => {
-    const elcurrency = document.querySelector('#currency') as HTMLInputElement;
-    const mask = new Inputmask({
-      showMaskOnHover: false,
-      showMaskOnFocus: false,
-      alias: 'numeric',
-      prefix: '$',
-      suffix: '',
-      radixPoint: '.',
-      groupSeparator: ',',
-      digits: 2,
-      allowMinus: false,
-      rightAlign: false,
+  function handleMaskMoney(event: FormEvent<HTMLInputElement>) {
+    const currentTarget = event.currentTarget;
+    let value = currentTarget.value.replace(/\D/g, '');
+    value = (+value / 100).toLocaleString('en-US', {
+      style: 'currency',
+      currency: 'USD',
     });
-    mask.mask(elcurrency);
-
-    return () => {
-      if (elcurrency.inputmask) elcurrency.inputmask.remove();
-    };
-  }, []);
+    currentTarget.value = value;
+  }
 
   return (
     <>
@@ -105,34 +125,42 @@ export default function CryptosSend({ dataCryptos, balance }: Props) {
                 <h4 className="text-c1c5d0 text-sm font-normal">
                   Minimum value:
                 </h4>
-                <h4 className="text-c1c5d0 text-sm font-normal">$20.00</h4>
+                <h4 className="text-c1c5d0 text-sm font-normal">$10.00</h4>
               </div>
             </div>
           </div>
-          <div className="flex flex-col gap-[5px]">
+          <div className="flex flex-col gap-1">
             <p className="text-c1c5d0 font-normal text-xs">Value</p>
             <form
               onSubmit={handleSubmit(handleFormSubmit)}
-              className="flex items-center gap-4 border-b-1 border-solid border-ffffff33 pb-1 w-full"
+              className=" flex flex-col gap-1"
             >
-              <div className="flex items-center gap-1">
-                <Image
-                  src="/assets/imgs/velo-img-20.webp"
-                  alt="dollar"
-                  width={25}
-                  height={25}
-                  className="rounded-full"
+              {/* eslint-disable-next-line */}
+              <div className={`flex items-center gap-4 border-b-1 border-solid ${errors.currency ? 'border-red-600' : 'border-ffffff33'} pb-1 w-full`}>
+                <div className="flex items-center gap-1">
+                  <Image
+                    src="/assets/imgs/velo-img-20.webp"
+                    alt="dollar"
+                    width={25}
+                    height={25}
+                    className="rounded-full"
+                  />
+                  <span className="text-primary font-medium text-sm">USD</span>
+                </div>
+                <input
+                  id="currency"
+                  type="text"
+                  placeholder="$0.00"
+                  className="w-full bg-transparent text-sm font-normal text-primary"
+                  {...register('currency')}
+                  onInput={handleMaskMoney}
                 />
-                <span className="text-primary font-medium text-sm">USD</span>
               </div>
-              <input
-                id="currency"
-                type="text"
-                placeholder="$0.00"
-                className="w-full bg-transparent text-sm font-normal text-primary"
-                {...register('currency')}
-              />
-              <button type="submit" className="hidden"></button>
+              {errors.currency && (
+                <span className="text-[10px] text-red-600 font-normal">
+                  {errors.currency.message}
+                </span>
+              )}
             </form>
           </div>
         </div>
