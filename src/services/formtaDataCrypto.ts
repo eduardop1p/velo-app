@@ -271,3 +271,5 @@ export default function formatDataCrypto(
     }
   }
 }
+
+export const cryptoNames = [{ name: 'Bitcoin' }];

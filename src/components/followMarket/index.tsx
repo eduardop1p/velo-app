@@ -220,6 +220,7 @@ export default function FollowMarket({
                 height={30}
                 src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}${stDataCryptos[0].IMAGEURL}`}
                 alt={stDataCryptos[0].NAME}
+                className="rounded-full"
               />
               <span className="text-primary text-[15px] font-medium">
                 {stDataCryptos[0].FROMSYMBOL}
@@ -261,6 +262,7 @@ export default function FollowMarket({
                 height={30}
                 src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}${stDataCryptos[1].IMAGEURL}`}
                 alt={stDataCryptos[1].NAME}
+                className="rounded-full"
               />
               <span className="text-primary text-[15px] font-medium">
                 {stDataCryptos[1].FROMSYMBOL}
@@ -302,6 +304,7 @@ export default function FollowMarket({
                 height={30}
                 src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}${stDataCryptos[2].IMAGEURL}`}
                 alt={stDataCryptos[2].NAME}
+                className="rounded-full"
               />
               <span className="text-primary text-[15px] font-medium">
                 {stDataCryptos[2].FROMSYMBOL}
@@ -343,6 +346,7 @@ export default function FollowMarket({
                 height={30}
                 src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}${stDataCryptos[3].IMAGEURL}`}
                 alt={stDataCryptos[3].NAME}
+                className="rounded-full"
               />
               <span className="text-primary text-[15px] font-medium">
                 {stDataCryptos[3].FROMSYMBOL}
@@ -384,6 +388,7 @@ export default function FollowMarket({
                 height={30}
                 src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}${stDataCryptos[4].IMAGEURL}`}
                 alt={stDataCryptos[4].NAME}
+                className="rounded-full"
               />
               <span className="text-primary text-[15px] font-medium">
                 {stDataCryptos[4].FROMSYMBOL}
@@ -426,6 +431,7 @@ export default function FollowMarket({
                 height={30}
                 src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}${stDataCryptos[5].IMAGEURL}`}
                 alt={stDataCryptos[5].NAME}
+                className="rounded-full"
               />
               <span className="text-primary text-[15px] font-medium">
                 {stDataCryptos[5].FROMSYMBOL}
@@ -467,6 +473,7 @@ export default function FollowMarket({
                 height={30}
                 src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}${stDataCryptos[6].IMAGEURL}`}
                 alt={stDataCryptos[6].NAME}
+                className="rounded-full"
               />
               <span className="text-primary text-[15px] font-medium">
                 {stDataCryptos[6].FROMSYMBOL}
@@ -508,6 +515,7 @@ export default function FollowMarket({
                 height={30}
                 src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}${stDataCryptos[7].IMAGEURL}`}
                 alt={stDataCryptos[7].NAME}
+                className="rounded-full"
               />
               <span className="text-primary text-[15px] font-medium">
                 {stDataCryptos[7].FROMSYMBOL}
@@ -549,6 +557,7 @@ export default function FollowMarket({
                 height={30}
                 src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}${stDataCryptos[8].IMAGEURL}`}
                 alt={stDataCryptos[8].NAME}
+                className="rounded-full"
               />
               <span className="text-primary text-[15px] font-medium">
                 {stDataCryptos[8].FROMSYMBOL}
@@ -590,6 +599,7 @@ export default function FollowMarket({
                 height={30}
                 src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}${stDataCryptos[9].IMAGEURL}`}
                 alt={stDataCryptos[9].NAME}
+                className="rounded-full"
               />
               <span className="text-primary text-[15px] font-medium">
                 {stDataCryptos[9].FROMSYMBOL}

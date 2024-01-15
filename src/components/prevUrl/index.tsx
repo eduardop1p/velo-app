@@ -45,7 +45,7 @@ export default function PrevUrl({
       {url1 && (
         <Link
           href={url1.url}
-          className={`${color} text-[13px] font-normal leading-none`}
+          className={`${color} text-sm font-normal leading-none`}
         >
           {url1.name}
         </Link>
@@ -57,7 +57,7 @@ export default function PrevUrl({
         <>
           <Link
             href={url2.url}
-            className={`${color} text-[13px] font-normal leading-none`}
+            className={`${color} text-sm font-normal leading-none`}
           >
             {url2.name}
           </Link>
@@ -66,7 +66,7 @@ export default function PrevUrl({
           </div>
         </>
       )}
-      <span className={`${color} text-[13px] font-normal leading-none`}>
+      <span className={`${color} text-sm font-normal leading-none`}>
         {currentPage}
       </span>
     </div>
