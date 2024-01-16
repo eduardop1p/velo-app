@@ -1,12 +1,12 @@
 import Image from 'next/image';
 
-import FormLandingPage from '@/components/formLandingPage';
+import FormLandingPage from '@/components/forms/landingPage';
 import NewInVelo from '@/components/newInVelo';
-import SliderCryptoassets from '@/components/sliderCryptoassets';
+import SliderCryptoassets from '@/components/slides/cryptoassets';
 import { CryptoType } from '@/components/header';
 import formatDataCrypto from '@/services/formtaDataCrypto';
-import SliderCompleteApp from '@/components/sliderCompleteApp';
-import TimeLineApp from '@/components/TimeLineApp';
+import SliderCompleteApp from '@/components/slides/completeApp';
+import TimeLineApp from '@/components/timeLineApp';
 import SectionNewsletter from '@/components/sectionNewsletter';
 import Footer from '@/components/footer';
 import { HistorHourType } from './home/page';

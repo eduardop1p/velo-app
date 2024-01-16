@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import Image from 'next/image';
 
-import FormLogin from '@/components/formLogin';
+import FormLogin from '@/components/forms/login';
 import Footer from '@/components/footer';
 
 export const metadata: Metadata = {

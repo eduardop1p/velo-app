@@ -11,7 +11,7 @@ import { DateTime } from 'luxon';
 // });
 import UserPatrimony from '@/components/userPatrimony';
 import { CryptoType, ShowUserType } from '@/components/header';
-import SlideMarketOverview from '@/components/slideMarketOverview';
+import SlideMarketOverview from '@/components/slides/marketOverview';
 import FollowMarket from '@/components/followMarket';
 import formatDataCrypto from '@/services/formtaDataCrypto';
 import calcPatrimonyTotal from '@/services/calcPatrimonyTotal';

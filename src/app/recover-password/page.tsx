@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import Image from 'next/image';
 
-import FormRecoverPassword from '@/components/formRecoverPassword';
+import FormRecoverPassword from '@/components/forms/recoverPassword';
 import Footer from '@/components/footer';
 
 export const metadata: Metadata = {

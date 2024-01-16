@@ -3,7 +3,7 @@ import Image from 'next/image';
 import dynamic from 'next/dynamic';
 
 const FormCreatedAccount = dynamic(
-  () => import('@/components/formCreatedAccount'),
+  () => import('@/components/forms/createdAccount'),
   {
     ssr: false,
   }

@@ -1,22 +1,22 @@
 import crypto from 'crypto';
 
 interface Params {
-  cryptoSymbol: string;
   apiEndpoint: string;
   apiMethod: string;
+  apiQueryString?: string;
 }
 
 export default async function fetchKucoinApi({
-  cryptoSymbol,
   apiEndpoint,
   apiMethod,
+  apiQueryString = '',
 }: Params) {
   const apiSecret = process.env.KUCOIN_API_SECRET as string;
   const apiKey = process.env.KUCOIN_API_KEY as string;
   const timestamp = Date.now();
   const endpoint = apiEndpoint;
   const method = apiMethod;
-  const queryString = `?currency=${cryptoSymbol}`;
+  const queryString = apiQueryString;
 
   const payload = timestamp + method + endpoint + queryString;
   const signature = crypto
@@ -33,7 +33,7 @@ export default async function fetchKucoinApi({
   };
 
   const resWithdrawalsQuotas = await fetch(
-    `${process.env.KUCOIN_API_BASE_URL}${apiEndpoint}?currency=${cryptoSymbol}`,
+    `${process.env.KUCOIN_API_BASE_URL}${apiEndpoint}${apiQueryString}`,
     {
       method: apiMethod,
       cache: 'no-cache',

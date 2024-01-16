@@ -9,7 +9,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { FaArrowRight } from 'react-icons/fa6';
 
-import { CryptoType } from '../header';
+import { CryptoType } from '../../header';
 
 export default function SlideInvestInCryptos({
   dataCryptoassets,

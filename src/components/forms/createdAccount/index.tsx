@@ -10,13 +10,13 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 
-import AlertMsg from '../alertMsg';
-import { OpenAlertType } from '../alertMsg';
-import FormErrorMsg from '../formErrorMsg';
+import AlertMsg from '../../alertMsg';
+import { OpenAlertType } from '../../alertMsg';
+import FormErrorMsg from '../errorMsg';
 // import FormLoading from '../formLoading';
 import { CountriesType } from '@/app/create-account/page';
-import ShowPassword, { ShowPasswordType } from '../showPassword';
-import Loading from '../loading';
+import ShowPassword, { ShowPasswordType } from '../../showPassword';
+import Loading from '../../loading';
 
 const zodSchema = z
   .object({

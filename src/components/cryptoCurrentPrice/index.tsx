@@ -29,7 +29,7 @@ export default function CryptoCurrentPrice({
   return (
     // eslint-disable-next-line
     <div className={`flex gap-1 items-center ${cryptoPrice.current ? 'visible' : 'invisible'}`}>
-      <h3 className="text-primary font-normal text-base">Current price:</h3>
+      <h3 className="text-primary font-normal text-base">Real time price:</h3>
       {/* eslint-disable-next-line */}
       <span className={`text-[15px] font-normal ${handleColorPrice()}`}>
         {handleFormatPrice(cryptoPrice.current)}

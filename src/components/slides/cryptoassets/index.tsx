@@ -16,7 +16,7 @@ import {
 import { Autoplay, Pagination } from 'swiper/modules';
 import Link from 'next/link';
 
-import { CryptoType } from '../header';
+import { CryptoType } from '../../header';
 import { HistorHourType } from '@/app/home/page';
 
 export default function SliderCryptoassets({

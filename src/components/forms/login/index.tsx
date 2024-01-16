@@ -7,11 +7,11 @@ import { useState, type FocusEvent, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-import AlertMsg from '../alertMsg';
-import { OpenAlertType } from '../alertMsg';
-import FormErrorMsg from '../formErrorMsg';
-import FormLoading from '../formLoading';
-import ShowPassword, { ShowPasswordType } from '../showPassword';
+import AlertMsg from '../../alertMsg';
+import { OpenAlertType } from '../../alertMsg';
+import FormErrorMsg from '../errorMsg';
+import FormLoading from '../loading';
+import ShowPassword, { ShowPasswordType } from '../../showPassword';
 
 const zodSchema = z.object({
   email: z.string().trim().min(1, 'Required field').email('Invalid email'),

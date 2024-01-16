@@ -8,10 +8,10 @@ import Link from 'next/link';
 import { FaArrowLeft } from 'react-icons/fa6';
 import { useRouter } from 'next/navigation';
 
-import AlertMsg from '../alertMsg';
-import { OpenAlertType } from '../alertMsg';
-import FormErrorMsg from '../formErrorMsg';
-import FormLoading from '../formLoading';
+import AlertMsg from '../../alertMsg';
+import { OpenAlertType } from '../../alertMsg';
+import FormErrorMsg from '../errorMsg';
+import FormLoading from '../loading';
 
 const zodSchema = z.object({
   email: z.string().trim().min(1, 'Required field').email('Invalid email'),

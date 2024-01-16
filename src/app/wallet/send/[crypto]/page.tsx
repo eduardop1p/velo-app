@@ -7,6 +7,7 @@ import { CryptoType, ShowUserType } from '@/components/header';
 import calBalance from '@/services/calcBalance';
 import CryptoCurrentPrice from '@/components/cryptoCurrentPrice';
 import fetchKucoinApi from '@/services/fetchKucoinApi';
+import FormSendCrypto from '@/components/forms/sendCrypto';
 
 export default async function Page({
   params,
@@ -48,7 +49,7 @@ export default async function Page({
   const dataWithdrawalsQuotas = await fetchKucoinApi({
     apiEndpoint: '/api/v1/withdrawals/quotas',
     apiMethod: 'GET',
-    cryptoSymbol,
+    apiQueryString: `?currency=${cryptoSymbol}`,
   });
 
   const handleFormatPrice = (value: number) => {
@@ -60,20 +61,20 @@ export default async function Page({
 
   const handleFixedPointPrice = () => {
     const currentCryptoBalance =
-      calBalance(userData.transactions) / dataCrypto.PRICE;
+      calBalance(userData.transactions) / +dataCrypto.PRICE.toFixed(2);
     if (cryptoSymbol === 'BTC') return currentCryptoBalance.toFixed(8);
     if (cryptoSymbol === 'USDC' || cryptoSymbol === 'USDT')
       return currentCryptoBalance.toFixed(2);
     return currentCryptoBalance.toFixed(6);
   };
 
-  const handleFixedPointWithdrawMinFee = () => {
-    if (!dataWithdrawalsQuotas.withdrawMinFee) return;
-    const withdrawMinFee = parseFloat(dataWithdrawalsQuotas.withdrawMinFee);
-    if (cryptoSymbol === 'BTC') return withdrawMinFee.toFixed(8);
-    if (cryptoSymbol === 'USDC' || cryptoSymbol === 'USDT')
-      return withdrawMinFee.toFixed(2);
-    return withdrawMinFee.toFixed(6);
+  const handleFixedPointWithdrawMinSize = () => {
+    if (!dataWithdrawalsQuotas) return;
+    const withdrawMinSize = parseFloat(dataWithdrawalsQuotas.withdrawMinSize);
+    // if (cryptoSymbol === 'BTC') return withdrawMinSize.toFixed(8);
+    // if (cryptoSymbol === 'USDC' || cryptoSymbol === 'USDT')
+    //   return withdrawMinSize.toFixed(2);
+    return withdrawMinSize >= 1 ? withdrawMinSize.toFixed(2) : withdrawMinSize;
   };
 
   return (
@@ -129,10 +130,11 @@ export default async function Page({
                 Minimum value:
               </h3>
               <span className="text-[15px] font-normal text-primary">
-                {handleFixedPointWithdrawMinFee()} {cryptoSymbol}
+                {handleFixedPointWithdrawMinSize()} {cryptoSymbol}
               </span>
             </div>
           </div>
+          <FormSendCrypto />
         </div>
       </div>
     </main>

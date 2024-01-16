@@ -13,7 +13,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import { CryptoType } from '../header';
-import { GraphicLine } from '../sliderCryptoassets';
+import { GraphicLine } from '../slides/cryptoassets';
 import { HistorHourType } from '@/app/home/page';
 
 type OrderType = 'desc' | 'asc' | 'default';

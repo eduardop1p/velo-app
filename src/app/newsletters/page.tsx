@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import Image from 'next/image';
 
 import PrevUrl from '@/components/prevUrl';
-import FormNewsletter from '@/components/formNewsletter';
+import FormNewsletter from '@/components/forms/newsletter';
 import Footer from '@/components/footer';
 
 export const metadata: Metadata = {

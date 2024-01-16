@@ -1,4 +1,4 @@
-import SlideInvestInCryptos from '@/components/sliderInvestCryptos';
+import SlideInvestInCryptos from '@/components/slides/investCryptos';
 import { CryptoType } from '@/components/header';
 
 export default function InvestOtherCryptos({

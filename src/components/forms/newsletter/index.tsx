@@ -5,10 +5,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod';
 import { useState, type FocusEvent, useEffect } from 'react';
 
-import AlertMsg from '../alertMsg';
-import { OpenAlertType } from '../alertMsg';
-import FormErrorMsg from '../formErrorMsg';
-import FormLoading from '../formLoading';
+import AlertMsg from '../../alertMsg';
+import { OpenAlertType } from '../../alertMsg';
+import FormErrorMsg from '../errorMsg';
+import FormLoading from '../loading';
 
 const zodSchema = z.object({
   'full-name': z.string().trim().min(1, 'Required field'),
