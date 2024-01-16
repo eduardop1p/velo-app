@@ -12,6 +12,7 @@ export const metadata: Metadata = {
 
 import Header from '@/components/header';
 import AcceptCookies from '@/components/acceptCookies';
+import RealTimePriceCryptoContext from '@/utils/context/realTimePriceCryptoContext';
 
 const inter = Poppins({
   weight: ['200', '300', '400', '500', '600', '700', '800'],
@@ -35,7 +36,7 @@ export default function RootLayout({
       <body>
         <Header />
         {!cookiesAccepted && <AcceptCookies />}
-        {children}
+        <RealTimePriceCryptoContext>{children}</RealTimePriceCryptoContext>
       </body>
     </html>
   );

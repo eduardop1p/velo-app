@@ -1,6 +1,12 @@
 'use client';
 
+import { useCallback, useContext, useEffect, useRef } from 'react';
+
 import useWebSocketCryptoPrice from '@/utils/useWebSocketCryptoPrice';
+import {
+  Context,
+  ContextStateType,
+} from '@/utils/context/realTimePriceCryptoContext';
 
 export default function CryptoCurrentPrice({
   cryptoSymbol,
@@ -9,7 +15,18 @@ export default function CryptoCurrentPrice({
   cryptoSymbol: string;
   cryptoName: string;
 }) {
-  const { cryptoPrice } = useWebSocketCryptoPrice({ symbol: cryptoSymbol });
+  const { setRealTimePriceCrypto } = useContext(Context) as ContextStateType;
+
+  const cryptoPrice = useWebSocketCryptoPrice({ symbol: cryptoSymbol });
+
+  let refCryptoPrice = useRef(cryptoPrice);
+
+  useEffect(() => {
+    if (cryptoPrice.current !== refCryptoPrice.current.current) {
+      setRealTimePriceCrypto(cryptoPrice);
+    }
+    refCryptoPrice.current = cryptoPrice;
+  }, [setRealTimePriceCrypto, cryptoPrice]);
 
   const handleFormatPrice = (value: number) => {
     if (!value) return;

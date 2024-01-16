@@ -2,7 +2,7 @@ import { cookies } from 'next/headers';
 
 import Back from '@/components/searchFaq/back';
 import PrevUrl from '@/components/prevUrl';
-import CryptosSend from '@/components/cryptosSend';
+import CryptosSend from '@/components/sendDollar';
 import formatDataCrypto from '@/services/formtaDataCrypto';
 import { CryptoType, ShowUserType } from '@/components/header';
 import calBalance from '@/services/calcBalance';

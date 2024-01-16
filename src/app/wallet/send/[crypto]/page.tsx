@@ -9,6 +9,11 @@ import CryptoCurrentPrice from '@/components/cryptoCurrentPrice';
 import fetchKucoinApi from '@/services/fetchKucoinApi';
 import FormSendCrypto from '@/components/forms/sendCrypto';
 
+interface WithdrawalsQuotasType {
+  withdrawMinFee: string;
+  withdrawMinSize: string;
+}
+
 export default async function Page({
   params,
   searchParams,
@@ -46,11 +51,11 @@ export default async function Page({
     ...metaData.RAW[cryptoSymbol].USD,
   } as CryptoType;
 
-  const dataWithdrawalsQuotas = await fetchKucoinApi({
+  const dataWithdrawalsQuotas = (await fetchKucoinApi({
     apiEndpoint: '/api/v1/withdrawals/quotas',
     apiMethod: 'GET',
     apiQueryString: `?currency=${cryptoSymbol}`,
-  });
+  })) as WithdrawalsQuotasType;
 
   const handleFormatPrice = (value: number) => {
     return value.toLocaleString('en-US', {
@@ -69,7 +74,7 @@ export default async function Page({
   };
 
   const handleFixedPointWithdrawMinSize = () => {
-    if (!dataWithdrawalsQuotas) return;
+    if (!dataWithdrawalsQuotas) return 0;
     const withdrawMinSize = parseFloat(dataWithdrawalsQuotas.withdrawMinSize);
     // if (cryptoSymbol === 'BTC') return withdrawMinSize.toFixed(8);
     // if (cryptoSymbol === 'USDC' || cryptoSymbol === 'USDT')
@@ -134,7 +139,13 @@ export default async function Page({
               </span>
             </div>
           </div>
-          <FormSendCrypto />
+          <FormSendCrypto
+            cryptoImgUrl={dataCrypto.IMAGEURL}
+            withdrawMinSize={handleFixedPointWithdrawMinSize()}
+            withdrawMinFeeRate={dataWithdrawalsQuotas.withdrawMinFee}
+            cryptoName={cryptoName}
+            cryptoSymbol={cryptoSymbol}
+          />
         </div>
       </div>
     </main>

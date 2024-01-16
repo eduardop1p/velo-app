@@ -2,16 +2,15 @@
 
 import { useEffect, useState } from 'react';
 
+import { RealTimePriceCryptoType } from '../context/realTimePriceCryptoContext';
+
 interface Props {
   symbol: string;
 }
 
-export default function useWebSocketCryptoPrice({ symbol }: Props): {
-  cryptoPrice: {
-    prev: number;
-    current: number;
-  };
-} {
+export default function useWebSocketCryptoPrice({
+  symbol,
+}: Props): RealTimePriceCryptoType {
   const [cryptoPrice, setCryptoPrice] = useState({
     prev: 0,
     current: 0,
@@ -48,5 +47,8 @@ export default function useWebSocketCryptoPrice({ symbol }: Props): {
     };
   }, [symbol]);
 
-  return { cryptoPrice };
+  return {
+    current: cryptoPrice.current,
+    prev: cryptoPrice.prev,
+  };
 }

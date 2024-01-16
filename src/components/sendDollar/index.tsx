@@ -54,7 +54,7 @@ const zodSchema = z
 
 type BodyType = z.infer<typeof zodSchema>;
 
-export default function CryptosSend({ dataCryptos, balance }: Props) {
+export default function SendDollar({ dataCryptos, balance }: Props) {
   const {
     register,
     handleSubmit,
