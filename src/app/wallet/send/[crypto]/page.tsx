@@ -7,7 +7,8 @@ import { CryptoType, ShowUserType } from '@/components/header';
 import calBalance from '@/services/calcBalance';
 import CryptoCurrentPrice from '@/components/cryptoCurrentPrice';
 import fetchKucoinApi from '@/services/fetchKucoinApi';
-import FormSendCrypto from '@/components/forms/sendCrypto';
+import BalanceMinimum from '@/components/forms/sendCrypto/balanceMinimum';
+// import FormSendCrypto from '@/components/forms/sendCrypto/index-deprecated';
 
 interface WithdrawalsQuotasType {
   withdrawMinFee: string;
@@ -57,31 +58,6 @@ export default async function Page({
     apiQueryString: `?currency=${cryptoSymbol}`,
   })) as WithdrawalsQuotasType;
 
-  const handleFormatPrice = (value: number) => {
-    return value.toLocaleString('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    });
-  };
-
-  const handleFixedPointPrice = () => {
-    const currentCryptoBalance =
-      calBalance(userData.transactions) / +dataCrypto.PRICE.toFixed(2);
-    if (cryptoSymbol === 'BTC') return currentCryptoBalance.toFixed(8);
-    if (cryptoSymbol === 'USDC' || cryptoSymbol === 'USDT')
-      return currentCryptoBalance.toFixed(2);
-    return currentCryptoBalance.toFixed(6);
-  };
-
-  const handleFixedPointWithdrawMinSize = () => {
-    if (!dataWithdrawalsQuotas) return 0;
-    const withdrawMinSize = parseFloat(dataWithdrawalsQuotas.withdrawMinSize);
-    // if (cryptoSymbol === 'BTC') return withdrawMinSize.toFixed(8);
-    // if (cryptoSymbol === 'USDC' || cryptoSymbol === 'USDT')
-    //   return withdrawMinSize.toFixed(2);
-    return withdrawMinSize >= 1 ? withdrawMinSize.toFixed(2) : withdrawMinSize;
-  };
-
   return (
     <main className="mt-20">
       <div className="min-h-full-screen-80px bg-black-section px-20 py-14 flex flex-col gap-5">
@@ -120,32 +96,18 @@ export default async function Page({
           />
         </div>
         <div className="flex flex-col gap-5 ">
-          <div className="flex gap-4 justify-between w-1/2">
-            <div className="flex gap-1">
-              <h3 className="text-primary-2 font-normal text-[15px]">
-                Balance available:
-              </h3>
-              <span className="text-[15px] font-normal text-primary">
-                {handleFixedPointPrice()} {cryptoSymbol} |{' '}
-                {handleFormatPrice(calBalance(userData.transactions))}
-              </span>
-            </div>
-            <div className="flex gap-1">
-              <h3 className="text-primary-2 font-normal text-[15px]">
-                Minimum value:
-              </h3>
-              <span className="text-[15px] font-normal text-primary">
-                {handleFixedPointWithdrawMinSize()} {cryptoSymbol}
-              </span>
-            </div>
-          </div>
-          <FormSendCrypto
+          <BalanceMinimum
+            balance={calBalance(userData.transactions)}
+            cryptoSymbol={cryptoSymbol}
+            withdrawMinSize={+dataWithdrawalsQuotas.withdrawMinSize}
+          />
+          {/* <FormSendCrypto
             cryptoImgUrl={dataCrypto.IMAGEURL}
-            withdrawMinSize={handleFixedPointWithdrawMinSize()}
-            withdrawMinFeeRate={dataWithdrawalsQuotas.withdrawMinFee}
+            withdrawMinSize={+dataWithdrawalsQuotas.withdrawMinSize}
             cryptoName={cryptoName}
             cryptoSymbol={cryptoSymbol}
-          />
+            userBalance={calBalance(userData.transactions)}
+          /> */}
         </div>
       </div>
     </main>

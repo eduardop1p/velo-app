@@ -1,8 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
-import { RealTimePriceCryptoType } from '../context/realTimePriceCryptoContext';
+import {
+  Context,
+  ContextStateType,
+  RealTimePriceCryptoType,
+} from '../context/realTimePriceCryptoContext';
 
 interface Props {
   symbol: string;
@@ -11,6 +15,8 @@ interface Props {
 export default function useWebSocketCryptoPrice({
   symbol,
 }: Props): RealTimePriceCryptoType {
+  const { setRealTimePriceCrypto } = useContext(Context) as ContextStateType;
+
   const [cryptoPrice, setCryptoPrice] = useState({
     prev: 0,
     current: 0,
@@ -31,8 +37,9 @@ export default function useWebSocketCryptoPrice({
     ws.onmessage = event => {
       const jsonData = JSON.parse(event.data);
       const price = jsonData.PRICE;
+      if (!price) return;
       setCryptoPrice(state => ({
-        current: price ? +price.toFixed(2) : state.prev,
+        current: +price.toFixed(2),
         prev: state.current,
       }));
     };
@@ -44,8 +51,12 @@ export default function useWebSocketCryptoPrice({
 
     return () => {
       ws.close();
+      setRealTimePriceCrypto({
+        current: 0,
+        prev: 0,
+      });
     };
-  }, [symbol]);
+  }, [symbol, setRealTimePriceCrypto]);
 
   return {
     current: cryptoPrice.current,

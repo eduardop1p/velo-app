@@ -1,6 +1,7 @@
 'use client';
 
-import { useCallback, useContext, useEffect, useRef } from 'react';
+import { useContext, useEffect, useRef } from 'react';
+import { Skeleton } from '@mui/material';
 
 import useWebSocketCryptoPrice from '@/utils/useWebSocketCryptoPrice';
 import {
@@ -43,9 +44,23 @@ export default function CryptoCurrentPrice({
       : 'text-red-600';
   };
 
+  if (!cryptoPrice.current)
+    return (
+      <Skeleton
+        variant="rectangular"
+        animation="pulse"
+        sx={{
+          bgcolor: 'grey.900',
+          borderRadius: '3px',
+        }}
+        width="20%"
+        height={22}
+      />
+    );
+
   return (
     // eslint-disable-next-line
-    <div className={`flex gap-1 items-center ${cryptoPrice.current ? 'visible' : 'invisible'}`}>
+    <div className={`flex gap-1 items-center`}>
       <h3 className="text-primary font-normal text-base">Real time price:</h3>
       {/* eslint-disable-next-line */}
       <span className={`text-[15px] font-normal ${handleColorPrice()}`}>
