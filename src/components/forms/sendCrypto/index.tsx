@@ -1,20 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod';
-import {
-  useState,
-  type FormEvent,
-  useEffect,
-  useCallback,
-  useContext,
-} from 'react';
+import { useState, useEffect, useCallback, useContext } from 'react';
 import Image from 'next/image';
 import Inputmask from 'inputmask';
 import { useRouter } from 'next/navigation';
 
-import replaceCurrency from '@/services/replaceCurrency';
 import {
   Context,
   ContextStateType,
@@ -27,6 +21,7 @@ interface Props {
   cryptoSymbol: string;
   withdrawMinSize: number;
   userBalance: number;
+  cryptoPrice: number;
 }
 
 const zodSchema = z
@@ -69,9 +64,9 @@ export default function FormSendCrypto({
   cryptoSymbol,
   withdrawMinSize,
   userBalance,
+  cryptoPrice,
 }: Props) {
   const { realTimePriceCrypto } = useContext(Context) as ContextStateType;
-  let cryptoPrice = realTimePriceCrypto.current;
 
   const {
     register,
@@ -144,14 +139,16 @@ export default function FormSendCrypto({
 
   const handleOnInputAmount = (amountValue: number) => {
     setValue('amount', handleCryptoFixedPoint(amountValue));
-    setValue(
-      'usdValue',
-      formatPrice(amountValue * realTimePriceCrypto.current)
-    );
+    setValue('usdValue', formatPrice(amountValue * cryptoPrice));
   };
 
   const handleAddMinValueToAmount = () => {
     handleOnInputAmount(withdrawMinSize);
+    trigger('amount');
+  };
+
+  const handleAddAllToAmount = () => {
+    handleOnInputAmount(handleCryptoFixedPoint(userBalance / cryptoPrice));
     trigger('amount');
   };
 
@@ -205,7 +202,7 @@ export default function FormSendCrypto({
             <button
               type="button"
               className="py-2 px-4 bg-464c51ff text-primary w-fit rounded text-xs"
-            // onClick={handleAddAllToAmount}
+              onClick={handleAddAllToAmount}
             >
               All
             </button>

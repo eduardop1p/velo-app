@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
 import { useContext } from 'react';
@@ -13,15 +14,16 @@ interface Props {
   cryptoSymbol: string;
   balance: number;
   withdrawMinSize: number;
+  cryptoPrice: number;
 }
 
 export default function BalanceMinimum({
   balance,
   cryptoSymbol,
   withdrawMinSize,
+  cryptoPrice,
 }: Props) {
-  const { realTimePriceCrypto } = useContext(Context) as ContextStateType;
-  let cryptoPrice = realTimePriceCrypto.current;
+  // const { realTimePriceCrypto } = useContext(Context) as ContextStateType;
 
   const handleUserCryptoBalance = () => {
     const currentCryptoBalance = balance / cryptoPrice;

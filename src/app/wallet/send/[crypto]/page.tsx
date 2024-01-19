@@ -106,12 +106,14 @@ export default async function Page({
             balance={calBalance(userData.transactions)}
             cryptoSymbol={cryptoSymbol}
             withdrawMinSize={+dataWithdrawalsQuotas.withdrawMinSize}
+            cryptoPrice={dataCrypto.PRICE}
           />
           <FormSendCrypto
             cryptoImgUrl={dataCrypto.IMAGEURL}
             withdrawMinSize={+dataWithdrawalsQuotas.withdrawMinSize}
             cryptoName={cryptoName}
             cryptoSymbol={cryptoSymbol}
+            cryptoPrice={dataCrypto.PRICE}
             userBalance={calBalance(userData.transactions)}
           />
         </div>
