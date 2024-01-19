@@ -7,6 +7,7 @@ import {
   Context,
   ContextStateType,
 } from '@/utils/context/realTimePriceCryptoContext';
+import formatPrice from '@/services/formatPrice';
 
 interface Props {
   cryptoSymbol: string;
@@ -21,13 +22,6 @@ export default function BalanceMinimum({
 }: Props) {
   const { realTimePriceCrypto } = useContext(Context) as ContextStateType;
   let cryptoPrice = realTimePriceCrypto.current;
-
-  const handleFormatPrice = (value: number) => {
-    return value.toLocaleString('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    });
-  };
 
   const handleUserCryptoBalance = () => {
     const currentCryptoBalance = balance / cryptoPrice;
@@ -58,8 +52,7 @@ export default function BalanceMinimum({
           Balance available:
         </h3>
         <span className="text-[15px] font-normal text-primary whitespace-nowrap">
-          {handleUserCryptoBalance()} {cryptoSymbol} |{' '}
-          {handleFormatPrice(balance)}
+          {handleUserCryptoBalance()} {cryptoSymbol} | {formatPrice(balance)}
         </span>
       </div>
       <div className="flex gap-1">

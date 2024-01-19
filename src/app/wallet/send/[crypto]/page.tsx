@@ -8,7 +8,7 @@ import calBalance from '@/services/calcBalance';
 import CryptoCurrentPrice from '@/components/cryptoCurrentPrice';
 import fetchKucoinApi from '@/services/fetchKucoinApi';
 import BalanceMinimum from '@/components/forms/sendCrypto/balanceMinimum';
-// import FormSendCrypto from '@/components/forms/sendCrypto/index-deprecated';
+import FormSendCrypto from '@/components/forms/sendCrypto/index';
 
 interface WithdrawalsQuotasType {
   withdrawMinFee: string;
@@ -52,11 +52,17 @@ export default async function Page({
     ...metaData.RAW[cryptoSymbol].USD,
   } as CryptoType;
 
-  const dataWithdrawalsQuotas = (await fetchKucoinApi({
+  let dataWithdrawalsQuotas = (await fetchKucoinApi({
     apiEndpoint: '/api/v1/withdrawals/quotas',
     apiMethod: 'GET',
     apiQueryString: `?currency=${cryptoSymbol}`,
   })) as WithdrawalsQuotasType;
+  if (!dataWithdrawalsQuotas) {
+    dataWithdrawalsQuotas = {
+      withdrawMinFee: '0',
+      withdrawMinSize: '0',
+    };
+  }
 
   return (
     <main className="mt-20">
@@ -101,13 +107,13 @@ export default async function Page({
             cryptoSymbol={cryptoSymbol}
             withdrawMinSize={+dataWithdrawalsQuotas.withdrawMinSize}
           />
-          {/* <FormSendCrypto
+          <FormSendCrypto
             cryptoImgUrl={dataCrypto.IMAGEURL}
             withdrawMinSize={+dataWithdrawalsQuotas.withdrawMinSize}
             cryptoName={cryptoName}
             cryptoSymbol={cryptoSymbol}
             userBalance={calBalance(userData.transactions)}
-          /> */}
+          />
         </div>
       </div>
     </main>

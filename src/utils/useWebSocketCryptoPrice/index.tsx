@@ -39,7 +39,7 @@ export default function useWebSocketCryptoPrice({
       const price = jsonData.PRICE;
       if (!price) return;
       setCryptoPrice(state => ({
-        current: +price.toFixed(2),
+        current: price,
         prev: state.current,
       }));
     };

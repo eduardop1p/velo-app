@@ -8,6 +8,7 @@ import {
   Context,
   ContextStateType,
 } from '@/utils/context/realTimePriceCryptoContext';
+import formatPrice from '@/services/formatPrice';
 
 export default function CryptoCurrentPrice({
   cryptoSymbol,
@@ -28,14 +29,6 @@ export default function CryptoCurrentPrice({
     }
     refCryptoPrice.current = cryptoPrice;
   }, [setRealTimePriceCrypto, cryptoPrice]);
-
-  const handleFormatPrice = (value: number) => {
-    if (!value) return;
-    return value.toLocaleString('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    });
-  };
 
   const handleColorPrice = () => {
     if (cryptoPrice.current === cryptoPrice.prev) return 'text-primary-2';
@@ -64,7 +57,7 @@ export default function CryptoCurrentPrice({
       <h3 className="text-primary font-normal text-base">Real time price:</h3>
       {/* eslint-disable-next-line */}
       <span className={`text-[15px] font-normal ${handleColorPrice()}`}>
-        {handleFormatPrice(cryptoPrice.current)}
+        {formatPrice(cryptoPrice.current)}
       </span>
     </div>
   );
