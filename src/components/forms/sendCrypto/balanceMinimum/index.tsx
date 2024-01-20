@@ -12,25 +12,30 @@ import formatPrice from '@/services/formatPrice';
 
 interface Props {
   cryptoSymbol: string;
-  balance: number;
+  userCryptoBalance: number;
   withdrawMinSize: number;
-  cryptoPrice: number;
 }
 
 export default function BalanceMinimum({
-  balance,
+  userCryptoBalance,
   cryptoSymbol,
   withdrawMinSize,
-  cryptoPrice,
 }: Props) {
-  // const { realTimePriceCrypto } = useContext(Context) as ContextStateType;
+  const { realTimePriceCrypto } = useContext(Context) as ContextStateType;
+  const cryptoPrice = realTimePriceCrypto.current;
 
   const handleUserCryptoBalance = () => {
-    const currentCryptoBalance = balance / cryptoPrice;
-    if (cryptoSymbol === 'BTC') return currentCryptoBalance.toFixed(8);
+    if (cryptoSymbol === 'BTC') return userCryptoBalance.toFixed(8);
     if (cryptoSymbol === 'USDC' || cryptoSymbol === 'USDT')
-      return currentCryptoBalance.toFixed(2);
-    return currentCryptoBalance.toFixed(6);
+      return userCryptoBalance.toFixed(2);
+    return userCryptoBalance.toFixed(6);
+  };
+
+  const handleWithdrawMinSize = () => {
+    if (cryptoSymbol === 'BTC') return withdrawMinSize.toFixed(8);
+    if (cryptoSymbol === 'USDT' || cryptoSymbol === 'USDC')
+      return withdrawMinSize.toFixed(2);
+    return withdrawMinSize.toFixed(6);
   };
 
   if (!cryptoPrice)
@@ -54,7 +59,8 @@ export default function BalanceMinimum({
           Balance available:
         </h3>
         <span className="text-[15px] font-normal text-primary whitespace-nowrap">
-          {handleUserCryptoBalance()} {cryptoSymbol} | {formatPrice(balance)}
+          {handleUserCryptoBalance()} {cryptoSymbol} |{' '}
+          {formatPrice(userCryptoBalance * realTimePriceCrypto.current)}
         </span>
       </div>
       <div className="flex gap-1">
@@ -62,8 +68,7 @@ export default function BalanceMinimum({
           Minimum value:
         </h3>
         <span className="text-[15px] font-normal text-primary whitespace-nowrap">
-          {withdrawMinSize >= 1 ? withdrawMinSize.toFixed(2) : withdrawMinSize}{' '}
-          {cryptoSymbol}
+          {handleWithdrawMinSize()} {cryptoSymbol}
         </span>
       </div>
     </div>

@@ -272,4 +272,114 @@ export default function formatDataCrypto(
   }
 }
 
-export const cryptoNames = [{ name: 'Bitcoin' }];
+export const cryptosNames = [
+  { symbol: 'BTC', name: 'Bitcoin' },
+  {
+    symbol: 'DOGE',
+    name: 'Dogecoin',
+  },
+  {
+    symbol: 'XLM',
+    name: 'Stellar',
+  },
+  {
+    symbol: 'XRP',
+    name: 'Ripple',
+  },
+  {
+    symbol: 'LTC',
+    name: 'LiteCoin',
+  },
+  {
+    symbol: 'ETH',
+    name: 'Ethereum',
+  },
+  {
+    symbol: 'ADA',
+    name: 'Cardano',
+  },
+  {
+    symbol: 'SOL',
+    name: 'Solana',
+  },
+  {
+    symbol: 'DOT',
+    name: 'Polkadot',
+  },
+  {
+    symbol: 'AVAX',
+    name: 'Avalanche',
+  },
+  {
+    symbol: 'ALGO',
+    name: 'Algorand',
+  },
+  {
+    symbol: 'USDC',
+    name: 'USD Coin',
+  },
+  {
+    symbol: 'USDT',
+    name: 'Tether',
+  },
+  {
+    symbol: 'MATIC',
+    name: 'Polygon',
+  },
+  {
+    symbol: 'OP',
+    name: 'Optimism',
+  },
+  {
+    symbol: 'LINK',
+    name: 'Chainlink',
+  },
+  {
+    symbol: 'SAND',
+    name: 'The sandbox',
+  },
+  {
+    symbol: 'MANA',
+    name: 'Decentraland',
+  },
+  {
+    symbol: 'CRV',
+    name: 'Curve',
+  },
+  {
+    symbol: 'LDO',
+    name: 'Lido',
+  },
+  {
+    symbol: 'AAVE',
+    name: 'Aave',
+  },
+  {
+    symbol: 'UNI',
+    name: 'Uniswap',
+  },
+  {
+    symbol: 'MKR',
+    name: 'MakerDAO',
+  },
+  {
+    symbol: 'SNX',
+    name: 'Synthetix',
+  },
+  {
+    symbol: 'COMP',
+    name: 'Compound',
+  },
+  {
+    symbol: 'QNT',
+    name: 'Quant',
+  },
+  {
+    symbol: 'ATOM',
+    name: 'Cosmos',
+  },
+  {
+    symbol: 'APE',
+    name: 'ApeCoin',
+  },
+];

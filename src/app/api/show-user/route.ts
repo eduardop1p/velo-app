@@ -20,13 +20,14 @@ export async function GET(req: NextRequest, res: NextResponse) {
       }
     );
   }
-  const [, token] = authorization.split(' ');
-  const data = jwt.verify(
-    token,
-    process.env.TOKEN_SECRET as string
-  ) as jwt.JwtPayload & { id: string; email: string };
 
   try {
+    const [, token] = authorization.split(' ');
+    const data = jwt.verify(
+      token,
+      process.env.TOKEN_SECRET as string
+    ) as jwt.JwtPayload & { id: string; email: string };
+
     const user = (await usersModel.findById(data.id)) as UserType;
     return NextResponse.json({
       name: user.name,
@@ -37,6 +38,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
       active: user.active,
       veliabilities: user.veliabilities,
       transactions: user.transactions,
+      cryptos: user.cryptos,
     });
   } catch (err) {
     // console.log(err);

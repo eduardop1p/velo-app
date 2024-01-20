@@ -2,7 +2,7 @@ import { cookies } from 'next/headers';
 
 import Back from '@/components/searchFaq/back';
 import PrevUrl from '@/components/prevUrl';
-import CryptosSend from '@/components/sendDollar';
+import WalletSendCrypto from '@/components/walletSendCrypto';
 import formatDataCrypto from '@/services/formtaDataCrypto';
 import { CryptoType, ShowUserType } from '@/components/header';
 import calBalance from '@/services/calcBalance';
@@ -56,7 +56,7 @@ export default async function Page() {
           <h2 className="text-primary text-2xl font-normal my-2">
             Select which currency you want to send
           </h2>
-          <CryptosSend
+          <WalletSendCrypto
             dataCryptos={dataCryptos}
             balance={calBalance(userData.transactions)}
           />

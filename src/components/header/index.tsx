@@ -4,8 +4,10 @@ import formatDataCrypto from '@/services/formtaDataCrypto';
 import { ActiveCryptoType } from '../products';
 import Headers from './headers';
 import {
-  ActiveVeliabilitiesType,
   TransactionsType,
+  ActiveType,
+  VeliabilitiesType,
+  UserCryptosType,
 } from '@/app/api/models/users';
 
 export interface CryptoType {
@@ -40,9 +42,10 @@ export interface ShowUserType {
   dateBirth: string;
   cellPhone: string;
   country: string;
-  active: ActiveVeliabilitiesType[];
-  veliabilities: ActiveVeliabilitiesType[];
+  active: ActiveType[];
+  veliabilities: VeliabilitiesType[];
   transactions: TransactionsType[];
+  cryptos: UserCryptosType[];
 }
 
 const getData = async (url: string, activeCrypto: ActiveCryptoType) => {

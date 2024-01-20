@@ -54,7 +54,7 @@ const zodSchema = z
 
 type BodyType = z.infer<typeof zodSchema>;
 
-export default function SendDollar({ dataCryptos, balance }: Props) {
+export default function WalletSendCrypto({ dataCryptos, balance }: Props) {
   const {
     register,
     handleSubmit,
@@ -277,7 +277,7 @@ export default function SendDollar({ dataCryptos, balance }: Props) {
         {dataCryptos.map((val, index) => (
           <Link
             // eslint-disable-next-line
-            href={`/wallet/send/${val.FROMSYMBOL.toLowerCase()}?name=${val.NAME}`}
+            href={`/wallet/send/${val.FROMSYMBOL.toLowerCase()}`}
             key={index.toString()}
             className={`p-6 bg-1b1e20ff ${handleSearchCrypto(
               val.NAME.toLowerCase(),

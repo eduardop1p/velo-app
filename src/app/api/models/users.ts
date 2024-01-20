@@ -1,4 +1,4 @@
-import { Schema, model, models } from 'mongoose';
+import { Schema, model, models, type Document, Model } from 'mongoose';
 
 export interface ActiveType {
   title: string;
@@ -14,6 +14,11 @@ export interface TransactionsType {
   title: string;
   value: number;
   status: 'success' | 'pending' | 'error';
+  date: number;
+}
+export interface UserCryptosType {
+  name: string;
+  value: number;
 }
 
 export interface UserType {
@@ -26,9 +31,12 @@ export interface UserType {
   active: ActiveType[];
   veliabilities: VeliabilitiesType[];
   transactions: TransactionsType[]; // balance
+  cryptos: UserCryptosType[];
 }
 
-const usersSchema = new Schema<UserType>({
+interface UserDocumentType extends UserType, Document {}
+
+const usersSchema = new Schema<UserDocumentType>({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   dateBirth: { type: String, required: true },
@@ -54,10 +62,17 @@ const usersSchema = new Schema<UserType>({
       title: { type: String, required: false },
       value: { type: Number, required: false },
       status: { type: String, required: false },
+      date: { type: Number, required: false },
+    },
+  ],
+  cryptos: [
+    {
+      name: { type: String, required: false },
+      value: { type: Number, required: false },
     },
   ],
 });
 
-const usersModel = models.Users || model<UserType>('Users', usersSchema);
+const usersModel: Model<UserDocumentType> = models.Users || model<UserDocumentType>('Users', usersSchema); // eslint-disable-line
 
 export default usersModel;
