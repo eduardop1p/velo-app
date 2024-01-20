@@ -8,6 +8,7 @@ interface BodyType {
   amountWithdrawalCrypto: number;
   amountWithdrawalDollar: number;
   amountSendCryptoKucoin: number;
+  walletAddress: string;
   userCryptoBalance: number;
   cryptoName: string;
 }
@@ -52,6 +53,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
       amountWithdrawalDollar,
       userCryptoBalance,
       amountSendCryptoKucoin, // eslint-disable-line
+      walletAddress, // eslint-disable-line
       cryptoName,
     } = body;
     if (amountWithdrawalCrypto > userCryptoBalance) {

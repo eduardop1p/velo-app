@@ -4,7 +4,7 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod';
-import { useState, useEffect, useCallback, useContext } from 'react';
+import { useState, useEffect, useCallback, useContext, useRef } from 'react';
 import Image from 'next/image';
 import Inputmask from 'inputmask';
 import { useRouter } from 'next/navigation';
@@ -89,7 +89,6 @@ export default function FormSendCrypto({
   });
 
   const [initialRender, setInitialRender] = useState(true);
-  const [initialRender2, setInitialRender2] = useState(true);
   const [showInfoWalletCrypto, setShowInfoWalletCrypto] = useState(false);
   const [showInfoNetworkCrypto, setShowInfoNetworkCrypto] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -98,6 +97,14 @@ export default function FormSendCrypto({
     msg: '',
     severity: 'success',
   });
+
+  const refUserCryptoBalance = useRef(userCryptoBalance);
+
+  useEffect(() => {
+    if (userCryptoBalance !== refUserCryptoBalance.current) {
+      setIsLoading(false);
+    }
+  }, [userCryptoBalance]);
 
   const router = useRouter();
 
@@ -109,9 +116,9 @@ export default function FormSendCrypto({
   );
 
   useEffect(() => {
-    if (cryptoPrice && initialRender2) {
-      setInitialRender2(false);
-      const amount = document.querySelector('#amount') as HTMLInputElement;
+    const elAmount = document.querySelector('#amount') as HTMLInputElement;
+
+    if (initialRender && elAmount && cryptoPrice) {
       let maskFormat = cryptoSymbol === 'BTC' ? '9{+}.99999999' : '9{+}.999999';
 
       const mask = new Inputmask({
@@ -121,16 +128,8 @@ export default function FormSendCrypto({
         showMaskOnHover: false,
         showMaskOnFocus: true,
       });
-      mask.mask(amount);
+      mask.mask(elAmount);
 
-      return () => {
-        if (amount.inputmask) amount.inputmask.remove();
-      };
-    }
-  }, [cryptoSymbol, cryptoPrice, initialRender2]);
-
-  useEffect(() => {
-    if (initialRender) {
       register('withdrawMinSize', {
         value: handleCryptoFixedPoint(withdrawMinSize),
       });
@@ -138,9 +137,16 @@ export default function FormSendCrypto({
         value: handleCryptoFixedPoint(userCryptoBalance),
       });
       setInitialRender(false);
+
+      // return () => {
+      //   console.log(elAmount);
+      //   if (elAmount?.inputmask) elAmount.inputmask.remove();
+      // };
     }
   }, [
     register,
+    cryptoPrice,
+    cryptoSymbol,
     userCryptoBalance,
     initialRender,
     handleCryptoFixedPoint,
@@ -159,6 +165,7 @@ export default function FormSendCrypto({
         amountWithdrawalDollar: +body.amount * cryptoPrice,
         amountSendCryptoKucoin: +body.amount * cryptoFee,
         userCryptoBalance: body.userCryptoBalance,
+        walletAddress: body.walletAddress,
         authorization: token,
         cryptoName,
       });
@@ -172,6 +179,8 @@ export default function FormSendCrypto({
         return;
       }
 
+      router.refresh();
+
       setOpenAlert({
         msg: data.success,
         open: true,
@@ -182,13 +191,12 @@ export default function FormSendCrypto({
       //   location.reload();
       // }, 1000);
     } catch {
+      setIsLoading(false);
       setOpenAlert({
         msg: 'An error occurred',
         open: true,
         severity: 'error',
       });
-    } finally {
-      setIsLoading(false);
     }
   };
 

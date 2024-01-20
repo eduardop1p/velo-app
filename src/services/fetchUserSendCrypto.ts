@@ -2,6 +2,7 @@ interface Params {
   amountWithdrawalCrypto: number;
   amountWithdrawalDollar: number;
   amountSendCryptoKucoin: number;
+  walletAddress: string;
   userCryptoBalance: number;
   authorization: string;
   cryptoName: string;
@@ -10,6 +11,7 @@ interface Params {
 export default async function fetchUserSendCrypto({
   amountWithdrawalCrypto,
   amountWithdrawalDollar,
+  walletAddress,
   amountSendCryptoKucoin,
   userCryptoBalance,
   authorization,
@@ -19,6 +21,7 @@ export default async function fetchUserSendCrypto({
     amountWithdrawalCrypto,
     amountWithdrawalDollar,
     amountSendCryptoKucoin,
+    walletAddress,
     userCryptoBalance,
     cryptoName,
   };
