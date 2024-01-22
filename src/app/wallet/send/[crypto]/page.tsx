@@ -70,7 +70,7 @@ export default async function Page({ params }: { params: { crypto: string } }) {
       apiQueryString: `?currency=${cryptoSymbol}`,
     });
     if (errKucoin) {
-      throw new Error('Internal server error');
+      throw new Error(errKucoin.msg);
     }
     if (dataKucoin) {
       dataWithdrawalsQuotas = {
@@ -79,6 +79,7 @@ export default async function Page({ params }: { params: { crypto: string } }) {
       };
     }
   } catch (err) {
+    console.log(err);
     return <UnavailablePage />;
   }
 

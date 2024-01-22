@@ -17,6 +17,7 @@ import formatDataCrypto from '@/services/formtaDataCrypto';
 import calcPatrimonyTotal from '@/services/calcPatrimonyTotal';
 import calBalance from '@/services/calcBalance';
 import calInvested from '@/services/calcInvested';
+import UnavailablePage from '@/components/UnavailablePage';
 
 export const metadata: Metadata = {
   title: 'Bitcoin, Ethereum and other cryptocurrencies | Velo',
@@ -56,75 +57,83 @@ export interface MakertNewsType {
 export default async function Page() {
   const token = cookies().get('token')?.value;
 
-  const resUser = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/show-user`, {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-    cache: 'no-cache',
-  });
-  if (!resUser.ok) {
-    return;
-  }
-  const userData = (await resUser.json()) as ShowUserType;
-  const userPatrimonyInvested = {
-    patrimony: calcPatrimonyTotal(
-      userData.active,
-      userData.veliabilities,
-      calBalance(userData.transactions)
-    ),
-    invested: calInvested(userData.active),
-    balance: calBalance(userData.transactions),
-  };
+  let userPatrimonyInvested;
+  let dataCryptos: CryptoType[];
+  let dataMarketNews;
+  let newDataHistoHour = [];
 
-  const resCryptos = await fetch(
-    `${process.env.CRYPTO_API_URL}&fsyms=BTC,DOGE,XLM,XRP,LTC,ETH,ADA,SOL,DOT,AVAX,ALGO,USDC,USDT,MATIC,OP,LINK,SAND,MANA,CRV,LDO,AAVE,UNI,MKR,SNX,COMP,QNT,ATOM,APE`,
-    {
-      method: 'GET',
-      next: {
-        revalidate: 60,
-      },
+  try {
+    const resUser = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/show-user`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        cache: 'no-cache',
+      }
+    );
+    if (!resUser.ok) {
+      return;
     }
-  );
-  const metaData = await resCryptos.json();
-  const dataCryptos = formatDataCrypto(
-    'full-data',
-    metaData.RAW
-  ) as CryptoType[];
+    const userData = (await resUser.json()) as ShowUserType;
+    userPatrimonyInvested = {
+      patrimony: calcPatrimonyTotal(
+        userData.active,
+        userData.veliabilities,
+        calBalance(userData.transactions)
+      ),
+      invested: calInvested(userData.active),
+      balance: calBalance(userData.transactions),
+    };
 
-  const hourHtc = new Date().getUTCHours();
-  const limit = !hourHtc ? 1 : hourHtc;
-  const newDataHistoHour = [];
-  for (let i = 0; i < dataCryptos.length; i++) {
-    const resHistoHour = await fetch(
-      `${process.env.NEXT_PUBLIC_CRYPTO_API_URL_HISTOHOUR}&fsym=${dataCryptos[i].FROMSYMBOL}&limit=${limit}`,
+    const resCryptos = await fetch(
+      `${process.env.CRYPTO_API_URL}&fsyms=BTC,DOGE,XLM,XRP,LTC,ETH,ADA,SOL,DOT,AVAX,ALGO,USDC,USDT,MATIC,OP,LINK,SAND,MANA,CRV,LDO,AAVE,UNI,MKR,SNX,COMP,QNT,ATOM,APE`,
+      {
+        method: 'GET',
+        next: {
+          revalidate: 60,
+        },
+      }
+    );
+    const metaData = await resCryptos.json();
+    dataCryptos = formatDataCrypto('full-data', metaData.RAW) as CryptoType[];
+
+    const hourHtc = new Date().getUTCHours();
+    const limit = !hourHtc ? 1 : hourHtc;
+    for (let i = 0; i < dataCryptos.length; i++) {
+      const resHistoHour = await fetch(
+        `${process.env.NEXT_PUBLIC_CRYPTO_API_URL_HISTOHOUR}&fsym=${dataCryptos[i].FROMSYMBOL}&limit=${limit}`,
+        {
+          method: 'GET',
+          next: { revalidate: 60 },
+        }
+      );
+      const metaDataHistoHour = await resHistoHour.json();
+      const dataHistoHour = metaDataHistoHour.Data.Data.map(
+        ({ time, close, open }: HistorHourType) => ({
+          timestamp: time * 1000,
+          close,
+          open,
+          FROMSYMBOL: dataCryptos[i].FROMSYMBOL,
+        })
+      ) as HistorHourType[];
+      newDataHistoHour.push(dataHistoHour);
+    }
+
+    const resNews = await fetch(
+      `${process.env.NEXT_PUBLIC_NEWS}&sortOrder=popular&extraParams=velo`,
       {
         method: 'GET',
         next: { revalidate: 60 },
       }
     );
-    const metaDataHistoHour = await resHistoHour.json();
-    const dataHistoHour = metaDataHistoHour.Data.Data.map(
-      ({ time, close, open }: HistorHourType) => ({
-        timestamp: time * 1000,
-        close,
-        open,
-        FROMSYMBOL: dataCryptos[i].FROMSYMBOL,
-      })
-    ) as HistorHourType[];
-    newDataHistoHour.push(dataHistoHour);
+    const metaDataNews = await resNews.json();
+    dataMarketNews = metaDataNews.Data.slice(0, 6) as MakertNewsType[];
+  } catch {
+    return <UnavailablePage />;
   }
-
-  const resNews = await fetch(
-    `${process.env.NEXT_PUBLIC_NEWS}&sortOrder=popular&extraParams=velo`,
-    {
-      method: 'GET',
-      next: { revalidate: 60 },
-    }
-  );
-  const metaDataNews = await resNews.json();
-  const dataMarketNews = metaDataNews.Data.slice(0, 6) as MakertNewsType[];
 
   const layer1Cryptos = dataCryptos.filter(val => {
     if (

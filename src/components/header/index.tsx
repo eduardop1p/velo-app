@@ -73,9 +73,6 @@ export default async function Header() {
       cache: 'no-cache',
     });
     userData = await res.json();
-    if (!res.ok) {
-      return;
-    }
   }
 
   const dataCurrencies = (await getData(

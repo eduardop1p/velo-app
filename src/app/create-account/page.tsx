@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
+import UnavailablePage from '@/components/UnavailablePage';
 
 const FormCreatedAccount = dynamic(
   () => import('@/components/forms/createdAccount'),
@@ -18,22 +19,27 @@ export const metadata: Metadata = {
 };
 
 export default async function Page() {
-  const res = await fetch(
-    'https://restcountries.com/v3.1/independent?status=true&fields=name',
-    {
-      method: 'GET',
-      next: { revalidate: 60 },
-    }
-  );
+  let dataCountries;
+  try {
+    const res = await fetch(
+      'https://restcountries.com/v3.1/independent?status=true&fields=name',
+      {
+        method: 'GET',
+        next: { revalidate: 60 },
+      }
+    );
 
-  const metadata = await res.json();
-  const dataCountries = metadata
-    .map((val: any) => ({
-      name: val.name.common,
-    }))
-    .sort((a: { name: string }, b: { name: string }) =>
-      a.name.localeCompare(b.name)
-    ) as CountriesType[];
+    const metadata = await res.json();
+    dataCountries = metadata
+      .map((val: any) => ({
+        name: val.name.common,
+      }))
+      .sort((a: { name: string }, b: { name: string }) =>
+        a.name.localeCompare(b.name)
+      ) as CountriesType[];
+  } catch {
+    return <UnavailablePage />;
+  }
 
   return (
     <main className="mt-20">

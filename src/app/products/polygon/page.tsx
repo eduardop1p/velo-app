@@ -10,26 +10,33 @@ import InvestOtherCryptos from '@/components/products/investOtherCryptos';
 import RegisterNewsletterCrypto from '@/components/products/registerNewsletterCrypto';
 import CryptoDoubts from '@/components/products/cryptoDoubts';
 import Footer from '@/components/footer';
+import UnavailablePage from '@/components/UnavailablePage';
 
 export const metadata: Metadata = {
   title: `Matic: Ethereum's leading scaling solution | Velo`,
 };
 
 export default async function Page() {
-  const resCryptoassets = await fetch(
-    `${process.env.CRYPTO_API_URL}&fsyms=BTC,DOGE,XLM,XRP,LTC,ETH,ADA,SOL,DOT,AVAX,ALGO,USDC,USDT,MATIC,OP,LINK,SAND,MANA,CRV,LDO,AAVE,UNI,MKR,SNX,COMP,QNT,ATOM,APE`,
-    {
-      method: 'GET',
-      next: {
-        revalidate: 60,
-      },
-    }
-  );
-  const metaData = await resCryptoassets.json();
-  const dataCryptoassets = formatDataCrypto(
-    'full-data',
-    metaData.RAW
-  ) as CryptoType[];
+  let dataCryptoassets: CryptoType[];
+
+  try {
+    const resCryptoassets = await fetch(
+      `${process.env.CRYPTO_API_URL}&fsyms=BTC,DOGE,XLM,XRP,LTC,ETH,ADA,SOL,DOT,AVAX,ALGO,USDC,USDT,MATIC,OP,LINK,SAND,MANA,CRV,LDO,AAVE,UNI,MKR,SNX,COMP,QNT,ATOM,APE`,
+      {
+        method: 'GET',
+        next: {
+          revalidate: 60,
+        },
+      }
+    );
+    const metaData = await resCryptoassets.json();
+    dataCryptoassets = formatDataCrypto(
+      'full-data',
+      metaData.RAW
+    ) as CryptoType[];
+  } catch {
+    return <UnavailablePage />;
+  }
 
   return (
     <>
