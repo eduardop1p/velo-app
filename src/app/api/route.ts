@@ -17,3 +17,49 @@ export async function GET(request: Request) {
     }
   );
 }
+
+export function NextResponseSuccess({
+  body,
+  status,
+}: {
+  body: {
+    msg: string;
+    type: string;
+    refreshToken?: string;
+    isValidToken?: boolean;
+  };
+  status: number;
+}) {
+  return NextResponse.json(
+    {
+      success: body.msg,
+      type: body.type,
+      refreshToken: body.refreshToken,
+      isValidToken: body.isValidToken,
+    },
+    { status }
+  );
+}
+
+export function NextResponseError({
+  body,
+  status,
+}: {
+  body: {
+    msg: string;
+    type: string;
+    refreshToken?: string;
+    isValidToken?: boolean;
+  };
+  status: number;
+}) {
+  return NextResponse.json(
+    {
+      error: body.msg,
+      type: body.type,
+      refreshToken: body.refreshToken,
+      isValidToken: body.isValidToken,
+    },
+    { status: status }
+  );
+}

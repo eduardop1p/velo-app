@@ -164,10 +164,10 @@ export default function FormSendCrypto({
         amountWithdrawalCrypto: +body.amount,
         amountWithdrawalDollar: +body.amount * cryptoPrice,
         amountSendCryptoKucoin: +body.amount * cryptoFee,
-        userCryptoBalance: body.userCryptoBalance,
         walletAddress: body.walletAddress,
         authorization: token,
         cryptoName,
+        cryptoSymbol,
       });
       const data = await res.json();
       if (!res.ok) {
@@ -176,6 +176,7 @@ export default function FormSendCrypto({
           open: true,
           severity: 'error',
         });
+        setIsLoading(false);
         return;
       }
 
@@ -190,6 +191,7 @@ export default function FormSendCrypto({
       // setTimeout(() => {
       //   location.reload();
       // }, 1000);
+      setIsLoading(false);
     } catch {
       setIsLoading(false);
       setOpenAlert({

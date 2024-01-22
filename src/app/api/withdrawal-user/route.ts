@@ -3,14 +3,16 @@ import jwt from 'jsonwebtoken';
 
 import dbConnect from '@/lib/dbConnect';
 import usersModel from '../models/users';
+import fetchKucoinApi from '@/services/fetchKucoinApi';
+import { NextResponseSuccess, NextResponseError } from '../route';
 
 interface BodyType {
   amountWithdrawalCrypto: number;
   amountWithdrawalDollar: number;
   amountSendCryptoKucoin: number;
   walletAddress: string;
-  userCryptoBalance: number;
   cryptoName: string;
+  cryptoSymbol: string;
 }
 
 // eslint-disable-next-line
@@ -18,100 +20,112 @@ export async function POST(req: NextRequest, res: NextResponse) {
   await dbConnect();
 
   const authorization = req.headers.get('authorization');
-
   if (!authorization) {
-    return NextResponse.json(
-      {
+    return NextResponseError({
+      body: {
+        msg: 'You need to login',
         type: 'server',
-        error: 'You need to login',
       },
-      {
-        status: 401,
-      }
-    );
+      status: 401,
+    });
   }
 
   const body = (await req.json()) as BodyType;
   if (!body)
-    return NextResponse.json(
-      {
-        error: 'Internal server error',
+    return NextResponseError({
+      body: {
+        msg: 'Internal server error',
         type: 'server',
       },
-      { status: 500 }
-    );
+      status: 500,
+    });
+  const {
+    amountWithdrawalCrypto,
+    amountWithdrawalDollar,
+    amountSendCryptoKucoin,
+    walletAddress,
+    cryptoSymbol,
+    cryptoName,
+  } = body;
 
   try {
     const [, token] = authorization.split(' ');
-    const authData = jwt.verify(
-      token,
-      process.env.TOKEN_SECRET as string
-    ) as jwt.JwtPayload & { id: string; email: string };
-
-    const {
-      amountWithdrawalCrypto,
-      amountWithdrawalDollar,
-      userCryptoBalance,
-      amountSendCryptoKucoin, // eslint-disable-line
-      walletAddress, // eslint-disable-line
-      cryptoName,
-    } = body;
-    if (amountWithdrawalCrypto > userCryptoBalance) {
-      return NextResponse.json(
-        {
-          error: 'Insufficient funds',
-          type: 'server',
-        },
-        { status: 403 }
-      );
-    }
+    const authData = jwt.decode(token) as { id: string };
 
     let user = await usersModel
       .findById(authData.id)
       .select(['transactions', 'cryptos']);
     if (!user) {
-      return NextResponse.json(
-        {
-          error: 'User not found',
+      return NextResponseError({
+        body: {
+          msg: 'User not found',
           type: 'server',
         },
-        { status: 400 }
-      );
+        status: 400,
+      });
+    }
+    const findUserCryptoBalance = user.cryptos.find(
+      val => val.name === cryptoName
+    );
+    const userCryptoBalance = findUserCryptoBalance
+      ? findUserCryptoBalance.value
+      : 0;
+    if (amountWithdrawalCrypto > userCryptoBalance) {
+      return NextResponseError({
+        body: {
+          msg: 'Insufficient funds',
+          type: 'server',
+        },
+        status: 403,
+      });
     }
     // const isCryptoName = user.cryptos.every(val => val.name === cryptoName);
 
-    user.transactions.push({
-      title: `${cryptoName} withdrawal`,
-      date: Date.now() * 1000,
-      status: 'pending',
-      value: -amountWithdrawalDollar,
-    });
-    const cryptos = user.cryptos.map(val => {
-      if (val.name === cryptoName) {
-        val.value -= amountWithdrawalCrypto;
-      }
-      return val;
-    });
-    user.cryptos = cryptos;
-    await user.save();
-
     // fetch kucoin aqui
+    const { dataKucoin, errKucoin } = await fetchKucoinApi({
+      apiEndpoint: '/api/v1/withdrawals',
+      apiMethod: 'POST',
+      body: {
+        currency: cryptoSymbol,
+        address: walletAddress,
+        amount: amountSendCryptoKucoin,
+      },
+      apiQueryString: '',
+    });
+    // const withdrawalId = dataSendCrypto.withdrawalId;
 
-    return NextResponse.json(
-      {
-        success: 'Cryptos sent to the given address',
+    // user.transactions.push({
+    //   title: `${cryptoName} withdrawal`,
+    //   date: Date.now() * 1000,
+    //   status: 'pending',
+    //   value: -amountWithdrawalDollar,
+    //   cryptoValue: -amountWithdrawalCrypto,
+    //   withdrawalId,
+    // });
+    // const cryptos = user.cryptos.map(val => {
+    //   if (val.name === cryptoName) {
+    //     val.value -= amountWithdrawalCrypto;
+    //   }
+    //   return val;
+    // });
+    // user.cryptos = cryptos;
+    // await user.save();
+
+    return NextResponseSuccess({
+      body: {
+        msg: 'Cryptos sent to the given address',
         type: 'server',
       },
-      { status: 200 }
-    );
+      status: 200,
+    });
   } catch (err) {
     // console.log(err);
-    return NextResponse.json(
-      {
-        error: 'Internal server error',
+    return NextResponseError({
+      body: {
+        msg: 'Internal server error',
         type: 'server',
       },
-      { status: 500 }
-    );
+      status: 500,
+    });
   }
 }

@@ -20,7 +20,7 @@ export default function AcceptCookies() {
 
   return (
     <div className="fixed bottom-0 z-10 flex w-full items-center justify-center gap-8 bg-primary px-16 py-4">
-      <p className="w-1/2 text-left text-sm">
+      <p className="w-1/2 text-left text-sm text-black">
         We store cookies on your device to provide you with a better experience.
         By using this website, you agree to our privacy policy.
       </p>

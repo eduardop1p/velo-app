@@ -13,6 +13,8 @@ export interface VeliabilitiesType {
 export interface TransactionsType {
   title: string;
   value: number;
+  cryptoValue: number;
+  withdrawalId: string;
   status: 'success' | 'pending' | 'error';
   date: number;
 }
@@ -61,6 +63,8 @@ const usersSchema = new Schema<UserDocumentType>({
     {
       title: { type: String, required: false },
       value: { type: Number, required: false },
+      cryptoValue: { type: Number, required: false },
+      withdrawalId: { type: String, required: false },
       status: { type: String, required: false },
       date: { type: Number, required: false },
     },

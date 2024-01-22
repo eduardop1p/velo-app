@@ -3,9 +3,9 @@ interface Params {
   amountWithdrawalDollar: number;
   amountSendCryptoKucoin: number;
   walletAddress: string;
-  userCryptoBalance: number;
   authorization: string;
   cryptoName: string;
+  cryptoSymbol: string;
 }
 
 export default async function fetchUserSendCrypto({
@@ -13,17 +13,17 @@ export default async function fetchUserSendCrypto({
   amountWithdrawalDollar,
   walletAddress,
   amountSendCryptoKucoin,
-  userCryptoBalance,
   authorization,
   cryptoName,
+  cryptoSymbol,
 }: Params) {
   const body = {
     amountWithdrawalCrypto,
     amountWithdrawalDollar,
     amountSendCryptoKucoin,
     walletAddress,
-    userCryptoBalance,
     cryptoName,
+    cryptoSymbol,
   };
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/withdrawal-user`,

@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import { cookies } from 'next/headers';
-import { notFound } from 'next/navigation';
 
 import Back from '@/components/searchFaq/back';
 import PrevUrl from '@/components/prevUrl';
@@ -10,10 +9,11 @@ import fetchKucoinApi from '@/services/fetchKucoinApi';
 import BalanceMinimum from '@/components/forms/sendCrypto/balanceMinimum';
 import FormSendCrypto from '@/components/forms/sendCrypto/index';
 import { cryptosNames } from '@/services/formtaDataCrypto';
+import UnavailablePage from '@/components/UnavailablePage';
 
 interface WithdrawalsQuotasType {
-  withdrawMinFee: string;
-  withdrawMinSize: string;
+  withdrawMinFee: number;
+  withdrawMinSize: number;
 }
 
 export default async function Page({ params }: { params: { crypto: string } }) {
@@ -26,7 +26,10 @@ export default async function Page({ params }: { params: { crypto: string } }) {
   let userData;
   let userCryptoBalance;
   let dataCrypto;
-  let dataWithdrawalsQuotas;
+  let dataWithdrawalsQuotas: WithdrawalsQuotasType = {
+    withdrawMinFee: 0,
+    withdrawMinSize: 0,
+  };
 
   try {
     const userRes = await fetch(
@@ -61,20 +64,22 @@ export default async function Page({ params }: { params: { crypto: string } }) {
       ...metaData.RAW[cryptoSymbol].USD,
     } as CryptoType;
 
-    dataWithdrawalsQuotas = (await fetchKucoinApi({
+    const { dataKucoin, errKucoin } = await fetchKucoinApi({
       apiEndpoint: '/api/v1/withdrawals/quotas',
       apiMethod: 'GET',
       apiQueryString: `?currency=${cryptoSymbol}`,
-    })) as WithdrawalsQuotasType;
-    if (!dataWithdrawalsQuotas) {
+    });
+    if (errKucoin) {
+      throw new Error('Internal server error');
+    }
+    if (dataKucoin) {
       dataWithdrawalsQuotas = {
-        withdrawMinFee: '0',
-        withdrawMinSize: '0',
+        withdrawMinFee: +dataKucoin.withdrawMinFee,
+        withdrawMinSize: +dataKucoin.withdrawMinSize,
       };
     }
   } catch (err) {
-    console.log(err);
-    notFound();
+    return <UnavailablePage />;
   }
 
   return (
@@ -118,12 +123,12 @@ export default async function Page({ params }: { params: { crypto: string } }) {
           <BalanceMinimum
             userCryptoBalance={userCryptoBalance}
             cryptoSymbol={cryptoSymbol}
-            withdrawMinSize={+dataWithdrawalsQuotas.withdrawMinSize}
+            withdrawMinSize={dataWithdrawalsQuotas.withdrawMinSize * 1.1}
           />
           <FormSendCrypto
             cryptoImgUrl={dataCrypto.IMAGEURL}
-            withdrawMinSize={+dataWithdrawalsQuotas.withdrawMinSize}
-            withdrawMinFee={+dataWithdrawalsQuotas.withdrawMinFee}
+            withdrawMinSize={dataWithdrawalsQuotas.withdrawMinSize * 1.1}
+            withdrawMinFee={dataWithdrawalsQuotas.withdrawMinFee}
             cryptoName={cryptoName}
             cryptoSymbol={cryptoSymbol}
             userCryptoBalance={userCryptoBalance}

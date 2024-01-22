@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 
 import dbConnect from '@/lib/dbConnect';
 import usersModel, { UserType } from '../models/users';
+import { NextResponseError } from '../route';
 
 // eslint-disable-next-line
 export async function GET(req: NextRequest, res: NextResponse) {
@@ -10,25 +11,30 @@ export async function GET(req: NextRequest, res: NextResponse) {
   const authorization = req.headers.get('authorization');
 
   if (!authorization) {
-    return NextResponse.json(
-      {
+    return NextResponseError({
+      body: {
+        msg: 'You need to login',
         type: 'server',
-        error: 'You need to login',
       },
-      {
-        status: 401,
-      }
-    );
+      status: 401,
+    });
   }
 
   try {
     const [, token] = authorization.split(' ');
-    const data = jwt.verify(
-      token,
-      process.env.TOKEN_SECRET as string
-    ) as jwt.JwtPayload & { id: string; email: string };
+    const authData = jwt.decode(token) as { id: string };
 
-    const user = (await usersModel.findById(data.id)) as UserType;
+    const user = (await usersModel.findById(authData.id)) as UserType;
+    if (!user) {
+      return NextResponseError({
+        body: {
+          msg: 'User not found',
+          type: 'server',
+        },
+        status: 400,
+      });
+    }
+
     return NextResponse.json({
       name: user.name,
       email: user.email,
@@ -42,12 +48,12 @@ export async function GET(req: NextRequest, res: NextResponse) {
     });
   } catch (err) {
     // console.log(err);
-    return NextResponse.json(
-      {
-        error: 'Internal server error',
+    return NextResponseError({
+      body: {
+        msg: 'Internal server error',
         type: 'server',
       },
-      { status: 500 }
-    );
+      status: 500,
+    });
   }
 }

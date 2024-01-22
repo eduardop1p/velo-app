@@ -1,24 +1,27 @@
 import crypto from 'crypto';
+import { has } from 'lodash';
 
 interface Params {
   apiEndpoint: string;
   apiMethod: string;
-  apiQueryString?: string;
+  apiQueryString: string;
+  body?: Record<string, any>;
 }
 
 export default async function fetchKucoinApi({
   apiEndpoint,
   apiMethod,
-  apiQueryString = '',
+  apiQueryString,
+  body,
 }: Params) {
   const apiSecret = process.env.KUCOIN_API_SECRET as string;
   const apiKey = process.env.KUCOIN_API_KEY as string;
   const timestamp = Date.now();
   const endpoint = apiEndpoint;
   const method = apiMethod;
-  const queryString = apiQueryString;
+  const params = body ? JSON.stringify(body) : apiQueryString;
 
-  const payload = timestamp + method + endpoint + queryString;
+  const payload = timestamp + method + endpoint + params;
   const signature = crypto
     .createHmac('sha256', apiSecret)
     .update(payload)
@@ -32,14 +35,25 @@ export default async function fetchKucoinApi({
     'Content-Type': 'application/json',
   };
 
-  const resWithdrawalsQuotas = await fetch(
+  const res = await fetch(
     `${process.env.KUCOIN_API_BASE_URL}${apiEndpoint}${apiQueryString}`,
     {
       method: apiMethod,
       cache: 'no-cache',
       headers,
+      body: body ? JSON.stringify(body) : undefined,
     }
   );
-  const dataWithdrawalsQuotas = await resWithdrawalsQuotas.json();
-  return dataWithdrawalsQuotas.data;
+  const metaData = await res.json();
+  if (has(metaData, 'msg') && metaData.code > 400000) {
+    return {
+      dataKucoin: null,
+      errKucoin: metaData,
+    };
+  }
+
+  return {
+    dataKucoin: metaData.data,
+    errKucoin: null,
+  };
 }

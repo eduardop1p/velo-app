@@ -5,39 +5,40 @@ import jwt from 'jsonwebtoken';
 import usersModel from '../models/users';
 import dbConnect from '@/lib/dbConnect';
 
+import { NextResponseError } from '../route';
+
 export async function POST(req: NextRequest) {
   await dbConnect();
   const body = (await req.json()) as { email: string; password: string };
   if (!body)
-    return NextResponse.json(
-      {
-        error: 'Internal server error',
+    return NextResponseError({
+      body: {
+        msg: 'Internal server error',
         type: 'server',
       },
-      { status: 500 }
-    );
+      status: 500,
+    });
 
   try {
     const userExist = await usersModel.findOne({ email: body.email });
     if (!userExist) {
-      return NextResponse.json(
-        {
-          error: 'The email entered does not belong to any account',
+      return NextResponseError({
+        body: {
+          msg: 'The email entered does not belong to any account',
           type: 'email',
         },
-        { status: 400 }
-      );
+        status: 400,
+      });
     }
     const user = await usersModel.findOne(body);
     if (!user) {
-      return NextResponse.json(
-        {
-          error:
-            'The password you entered is not correct. Try again or change your password',
+      return NextResponseError({
+        body: {
+          msg: 'The password you entered is not correct. Try again or change your password',
           type: 'password',
         },
-        { status: 401 }
-      );
+        status: 401,
+      });
     }
     const { _id, email, name } = user;
     const token = jwt.sign(
@@ -53,7 +54,7 @@ export async function POST(req: NextRequest) {
     cookie.set('token', token, {
       httpOnly: true,
       path: '/',
-      maxAge: 31557600000, // esse cookie vai expirar em 1 ano
+      maxAge: 2592000000, // esse cookie vai expirar em 1 mês
       secure: true,
       sameSite: 'none',
       priority: 'high',
@@ -64,12 +65,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ token, name });
   } catch (err) {
     // console.log(err);
-    return NextResponse.json(
-      {
-        error: 'Internal server error',
+    return NextResponseError({
+      body: {
+        msg: 'Internal server error',
         type: 'server',
       },
-      { status: 500 }
-    );
+      status: 500,
+    });
   }
 }

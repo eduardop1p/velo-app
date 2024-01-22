@@ -59,8 +59,9 @@ const getData = async (url: string, activeCrypto: ActiveCryptoType) => {
 
 export default async function Header() {
   const cookie = cookies();
-  const isAuth = cookie.has('token');
+  let isAuth = cookie.has('token');
   let userData: ShowUserType | undefined;
+
   if (isAuth) {
     const token = cookie.get('token')?.value;
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/show-user`, {
@@ -72,6 +73,9 @@ export default async function Header() {
       cache: 'no-cache',
     });
     userData = await res.json();
+    if (!res.ok) {
+      return;
+    }
   }
 
   const dataCurrencies = (await getData(

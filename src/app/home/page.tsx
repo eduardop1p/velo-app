@@ -56,7 +56,7 @@ export interface MakertNewsType {
 export default async function Page() {
   const token = cookies().get('token')?.value;
 
-  const userRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/show-user`, {
+  const resUser = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/show-user`, {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${token}`,
@@ -64,7 +64,10 @@ export default async function Page() {
     },
     cache: 'no-cache',
   });
-  const userData = (await userRes.json()) as ShowUserType;
+  if (!resUser.ok) {
+    return;
+  }
+  const userData = (await resUser.json()) as ShowUserType;
   const userPatrimonyInvested = {
     patrimony: calcPatrimonyTotal(
       userData.active,
