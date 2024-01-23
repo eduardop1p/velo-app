@@ -21,6 +21,7 @@
     "luxon": "^3.4.4",
     "mongoose": "^8.0.3",
     "next": "14.0.4",
+    "nextjs-toploader": "^1.6.4",
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.49.2",

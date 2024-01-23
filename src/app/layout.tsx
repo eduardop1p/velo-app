@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Poppins } from 'next/font/google';
 import { cookies } from 'next/headers';
+import NextTopLoader from 'nextjs-toploader';
 
 import './globals.css';
 
@@ -34,6 +35,7 @@ export default function RootLayout({
         <link rel="icon" href="/assets/imgs/velo-logo.png" sizes="64x64" />
       </head>
       <body>
+        <NextTopLoader showSpinner={false} color="#549cffff" shadow={false} />
         <Header />
         {!cookiesAccepted && <AcceptCookies />}
         <RealTimePriceCryptoContext>{children}</RealTimePriceCryptoContext>
