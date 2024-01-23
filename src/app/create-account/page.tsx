@@ -1,14 +1,8 @@
 import { Metadata } from 'next';
 import Image from 'next/image';
-import dynamic from 'next/dynamic';
-import UnavailablePage from '@/components/UnavailablePage';
 
-const FormCreatedAccount = dynamic(
-  () => import('@/components/forms/createdAccount'),
-  {
-    ssr: false,
-  }
-);
+import UnavailablePage from '@/components/UnavailablePage';
+import FormCreatedAccount from '@/components/forms/createdAccount';
 
 export interface CountriesType {
   name: string;
@@ -19,7 +13,8 @@ export const metadata: Metadata = {
 };
 
 export default async function Page() {
-  let dataCountries;
+  let dataCountries: CountriesType[];
+
   try {
     const res = await fetch(
       'https://restcountries.com/v3.1/independent?status=true&fields=name',
@@ -36,7 +31,7 @@ export default async function Page() {
       }))
       .sort((a: { name: string }, b: { name: string }) =>
         a.name.localeCompare(b.name)
-      ) as CountriesType[];
+      );
   } catch {
     return <UnavailablePage />;
   }
