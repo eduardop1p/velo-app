@@ -9,7 +9,7 @@ import Image from 'next/image';
 import Inputmask from 'inputmask';
 import { useRouter } from 'next/navigation';
 import { IoIosInformationCircleOutline } from 'react-icons/io';
-import { Skeleton } from '@mui/material';
+import SkeletonUi from '@/components/skeletonUI';
 
 import {
   Context,
@@ -228,93 +228,21 @@ export default function FormSendCrypto({
     return (
       <div className="flex flex-col gap-4 w-2/3">
         <div className="flex gap-8 w-full">
-          <Skeleton
-            variant="rectangular"
-            animation="pulse"
-            sx={{
-              bgcolor: 'grey.900',
-              borderRadius: '3px',
-            }}
-            width="50%"
-            height={71}
-          />
-          <Skeleton
-            variant="rectangular"
-            animation="pulse"
-            sx={{
-              bgcolor: 'grey.900',
-              borderRadius: '3px',
-            }}
-            width="50%"
-            height={71}
-          />
+          <SkeletonUi width="50%" height={71} />
+          <SkeletonUi width="50%" height={71} />
         </div>
         <div className="flex gap-8 w-full">
-          <Skeleton
-            variant="rectangular"
-            animation="pulse"
-            sx={{
-              bgcolor: 'grey.900',
-              borderRadius: '3px',
-            }}
-            width="50%"
-            height={43}
-          />
-          <Skeleton
-            variant="rectangular"
-            animation="pulse"
-            sx={{
-              bgcolor: 'grey.900',
-              borderRadius: '3px',
-            }}
-            width="50%"
-            height={43}
-          />
+          <SkeletonUi width="50%" height={43} />
+          <SkeletonUi width="50%" height={43} />
         </div>
         <div className="flex flex-col gap-8 mt-4 w-full">
           <div className="flex gap-8 w-full">
-            <Skeleton
-              variant="rectangular"
-              animation="pulse"
-              sx={{
-                bgcolor: 'grey.900',
-                borderRadius: '3px',
-              }}
-              width="50%"
-              height={69}
-            />
-            <Skeleton
-              variant="rectangular"
-              animation="pulse"
-              sx={{
-                bgcolor: 'grey.900',
-                borderRadius: '3px',
-              }}
-              width="50%"
-              height={69}
-            />
+            <SkeletonUi width="50%" height={69} />
+            <SkeletonUi width="50%" height={69} />
           </div>
           <div className="flex gap-8 w-full">
-            <Skeleton
-              variant="rectangular"
-              animation="pulse"
-              sx={{
-                bgcolor: 'grey.900',
-                borderRadius: '3px',
-              }}
-              width="50%"
-              height={43}
-            />
-            <Skeleton
-              variant="rectangular"
-              animation="pulse"
-              sx={{
-                bgcolor: 'grey.900',
-                borderRadius: '3px',
-              }}
-              width="50%"
-              height={43}
-            />
+            <SkeletonUi width="50%" height={43} />
+            <SkeletonUi width="50%" height={43} />
           </div>
         </div>
       </div>

@@ -2,7 +2,7 @@
 'use client';
 
 import { useContext } from 'react';
-import { Skeleton } from '@mui/material';
+import SkeletonUi from '@/components/skeletonUI';
 
 import {
   Context,
@@ -38,19 +38,7 @@ export default function BalanceMinimum({
     return withdrawMinSize.toFixed(6);
   };
 
-  if (!cryptoPrice)
-    return (
-      <Skeleton
-        variant="rectangular"
-        animation="pulse"
-        sx={{
-          bgcolor: 'grey.900',
-          borderRadius: '3px',
-        }}
-        width="50%"
-        height={23}
-      />
-    );
+  if (!cryptoPrice) return <SkeletonUi width="50%" height={23} />;
 
   return (
     <div className="flex gap-4 justify-between w-1/2">
