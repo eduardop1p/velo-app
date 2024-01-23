@@ -1,6 +1,5 @@
 import { Metadata } from 'next';
 
-import formatDataCrypto from '@/services/formtaDataCrypto';
 import { CryptoType } from '@/components/header';
 import InfoCrypto from '@/components/products/infoCrypto';
 import WhatIsCrypto from '@/components/products/whatIsCrypto';
@@ -10,6 +9,7 @@ import RegisterNewsletterCrypto from '@/components/products/registerNewsletterCr
 import Footer from '@/components/footer';
 import CryptoDoubts from '@/components/products/cryptoDoubts';
 import UnavailablePage from '@/components/UnavailablePage';
+import fetchGetFullCryptos from '@/services/fetchGetFullCryptos';
 
 export const metadata: Metadata = {
   title: 'Cardano: the third generation of cryptocurrencies | Velo',
@@ -19,20 +19,7 @@ export default async function Page() {
   let dataCryptoassets: CryptoType[];
 
   try {
-    const resCryptoassets = await fetch(
-      `${process.env.CRYPTO_API_URL}&fsyms=BTC,DOGE,XLM,XRP,LTC,ETH,ADA,SOL,DOT,AVAX,ALGO,USDC,USDT,MATIC,OP,LINK,SAND,MANA,CRV,LDO,AAVE,UNI,MKR,SNX,COMP,QNT,ATOM,APE`,
-      {
-        method: 'GET',
-        next: {
-          revalidate: 60,
-        },
-      }
-    );
-    const metaData = await resCryptoassets.json();
-    dataCryptoassets = formatDataCrypto(
-      'full-data',
-      metaData.RAW
-    ) as CryptoType[];
+    dataCryptoassets = await fetchGetFullCryptos();
   } catch {
     return <UnavailablePage />;
   }

@@ -20,10 +20,10 @@ import { CryptoType } from '../../header';
 import { HistorHourType } from '@/app/home/page';
 
 export default function SliderCryptoassets({
-  dataCryptoassets,
+  dataCryptos,
   dataHistoHour,
 }: {
-  dataCryptoassets: CryptoType[];
+  dataCryptos: CryptoType[];
   dataHistoHour: HistorHourType[][];
 }) {
   const [data, setData] = useState<CryptoType[][]>([]);
@@ -34,14 +34,14 @@ export default function SliderCryptoassets({
       const subArrs = [];
       const subArrLenght = 5;
 
-      for (let i = 0; i < dataCryptoassets.length; i += subArrLenght) {
-        const subArr = dataCryptoassets.slice(i, i + subArrLenght);
+      for (let i = 0; i < dataCryptos.length; i += subArrLenght) {
+        const subArr = dataCryptos.slice(i, i + subArrLenght);
         subArrs.push(subArr);
       }
       setData(subArrs);
       setInitialRender(false);
     }
-  }, [initialRender, data, dataCryptoassets]);
+  }, [initialRender, data, dataCryptos]);
 
   const handleonSlideChange = () => {
     const lines = document.querySelectorAll('.recharts-line');

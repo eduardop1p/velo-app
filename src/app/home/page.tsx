@@ -13,11 +13,12 @@ import UserPatrimony from '@/components/userPatrimony';
 import { CryptoType, ShowUserType } from '@/components/header';
 import SlideMarketOverview from '@/components/slides/marketOverview';
 import FollowMarket from '@/components/followMarket';
-import formatDataCrypto from '@/services/formtaDataCrypto';
 import calcPatrimonyTotal from '@/services/calcPatrimonyTotal';
 import calBalance from '@/services/calcBalance';
 import calInvested from '@/services/calcInvested';
 import UnavailablePage from '@/components/UnavailablePage';
+import fetchGetUser from '@/services/fetchGetUser';
+import fetchGetFullCryptos from '@/services/fetchGetFullCryptos';
 
 export const metadata: Metadata = {
   title: 'Bitcoin, Ethereum and other cryptocurrencies | Velo',
@@ -55,29 +56,15 @@ export interface MakertNewsType {
 }
 
 export default async function Page() {
-  const token = cookies().get('token')?.value;
+  const token = cookies().get('token')?.value as string;
 
-  let userPatrimonyInvested;
+  let userPatrimonyInvested: UserPatrimonyInvestedType<number>;
   let dataCryptos: CryptoType[];
-  let dataMarketNews;
+  let dataMarketNews: MakertNewsType[];
   let newDataHistoHour = [];
 
   try {
-    const resUser = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/show-user`,
-      {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        cache: 'no-cache',
-      }
-    );
-    if (!resUser.ok) {
-      return;
-    }
-    const userData = (await resUser.json()) as ShowUserType;
+    const userData: ShowUserType = await fetchGetUser(token);
     userPatrimonyInvested = {
       patrimony: calcPatrimonyTotal(
         userData.active,
@@ -88,18 +75,7 @@ export default async function Page() {
       balance: calBalance(userData.transactions),
     };
 
-    const resCryptos = await fetch(
-      `${process.env.CRYPTO_API_URL}&fsyms=BTC,DOGE,XLM,XRP,LTC,ETH,ADA,SOL,DOT,AVAX,ALGO,USDC,USDT,MATIC,OP,LINK,SAND,MANA,CRV,LDO,AAVE,UNI,MKR,SNX,COMP,QNT,ATOM,APE`,
-      {
-        method: 'GET',
-        next: {
-          revalidate: 60,
-        },
-      }
-    );
-    const metaData = await resCryptos.json();
-    dataCryptos = formatDataCrypto('full-data', metaData.RAW) as CryptoType[];
-
+    dataCryptos = await fetchGetFullCryptos();
     const hourHtc = new Date().getUTCHours();
     const limit = !hourHtc ? 1 : hourHtc;
     for (let i = 0; i < dataCryptos.length; i++) {
@@ -130,7 +106,7 @@ export default async function Page() {
       }
     );
     const metaDataNews = await resNews.json();
-    dataMarketNews = metaDataNews.Data.slice(0, 6) as MakertNewsType[];
+    dataMarketNews = metaDataNews.Data.slice(0, 6);
   } catch {
     return <UnavailablePage />;
   }

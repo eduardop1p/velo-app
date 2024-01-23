@@ -10,6 +10,7 @@ import BalanceMinimum from '@/components/forms/sendCrypto/balanceMinimum';
 import FormSendCrypto from '@/components/forms/sendCrypto/index';
 import { cryptosNames } from '@/services/formtaDataCrypto';
 import UnavailablePage from '@/components/UnavailablePage';
+import fetchGetUser from '@/services/fetchGetUser';
 
 interface WithdrawalsQuotasType {
   withdrawMinFee: number;
@@ -21,35 +22,24 @@ export default async function Page({ params }: { params: { crypto: string } }) {
   const cryptoName = cryptosNames.find(val => val.symbol === cryptoSymbol)
     ?.name as string;
 
-  const token = cookies().get('token')?.value;
+  const token = cookies().get('token')?.value as string;
 
-  let userData;
-  let userCryptoBalance;
-  let dataCrypto;
+  let userData: ShowUserType;
+  let userCryptoBalance: number;
+  let dataCrypto: CryptoType;
   let dataWithdrawalsQuotas: WithdrawalsQuotasType = {
     withdrawMinFee: 0,
     withdrawMinSize: 0,
   };
 
   try {
-    const userRes = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/show-user`,
-      {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        cache: 'no-cache',
-      }
-    );
-    userData = (await userRes.json()) as ShowUserType;
+    userData = await fetchGetUser(token);
     const findUserCryptoBalance = userData.cryptos.find(
       val => val.name === cryptoName
     );
     userCryptoBalance = findUserCryptoBalance ? findUserCryptoBalance.value : 0;
 
-    const resCryptos = await fetch(
+    const resCrypto = await fetch(
       `${process.env.CRYPTO_API_URL}&fsyms=${cryptoSymbol}`,
       {
         method: 'GET',
@@ -58,11 +48,11 @@ export default async function Page({ params }: { params: { crypto: string } }) {
         },
       }
     );
-    const metaData = await resCryptos.json();
+    const metaData = await resCrypto.json();
     dataCrypto = {
       NAME: cryptoName,
       ...metaData.RAW[cryptoSymbol].USD,
-    } as CryptoType;
+    };
 
     const { dataKucoin, errKucoin } = await fetchKucoinApi({
       apiEndpoint: '/api/v1/withdrawals/quotas',

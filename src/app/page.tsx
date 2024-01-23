@@ -3,36 +3,22 @@ import Image from 'next/image';
 import FormLandingPage from '@/components/forms/landingPage';
 import NewInVelo from '@/components/newInVelo';
 import SliderCryptoassets from '@/components/slides/cryptoassets';
-import { CryptoType } from '@/components/header';
-import formatDataCrypto from '@/services/formtaDataCrypto';
 import SliderCompleteApp from '@/components/slides/completeApp';
 import TimeLineApp from '@/components/timeLineApp';
 import SectionNewsletter from '@/components/sectionNewsletter';
 import Footer from '@/components/footer';
 import { HistorHourType } from './home/page';
+import fetchGetFullCryptos from '@/services/fetchGetFullCryptos';
 
 export default async function Page() {
-  const resCryptoassets = await fetch(
-    `${process.env.CRYPTO_API_URL}&fsyms=BTC,DOGE,XLM,XRP,LTC,ETH,ADA,SOL,DOT,AVAX,ALGO,USDC,USDT,MATIC,OP,LINK,SAND,MANA,CRV,LDO,AAVE,UNI,MKR,SNX,COMP,QNT,ATOM,APE`,
-    {
-      method: 'GET',
-      next: {
-        revalidate: 60,
-      },
-    }
-  );
-  const metaData = await resCryptoassets.json();
-  const dataCryptoassets = formatDataCrypto(
-    'full-data',
-    metaData.RAW
-  ) as CryptoType[];
+  const dataCryptos = await fetchGetFullCryptos();
 
   const hourHtc = new Date().getUTCHours();
   const limit = !hourHtc ? 1 : hourHtc;
   const newDataHistoHour = [];
-  for (let i = 0; i < dataCryptoassets.length; i++) {
+  for (let i = 0; i < dataCryptos.length; i++) {
     const resHistoHour = await fetch(
-      `${process.env.NEXT_PUBLIC_CRYPTO_API_URL_HISTOHOUR}&fsym=${dataCryptoassets[i].FROMSYMBOL}&limit=${limit}`,
+      `${process.env.NEXT_PUBLIC_CRYPTO_API_URL_HISTOHOUR}&fsym=${dataCryptos[i].FROMSYMBOL}&limit=${limit}`,
       {
         method: 'GET',
         next: { revalidate: 60 },
@@ -44,7 +30,7 @@ export default async function Page() {
         timestamp: time * 1000,
         close,
         open,
-        FROMSYMBOL: dataCryptoassets[i].FROMSYMBOL,
+        FROMSYMBOL: dataCryptos[i].FROMSYMBOL,
       })
     ) as HistorHourType[];
     newDataHistoHour.push(dataHistoHour);
@@ -104,7 +90,7 @@ export default async function Page() {
             Check out the products available at Velo and their current prices:
           </p>
           <SliderCryptoassets
-            dataCryptoassets={dataCryptoassets}
+            dataCryptos={dataCryptos}
             dataHistoHour={newDataHistoHour}
           />
         </section>

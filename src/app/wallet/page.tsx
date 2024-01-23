@@ -2,25 +2,17 @@ import { cookies } from 'next/headers';
 import { FaArrowUp, FaArrowDown } from 'react-icons/fa6';
 import Link from 'next/link';
 
-import { ShowUserType } from '@/components/header';
 import calBalance from '@/services/calcBalance';
 import calcPatrimonyTotal from '@/services/calcPatrimonyTotal';
 import calInvested from '@/services/calcInvested';
 import WalletGraphic from '@/components/walletGraphic';
 import calTransit from '@/services/calcTransit';
+import fetchGetUser from '@/services/fetchGetUser';
 
 export default async function Page() {
-  const token = cookies().get('token')?.value;
+  const token = cookies().get('token')?.value as string;
 
-  const userRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/show-user`, {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-    cache: 'no-cache',
-  });
-  const userData = (await userRes.json()) as ShowUserType;
+  const userData = await fetchGetUser(token);
   const userPatrimonyInvested = {
     patrimony: calcPatrimonyTotal(
       userData.active,

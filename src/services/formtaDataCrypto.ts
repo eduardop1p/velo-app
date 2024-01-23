@@ -1,9 +1,10 @@
 import { ActiveCryptoType } from '@/components/products';
+import type { CryptoType } from '@/components/header';
 
 export default function formatDataCrypto(
   activeCrypto: ActiveCryptoType | 'full-data' | 'follow-market',
   metaData: any
-): unknown[] {
+): CryptoType[] {
   switch (activeCrypto) {
     case 'currencies': {
       const btc = { NAME: 'Bitcoin', ...metaData.BTC.USD };
