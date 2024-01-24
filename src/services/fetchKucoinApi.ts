@@ -46,6 +46,7 @@ export default async function fetchKucoinApi({
   );
   const metaData = await res.json();
   if (has(metaData, 'msg') && metaData.code > 400000) {
+    console.log(metaData);
     return {
       dataKucoin: null,
       errKucoin: metaData,

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
@@ -9,7 +10,6 @@ import Image from 'next/image';
 import Inputmask from 'inputmask';
 import { useRouter } from 'next/navigation';
 import { IoIosInformationCircleOutline } from 'react-icons/io';
-import SkeletonUi from '@/components/skeletonUI';
 
 import {
   Context,
@@ -22,6 +22,7 @@ import cryptoFee from '@/services/cryptoFee';
 import fetchUserSendCrypto from '@/services/fetchUserSendCrypto';
 import Loading from '@/components/loading';
 import AlertMsg, { OpenAlertType } from '@/components/alertMsg';
+import SkeletonFormSendCrypto from './skeletonFormSendCrypto';
 
 interface Props {
   cryptoImgUrl: string;
@@ -84,6 +85,7 @@ export default function FormSendCrypto({
     setValue,
     trigger,
     watch,
+    setError,
   } = useForm<BodyType>({
     resolver: zodResolver(zodSchema),
   });
@@ -153,7 +155,8 @@ export default function FormSendCrypto({
     withdrawMinSize,
   ]);
 
-  const handleFormSubmit: SubmitHandler<BodyType> = async body => {
+  const handleFormSubmit: SubmitHandler<BodyType> = async (body, event) => {
+    event?.preventDefault();
     // console.log(body); // lembrar de mandar o valor do amount com menos 2% no valor real, cryptoFee
 
     if (isLoading) return;
@@ -171,6 +174,9 @@ export default function FormSendCrypto({
       });
       const data = await res.json();
       if (!res.ok) {
+        if (data.type !== 'server') {
+          setError(data.type, { message: data.error });
+        }
         setOpenAlert({
           msg: data.error,
           open: true,
@@ -188,9 +194,6 @@ export default function FormSendCrypto({
         severity: 'success',
       });
 
-      // setTimeout(() => {
-      //   location.reload();
-      // }, 1000);
       setIsLoading(false);
     } catch {
       setIsLoading(false);
@@ -224,29 +227,7 @@ export default function FormSendCrypto({
     return value.toFixed(6);
   };
 
-  if (!cryptoPrice)
-    return (
-      <div className="flex flex-col gap-4 w-2/3">
-        <div className="flex gap-8 w-full">
-          <SkeletonUi width="50%" height={71} />
-          <SkeletonUi width="50%" height={71} />
-        </div>
-        <div className="flex gap-8 w-full">
-          <SkeletonUi width="50%" height={43} />
-          <SkeletonUi width="50%" height={43} />
-        </div>
-        <div className="flex flex-col gap-8 mt-4 w-full">
-          <div className="flex gap-8 w-full">
-            <SkeletonUi width="50%" height={69} />
-            <SkeletonUi width="50%" height={69} />
-          </div>
-          <div className="flex gap-8 w-full">
-            <SkeletonUi width="50%" height={43} />
-            <SkeletonUi width="50%" height={43} />
-          </div>
-        </div>
-      </div>
-    );
+  if (!cryptoPrice) return <SkeletonFormSendCrypto />;
 
   return (
     <form

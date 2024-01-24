@@ -74,9 +74,9 @@ export async function POST(req: NextRequest, res: NextResponse) {
       return NextResponseError({
         body: {
           msg: 'Insufficient funds',
-          type: 'server',
+          type: 'amount',
         },
-        status: 403,
+        status: 400,
       });
     }
     // const isCryptoName = user.cryptos.every(val => val.name === cryptoName);
@@ -92,24 +92,41 @@ export async function POST(req: NextRequest, res: NextResponse) {
       },
       apiQueryString: '',
     });
-    // const withdrawalId = dataSendCrypto.withdrawalId;
+    if (errKucoin) {
+      if (errKucoin.code == '400100')
+        return NextResponseError({
+          body: {
+            msg: 'Incorrect withdrawal address',
+            type: 'walletAddress',
+          },
+          status: 400,
+        });
+      return NextResponseError({
+        body: {
+          msg: 'An error occurred while sending your cryptos',
+          type: 'server',
+        },
+        status: 400,
+      });
+    }
 
-    // user.transactions.push({
-    //   title: `${cryptoName} withdrawal`,
-    //   date: Date.now() * 1000,
-    //   status: 'pending',
-    //   value: -amountWithdrawalDollar,
-    //   cryptoValue: -amountWithdrawalCrypto,
-    //   withdrawalId,
-    // });
-    // const cryptos = user.cryptos.map(val => {
-    //   if (val.name === cryptoName) {
-    //     val.value -= amountWithdrawalCrypto;
-    //   }
-    //   return val;
-    // });
-    // user.cryptos = cryptos;
-    // await user.save();
+    const withdrawalId = dataKucoin.withdrawalId;
+    user.transactions.push({
+      title: `${cryptoName} withdrawal`,
+      date: Date.now() * 1000,
+      status: 'pending',
+      value: -amountWithdrawalDollar,
+      cryptoValue: -amountWithdrawalCrypto,
+      withdrawalId,
+    });
+    const cryptos = user.cryptos.map(val => {
+      if (val.name === cryptoName) {
+        val.value -= amountWithdrawalCrypto;
+      }
+      return val;
+    });
+    user.cryptos = cryptos;
+    await user.save();
 
     return NextResponseSuccess({
       body: {

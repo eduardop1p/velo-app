@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { cookies } from 'next/headers';
+import dynamic from 'next/dynamic';
 
 import Back from '@/components/searchFaq/back';
 import PrevUrl from '@/components/prevUrl';
@@ -7,7 +8,14 @@ import { CryptoType, ShowUserType } from '@/components/header';
 import CryptoCurrentPrice from '@/components/cryptoCurrentPrice';
 import fetchKucoinApi from '@/services/fetchKucoinApi';
 import BalanceMinimum from '@/components/forms/sendCrypto/balanceMinimum';
-import FormSendCrypto from '@/components/forms/sendCrypto/index';
+import SkeletonFormSendCrypto from '@/components/forms/sendCrypto/skeletonFormSendCrypto';
+const FormSendCrypto = dynamic(
+  () => import('@/components/forms/sendCrypto/index'),
+  {
+    ssr: false,
+    loading: () => <SkeletonFormSendCrypto />,
+  }
+);
 import { cryptosNames } from '@/services/formtaDataCrypto';
 import UnavailablePage from '@/components/UnavailablePage';
 import fetchGetUser from '@/services/fetchGetUser';
