@@ -93,7 +93,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
       apiQueryString: '',
     });
     if (errKucoin) {
-      if (errKucoin.code == '400100')
+      if (errKucoin.code === 400100)
         return NextResponseError({
           body: {
             msg: 'Incorrect withdrawal address',

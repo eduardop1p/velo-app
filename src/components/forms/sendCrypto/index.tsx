@@ -99,14 +99,20 @@ export default function FormSendCrypto({
     msg: '',
     severity: 'success',
   });
+  const [successSendCryptoMsg, setSuccessSendCryptoMsg] = useState('');
 
   const refUserCryptoBalance = useRef(userCryptoBalance);
 
   useEffect(() => {
     if (userCryptoBalance !== refUserCryptoBalance.current) {
       setIsLoading(false);
+      setOpenAlert({
+        msg: successSendCryptoMsg,
+        open: true,
+        severity: 'success',
+      });
     }
-  }, [userCryptoBalance]);
+  }, [userCryptoBalance, successSendCryptoMsg]);
 
   const router = useRouter();
 
@@ -188,13 +194,7 @@ export default function FormSendCrypto({
 
       router.refresh();
 
-      setOpenAlert({
-        msg: data.success,
-        open: true,
-        severity: 'success',
-      });
-
-      setIsLoading(false);
+      setSuccessSendCryptoMsg(data.success);
     } catch {
       setIsLoading(false);
       setOpenAlert({
