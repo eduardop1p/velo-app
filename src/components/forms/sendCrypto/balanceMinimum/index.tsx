@@ -38,7 +38,13 @@ export default function BalanceMinimum({
     return withdrawMinSize.toFixed(6);
   };
 
-  if (!cryptoPrice) return <SkeletonUi width="50%" height={23} />;
+  if (!cryptoPrice)
+    return (
+      <div className="flex gap-4 justify-between w-1/2">
+        <SkeletonUi width="50%" height={23} />
+        <SkeletonUi width="40%" height={23} />
+      </div>
+    );
 
   return (
     <div className="flex gap-4 justify-between w-1/2">

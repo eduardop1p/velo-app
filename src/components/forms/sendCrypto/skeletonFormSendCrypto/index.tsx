@@ -20,6 +20,11 @@ export default function SkeletonFormSendCrypto() {
           <SkeletonUi width="50%" height={43} />
           <SkeletonUi width="50%" height={43} />
         </div>
+        <div className="flex gap-4 self-start">
+          <SkeletonUi width={135} height={45} />
+          <SkeletonUi width={135} height={45} />
+        </div>
+        <SkeletonUi width="100%" height={68} />
       </div>
     </div>
   );

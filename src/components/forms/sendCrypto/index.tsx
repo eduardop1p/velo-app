@@ -174,6 +174,7 @@ export default function FormSendCrypto({
       });
       const data = await res.json();
       if (!res.ok) {
+        setIsLoading(false);
         if (data.type !== 'server') {
           setError(data.type, { message: data.error });
         }
@@ -182,7 +183,6 @@ export default function FormSendCrypto({
           open: true,
           severity: 'error',
         });
-        setIsLoading(false);
         return;
       }
 
