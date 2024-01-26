@@ -36,7 +36,7 @@ export interface UserType {
   cryptos: UserCryptosType[];
 }
 
-interface UserDocumentType extends UserType, Document {}
+export interface UserDocumentType extends UserType, Document {}
 
 const usersSchema = new Schema<UserDocumentType>({
   name: { type: String, required: true },

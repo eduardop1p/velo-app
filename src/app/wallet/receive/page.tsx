@@ -2,12 +2,12 @@ import { cookies } from 'next/headers';
 
 import Back from '@/components/searchFaq/back';
 import PrevUrl from '@/components/prevUrl';
-import WalletSend from '@/components/walletSend';
-import calBalance from '@/services/calcBalance';
+import WalletReceive from '@/components/walletReceive';
 import fetchGetUser from '@/services/fetchGetUser';
 import fetchGetFullCryptos from '@/services/fetchGetFullCryptos';
 import UnavailablePage from '@/components/UnavailablePage';
 import { CryptoType, ShowUserType } from '@/components/header';
+import calBalance from '@/services/calcBalance';
 
 export default async function Page() {
   const token = cookies().get('token')?.value as string;
@@ -41,9 +41,9 @@ export default async function Page() {
             />
           </div>
           <h2 className="text-primary text-2xl font-normal my-2">
-            Select which currency you want to send
+            Select which currency you want to receive
           </h2>
-          <WalletSend
+          <WalletReceive
             dataCryptos={dataCryptos}
             balance={calBalance(userData.transactions)}
           />

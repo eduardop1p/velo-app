@@ -49,7 +49,7 @@ export default async function fetchKucoinApi({
     return {
       dataKucoin: null,
       errKucoin: {
-        msg: metaData.msg,
+        msg: metaData.msg as string,
         code: +metaData.code,
       },
     };

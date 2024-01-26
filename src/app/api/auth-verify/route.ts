@@ -1,31 +1,25 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextRequest, NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 
-import dbConnect from '@/lib/dbConnect';
-import { NextResponseError, NextResponseSuccess } from '../route';
+import { BaseRoute } from '../route';
 
 // eslint-disable-next-line
 export async function GET(req: NextRequest, res: NextResponse) {
-  await dbConnect();
   const authorization = req.headers.get('authorization');
-
-  if (!authorization) {
-    return NextResponseError({
-      body: {
-        msg: 'You need to login',
-        type: 'server',
-        isValidToken: false,
-      },
-      status: 401,
-    });
-  }
-
+  const authVerify = new AuthVerify(authorization);
   try {
-    const [, token] = authorization.split(' ');
-    const secret = process.env.TOKEN_SECRET as string;
-    jwt.verify(token, secret);
+    const errors = authVerify.errors;
 
-    return NextResponseSuccess({
+    authVerify.verifyAuthorization();
+    if (errors.length) {
+      return authVerify.responseError(errors[0]);
+    }
+    authVerify.verifyToken();
+    if (errors.length) {
+      return authVerify.responseError(errors[0]);
+    }
+    return authVerify.responseSuccess({
       body: {
         msg: 'Validated access token',
         type: 'server',
@@ -34,15 +28,38 @@ export async function GET(req: NextRequest, res: NextResponse) {
       },
       status: 200,
     });
-  } catch (err) {
-    // console.log(err);
-    return NextResponseError({
+  } catch {
+    return authVerify.responseError({
       body: {
-        msg: 'Invalid access token',
+        msg: 'Internal server error',
         type: 'server',
-        isValidToken: false,
       },
-      status: 401,
+      status: 500,
     });
+  }
+}
+
+class AuthVerify extends BaseRoute {
+  constructor(protected authorization: string | null) {
+    super(authorization);
+  }
+
+  verifyToken() {
+    try {
+      if (!this.authorization) return;
+      const [, token] = this.authorization.split(' ');
+      const secret = process.env.TOKEN_SECRET as string;
+      jwt.verify(token, secret);
+    } catch {
+      this.errors.push({
+        body: {
+          msg: 'Invalid access token',
+          type: 'server',
+          isValidToken: false,
+        },
+        status: 401,
+      });
+      return;
+    }
   }
 }

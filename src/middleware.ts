@@ -6,6 +6,7 @@ import jwt from 'jsonwebtoken';
 export async function middleware(req: NextRequest, res: NextResponse) {
   const response = NextResponse.next();
   const isAuth = req.cookies.has('token');
+  const token = req.cookies.get('token')?.value;
   const { pathname } = req.nextUrl;
 
   const validatedAccessToken = async (token: string) => {
@@ -29,8 +30,7 @@ export async function middleware(req: NextRequest, res: NextResponse) {
     return pathname.startsWith(path);
   };
 
-  if (isAuth) {
-    const token = req.cookies.get('token')?.value as string;
+  if (isAuth && token) {
     const data = await validatedAccessToken(token);
     const isValidToken = data.isValidToken as boolean;
     if (!isValidToken && pathname !== '/login') {
