@@ -86,7 +86,6 @@ class ShowUser extends BaseRoute {
         active: this.user.active,
         veliabilities: this.user.veliabilities,
         transactions: this.user.transactions,
-        cryptos: this.user.cryptos,
       };
   }
 }

@@ -59,8 +59,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
 class WithdrawalUser extends BaseRoute {
   private user:
-    | (Document<unknown, {}, Pick<UserDocumentType, 'transactions' | 'cryptos'>> & // eslint-disable-line
-        Pick<UserDocumentType, 'transactions' | 'cryptos'> & {
+    | (Document<unknown, {}, Pick<UserDocumentType, 'transactions'>> & // eslint-disable-line
+        Pick<UserDocumentType, 'transactions'> & {
           _id: Types.ObjectId;
         })
     | null = null;
@@ -98,11 +98,13 @@ class WithdrawalUser extends BaseRoute {
   }
 
   private getUserCryptoBalance() {
-    const { cryptoName } = this.body;
-    const findUserCryptoBalance = this.user?.cryptos.find(
-      val => val.name === cryptoName
-    );
-    return findUserCryptoBalance ? findUserCryptoBalance.value : 0;
+    if (!this.user) return 0;
+    const { cryptoSymbol } = this.body;
+    const { transactions } = this.user;
+    const userCryptoBalance = transactions
+      .filter(val => val.symbol === cryptoSymbol && val.type === 'crypto')
+      .reduce((prev, val) => prev + val.cryptoValue, 0);
+    return userCryptoBalance;
   }
 
   private async verifyUserCryptoBalance() {
@@ -164,24 +166,19 @@ class WithdrawalUser extends BaseRoute {
   private async sendCryptoUser(withdrawalId: string) {
     if (!this.user) return;
     try {
-      const { cryptoName, amountWithdrawalCrypto, amountWithdrawalDollar } =
-        this.body;
+      const { cryptoName, cryptoSymbol, amountWithdrawalCrypto } = this.body;
 
       this.user.transactions.push({
-        title: `${cryptoName} withdrawal`,
+        title: 'withdrawal',
         date: Date.now() * 1000,
+        name: cryptoName,
         status: 'pending',
-        value: -amountWithdrawalDollar,
+        symbol: cryptoSymbol,
+        type: 'crypto',
         cryptoValue: -amountWithdrawalCrypto,
+        dollarValue: 0,
         withdrawalId,
       });
-      const cryptos = this.user.cryptos.map(val => {
-        if (val.name === cryptoName) {
-          val.value -= amountWithdrawalCrypto;
-        }
-        return val;
-      });
-      this.user.cryptos = cryptos;
       await this.user.save();
     } catch {
       this.errorInServer();

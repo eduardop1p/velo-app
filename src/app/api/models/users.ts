@@ -1,7 +1,9 @@
 import { Schema, model, models, type Document, Model } from 'mongoose';
 
 export interface ActiveType {
-  title: string;
+  name: string;
+  symbol: string;
+  cryptoValue: number;
   valueInvested: number;
   priceBuy: number;
   priceSell: number;
@@ -11,16 +13,15 @@ export interface VeliabilitiesType {
   value: number;
 }
 export interface TransactionsType {
+  name: string;
+  symbol: string;
+  type: 'crypto' | 'dollar';
   title: string;
-  value: number;
   cryptoValue: number;
+  dollarValue: number;
   withdrawalId: string;
   status: 'success' | 'pending' | 'error';
   date: number;
-}
-export interface UserCryptosType {
-  name: string;
-  value: number;
 }
 
 export interface UserType {
@@ -33,7 +34,6 @@ export interface UserType {
   active: ActiveType[];
   veliabilities: VeliabilitiesType[];
   transactions: TransactionsType[]; // balance
-  cryptos: UserCryptosType[];
 }
 
 export interface UserDocumentType extends UserType, Document {}
@@ -47,7 +47,9 @@ const usersSchema = new Schema<UserDocumentType>({
   password: { type: String, required: true },
   active: [
     {
-      title: { type: String, required: false },
+      name: { type: String, required: false },
+      symbol: { type: String, required: false },
+      cryptoValue: { type: Number, required: false },
       valueInvested: { type: Number, required: false },
       priceBuy: { type: Number, required: false },
       priceSell: { type: Number, required: false },
@@ -61,18 +63,15 @@ const usersSchema = new Schema<UserDocumentType>({
   ],
   transactions: [
     {
+      name: { type: String, required: false },
+      symbol: { type: String, required: false },
+      type: { type: String, required: false },
       title: { type: String, required: false },
-      value: { type: Number, required: false },
       cryptoValue: { type: Number, required: false },
+      dollarValue: { type: Number, required: false },
       withdrawalId: { type: String, required: false },
       status: { type: String, required: false },
       date: { type: Number, required: false },
-    },
-  ],
-  cryptos: [
-    {
-      name: { type: String, required: false },
-      value: { type: Number, required: false },
     },
   ],
 });
