@@ -7,15 +7,21 @@ import { useState } from 'react';
 
 import PatrimonyGraph from './patrimonyGraph';
 import { UserPatrimonyInvestedType } from '@/app/home/page';
+import formatPrice from '@/services/formatPrice';
 
 export default function UserPatrimony({
   userPatrimonyInvested,
 }: {
   userPatrimonyInvested: UserPatrimonyInvestedType<number>;
 }) {
-  const hidePatrimonyInvested = {
+  const hidePatrimonyInvested: UserPatrimonyInvestedType<number | string> & {
+    hide: boolean;
+  } = {
     hide: true,
-    invested: '••••••',
+    invested: {
+      value: '••••••',
+      active: [],
+    },
     patrimony: '••••••',
     balance: '••••••',
   };
@@ -23,13 +29,6 @@ export default function UserPatrimony({
 
   // eslint-disable-next-line
   const [stUserPatrimonyInvested, setStUserPatrimonyInvested] = useState(localStorage.getItem('hide-patrimony-invested') == 'true' ? hidePatrimonyInvested : showPatrimonyInvested);
-
-  const handleFormatPrice = (value: number) => {
-    return value.toLocaleString('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    });
-  };
 
   const handlePatrimonyInvested = () => {
     setStUserPatrimonyInvested(hidePatrimonyInvested);
@@ -50,7 +49,7 @@ export default function UserPatrimony({
             <span className="text-[25px] text-primary font-medium">
               {stUserPatrimonyInvested.hide
                 ? stUserPatrimonyInvested.patrimony
-                : handleFormatPrice(+stUserPatrimonyInvested.patrimony)}
+                : formatPrice(+stUserPatrimonyInvested.patrimony)}
             </span>
           </div>
           {!stUserPatrimonyInvested.hide ? (
@@ -79,9 +78,9 @@ export default function UserPatrimony({
       <div className="w-1/2">
         <PatrimonyGraph
           stUserPatrimonyInvested={stUserPatrimonyInvested}
-          fontSizeValueInvested="text-lg"
+          fontSizeValueInvested="text-base"
           fontSizeInvested="text-xs"
-          innerRadius={77}
+          innerRadius={76}
           outerRadius={90}
         />
       </div>

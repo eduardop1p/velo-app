@@ -16,7 +16,7 @@ const FormSendCrypto = dynamic(
     loading: () => <SkeletonFormSendCrypto />,
   }
 );
-import { cryptosNames } from '@/services/formtaDataCrypto';
+import { cryptosNames } from '@/services/formatDataCrypto';
 import UnavailablePage from '@/components/UnavailablePage';
 import fetchGetUser from '@/services/fetchGetUser';
 
@@ -42,10 +42,9 @@ export default async function Page({ params }: { params: { crypto: string } }) {
 
   try {
     userData = await fetchGetUser(token);
-    const findUserCryptoBalance = userData.cryptos.find(
-      val => val.name === cryptoName
-    );
-    userCryptoBalance = findUserCryptoBalance ? findUserCryptoBalance.value : 0;
+    userCryptoBalance = userData.transactions
+      .filter(val => val.symbol === cryptoSymbol && val.type === 'crypto')
+      .reduce((prev, val) => prev + val.cryptoValue, 0);
 
     const resCrypto = await fetch(
       `${process.env.CRYPTO_API_URL}&fsyms=${cryptoSymbol}`,

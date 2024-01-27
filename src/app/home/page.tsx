@@ -6,9 +6,6 @@ import Image from 'next/image';
 import { IoMdTime } from 'react-icons/io';
 import { DateTime } from 'luxon';
 
-// const UserPatrimony = dynamic(() => import('@/components/userPatrimony'), {
-//   ssr: false,
-// });
 import UserPatrimony from '@/components/userPatrimony';
 import { CryptoType, ShowUserType } from '@/components/header';
 import SlideMarketOverview from '@/components/slides/marketOverview';
@@ -19,6 +16,7 @@ import calInvested from '@/services/calcInvested';
 import UnavailablePage from '@/components/UnavailablePage';
 import fetchGetUser from '@/services/fetchGetUser';
 import fetchGetFullCryptos from '@/services/fetchGetFullCryptos';
+import { ActiveType } from '../api/models/users';
 
 export const metadata: Metadata = {
   title: 'Bitcoin, Ethereum and other cryptocurrencies | Velo',
@@ -28,7 +26,10 @@ export const metadata: Metadata = {
 
 export interface UserPatrimonyInvestedType<T> {
   patrimony: T;
-  invested: T;
+  invested: {
+    value: T;
+    active: ActiveType[];
+  };
   balance: T;
   transit?: T;
 }
@@ -71,7 +72,10 @@ export default async function Page() {
         userData.veliabilities,
         calBalance(userData.transactions)
       ),
-      invested: calInvested(userData.active),
+      invested: {
+        value: calInvested(userData.active),
+        active: userData.active,
+      },
       balance: calBalance(userData.transactions),
     };
 
@@ -87,7 +91,7 @@ export default async function Page() {
         }
       );
       const metaDataHistoHour = await resHistoHour.json();
-      const dataHistoHour = metaDataHistoHour.Data.Data.map(
+      const dataHistoHour = metaDataHistoHour.Data.Data?.map(
         ({ time, close, open }: HistorHourType) => ({
           timestamp: time * 1000,
           close,
@@ -106,8 +110,9 @@ export default async function Page() {
       }
     );
     const metaDataNews = await resNews.json();
-    dataMarketNews = metaDataNews.Data.slice(0, 6);
-  } catch {
+    dataMarketNews = metaDataNews.Data?.slice(0, 6);
+  } catch (err) {
+    console.log(err);
     return <UnavailablePage />;
   }
 

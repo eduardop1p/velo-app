@@ -66,7 +66,12 @@ export default function formatDataCrypto(
       const eth = { NAME: 'Ethereum', ...metaData.ETH.USD };
       const sol = { NAME: 'Solana', ...metaData.SOL.USD };
       const xrp = { NAME: 'Ripple', ...metaData.XRP.USD };
-      return [btc, usdt, eth, sol, xrp];
+      const doge = { NAME: 'Dogecoin', ...metaData.DOGE.USD };
+      const ada = { NAME: 'Cardano', ...metaData.ADA.USD };
+      const link = { NAME: 'Chainlink', ...metaData.LINK.USD };
+      const uni = { NAME: 'Uniswap', ...metaData.UNI.USD };
+      const xlm = { NAME: 'Stellar', ...metaData.XLM.USD };
+      return [btc, usdt, eth, sol, xrp, doge, ada, link, uni, xlm];
     }
     case 'full-data': {
       const btc = {

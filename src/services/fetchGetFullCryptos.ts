@@ -1,5 +1,5 @@
 import { CryptoType } from '@/components/header';
-import formatDataCrypto from './formtaDataCrypto';
+import formatDataCrypto from './formatDataCrypto';
 
 export default async function fetchGetFullCryptos() {
   const resCryptos = await fetch(

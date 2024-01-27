@@ -1,14 +1,14 @@
 import { cookies } from 'next/headers';
 
-import formatDataCrypto from '@/services/formtaDataCrypto';
+import formatDataCrypto from '@/services/formatDataCrypto';
 import { ActiveCryptoType } from '../products';
-import Headers from './headers';
+import NoAuthHeader from './noAuthHeader';
 import {
   TransactionsType,
   ActiveType,
   VeliabilitiesType,
-  UserCryptosType,
 } from '@/app/api/models/users';
+import AuthHeader from './authHeader';
 
 export interface CryptoType {
   NAME: string;
@@ -45,7 +45,6 @@ export interface ShowUserType {
   active: ActiveType[];
   veliabilities: VeliabilitiesType[];
   transactions: TransactionsType[];
-  cryptos: UserCryptosType[];
 }
 
 const getData = async (url: string, activeCrypto: ActiveCryptoType) => {
@@ -60,10 +59,10 @@ const getData = async (url: string, activeCrypto: ActiveCryptoType) => {
 export default async function Header() {
   const cookie = cookies();
   let isAuth = cookie.has('token');
-  let userData: ShowUserType | undefined;
+  const token = cookie.get('token')?.value;
+  let userData: ShowUserType;
 
-  if (isAuth) {
-    const token = cookie.get('token')?.value;
+  if (isAuth && token) {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/show-user`, {
       method: 'GET',
       headers: {
@@ -73,47 +72,49 @@ export default async function Header() {
       cache: 'no-cache',
     });
     userData = await res.json();
+
+    return <AuthHeader userData={userData} />;
   }
 
-  const dataCurrencies = (await getData(
+  const dataCurrencies: CryptoType[] = await getData(
     `${process.env.CRYPTO_API_URL}&fsyms=BTC,DOGE,XLM,LTC`,
     'currencies'
-  )) as CryptoType[];
-  const dataSmartContract = (await getData(
+  );
+  const dataSmartContract: CryptoType[] = await getData(
     `${process.env.CRYPTO_API_URL}&fsyms=ETH,ADA,SOL,DOT,AVAX,ALGO`,
     'smart-contract'
-  )) as CryptoType[];
-  const dataStablecoin = (await getData(
+  );
+  const dataStablecoin: CryptoType[] = await getData(
     `${process.env.CRYPTO_API_URL}&fsyms=USDC,USDT`,
     'stablecoin'
-  )) as CryptoType[];
-  const dataScalling = (await getData(
+  );
+  const dataScalling: CryptoType[] = await getData(
     `${process.env.CRYPTO_API_URL}&fsyms=MATIC,OP`,
     'scalling'
-  )) as CryptoType[];
-  const dataOracle = (await getData(
+  );
+  const dataOracle: CryptoType[] = await getData(
     `${process.env.CRYPTO_API_URL}&fsyms=LINK`,
     'oracle'
-  )) as CryptoType[];
-  const dataMetaverse = (await getData(
+  );
+  const dataMetaverse: CryptoType[] = await getData(
     `${process.env.CRYPTO_API_URL}&fsyms=SAND,MANA`,
     'metaverse'
-  )) as CryptoType[];
-  const dataDefi = (await getData(
+  );
+  const dataDefi: CryptoType[] = await getData(
     `${process.env.CRYPTO_API_URL}&fsyms=CRV,LDO,AAVE,UNI,MKR,SNX,COMP`,
     'defi'
-  )) as CryptoType[];
-  const dataInteroperability = (await getData(
+  );
+  const dataInteroperability: CryptoType[] = await getData(
     `${process.env.CRYPTO_API_URL}&fsyms=QNT,ATOM`,
     'interoperability'
-  )) as CryptoType[];
-  const dataNFT = (await getData(
+  );
+  const dataNFT: CryptoType[] = await getData(
     `${process.env.CRYPTO_API_URL}&fsyms=APE`,
     'nft'
-  )) as CryptoType[];
+  );
 
   return (
-    <Headers
+    <NoAuthHeader
       dataCurrencies={dataCurrencies}
       dataDefi={dataDefi}
       dataInteroperability={dataInteroperability}
@@ -123,8 +124,6 @@ export default async function Header() {
       dataScalling={dataScalling}
       dataSmartContract={dataSmartContract}
       dataStablecoin={dataStablecoin}
-      isAuth={isAuth}
-      userData={userData}
     />
   );
 }
