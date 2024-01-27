@@ -13,13 +13,14 @@ import {
 
 import { UserPatrimonyInvestedType } from '@/app/home/page';
 import formatPrice from '@/services/formatPrice';
+import { ActiveType } from '@/app/api/models/users';
 
 interface DataType {
   name: string;
   value: number;
   fill: string;
   opacity: number;
-  hover: boolean;
+  default: boolean;
   symbol?: string;
   cryptoValue?: number;
 }
@@ -29,7 +30,7 @@ interface CellInfoType {
   cryptoValue: number;
   value: number;
   fill: string;
-  hover: boolean;
+  default: boolean;
 }
 
 export default function PatrimonyGraph({
@@ -58,7 +59,7 @@ export default function PatrimonyGraph({
       value: val.valueInvested + val.profit,
       fill: val.fill,
       opacity: 1,
-      hover: true,
+      default: false,
     }));
     if (!data.length) {
       data = [
@@ -66,7 +67,7 @@ export default function PatrimonyGraph({
           name: 'invested',
           value: 100,
           fill: '#272a2eff',
-          hover: false,
+          default: true,
           opacity: 1,
         },
       ];
@@ -74,15 +75,24 @@ export default function PatrimonyGraph({
     setStData(data);
   }, [stUserPatrimonyInvested]);
 
+  const handleCalcPercentage = (data: ActiveType[], val: number) => {
+    const total = data.reduce(
+      (acc, val) => acc + val.valueInvested + val.profit,
+      0
+    );
+    return (val / total) * 100;
+  };
+
   const handlePieMouseEnter = (cellData: { payload: CellInfoType }) => {
-    if (!cellData.payload.hover) return;
+    console.log(cellData);
+    if (cellData.payload.default) return;
     setCellInfo([
       {
         cryptoValue: cellData.payload.cryptoValue,
         symbol: cellData.payload.symbol,
         value: cellData.payload.value,
         fill: cellData.payload.fill,
-        hover: cellData.payload.hover,
+        default: cellData.payload.default,
       },
     ]);
     const newStData = stData.map(val =>
@@ -92,7 +102,7 @@ export default function PatrimonyGraph({
   };
 
   const handlePieMouseLeave = (cellData: { payload: CellInfoType }) => {
-    if (!cellData.payload.hover) return;
+    if (cellData.payload.default) return;
     setStData(state => state.map(val => ({ ...val, opacity: 1 })));
     setCellInfo([]);
   };
