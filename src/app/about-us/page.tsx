@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 
-import TimeLineApp from '@/components/timeLineApp';
+import TimeLineApp from '../../components/timeLineApp';
 import SectionNewsletter from '@/components/sectionNewsletter';
 import PrevUrl from '@/components/prevUrl';
 import Footer from '@/components/footer';
