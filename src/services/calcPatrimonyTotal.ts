@@ -6,10 +6,7 @@ export default function calcPatrimonyTotal(
   balance: number
 ) {
   const activeTotal =
-    active.reduce(
-      (pv, active) => pv + active.valueInvested + active.profit,
-      0
-    ) + balance;
+    active.reduce((pv, active) => pv + active.valueInvestedProfit, 0) + balance;
   const veliabilitiesTotal = veliabilities.reduce(
     (pv, veliabilities) => pv + veliabilities?.value,
     0

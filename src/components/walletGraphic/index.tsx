@@ -1,19 +1,26 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaEyeSlash, FaEye } from 'react-icons/fa6';
 
 import type { UserPatrimonyInvestedType } from '@/app/home/page';
 import PatrimonyGraph from '../userPatrimony/patrimonyGraph';
+import getInvestedProfit from '@/services/getInvestedProfit';
+import formatPrice from '@/services/formatPrice';
 
 export default function WalletGraphic({
   userPatrimonyInvested,
 }: {
   userPatrimonyInvested: UserPatrimonyInvestedType<number>;
 }) {
-  const hidePatrimonyInvested = {
+  const hidePatrimonyInvested: UserPatrimonyInvestedType<string> & {
+    hide: boolean;
+  } = {
     hide: true,
-    invested: '••••••',
+    invested: {
+      value: '••••••',
+      active: [],
+    },
     patrimony: '••••••',
     balance: '••••••',
     transit: '••••••',
@@ -22,13 +29,19 @@ export default function WalletGraphic({
 
   // eslint-disable-next-line
   const [stUserPatrimonyInvested, setStUserPatrimonyInvested] = useState(localStorage.getItem('hide-patrimony-invested') == 'true' ? hidePatrimonyInvested : showPatrimonyInvested);
+  const [investedProfit, setInvestedProfit] = useState<{
+    value: string;
+    color: string;
+  } | null>(null);
 
-  const handleFormatPrice = (value: number) => {
-    return value.toLocaleString('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    });
-  };
+  useEffect(() => {
+    if (userPatrimonyInvested.invested.active.length) {
+      const { value, color } = getInvestedProfit(
+        userPatrimonyInvested.invested.active
+      );
+      setInvestedProfit({ value, color });
+    }
+  }, [userPatrimonyInvested]);
 
   const handlePatrimonyInvested = () => {
     setStUserPatrimonyInvested(hidePatrimonyInvested);
@@ -43,7 +56,7 @@ export default function WalletGraphic({
   const handleAccountBalance = () => {
     return stUserPatrimonyInvested.hide
       ? stUserPatrimonyInvested.balance
-      : handleFormatPrice(+stUserPatrimonyInvested.balance);
+      : formatPrice(+stUserPatrimonyInvested.balance);
   };
 
   const handleAccountTransit = () => {
@@ -51,7 +64,7 @@ export default function WalletGraphic({
 
     return stUserPatrimonyInvested.hide
       ? stUserPatrimonyInvested.transit
-      : handleFormatPrice(+stUserPatrimonyInvested.transit);
+      : formatPrice(+stUserPatrimonyInvested.transit);
   };
 
   return (
@@ -59,7 +72,7 @@ export default function WalletGraphic({
       <div className="w-[250px] h-[250px]">
         <PatrimonyGraph
           stUserPatrimonyInvested={stUserPatrimonyInvested}
-          fontSizeValueInvested="text-2xl"
+          fontSizeValueInvested="text-[22px]"
           fontSizeInvested="text-sm"
           innerRadius={103}
           outerRadius={120}
@@ -72,8 +85,15 @@ export default function WalletGraphic({
             <h2 className="text-[28px] text-primary font-medium">
               {stUserPatrimonyInvested.hide
                 ? stUserPatrimonyInvested.patrimony
-                : handleFormatPrice(+stUserPatrimonyInvested.patrimony)}
+                : formatPrice(+stUserPatrimonyInvested.patrimony)}
             </h2>
+            {investedProfit && (
+              <span
+                className={`${investedProfit.color} font-normal text-sm mt-[2px] ml-[2px]`}
+              >
+                {investedProfit.value}
+              </span>
+            )}
           </div>
           {!stUserPatrimonyInvested.hide ? (
             <button

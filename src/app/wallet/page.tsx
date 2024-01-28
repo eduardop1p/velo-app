@@ -8,18 +8,22 @@ import calInvested from '@/services/calcInvested';
 import WalletGraphic from '@/components/walletGraphic';
 import calTransit from '@/services/calcTransit';
 import fetchGetUser from '@/services/fetchGetUser';
+import { UserPatrimonyInvestedType } from '../home/page';
 
 export default async function Page() {
   const token = cookies().get('token')?.value as string;
 
   const userData = await fetchGetUser(token);
-  const userPatrimonyInvested = {
+  const userPatrimonyInvested: UserPatrimonyInvestedType<number> = {
     patrimony: calcPatrimonyTotal(
       userData.active,
       userData.veliabilities,
       calBalance(userData.transactions)
     ),
-    invested: calInvested(userData.active),
+    invested: {
+      active: userData.active,
+      value: calInvested(userData.active),
+    },
     balance: calBalance(userData.transactions),
     transit: calTransit(userData.transactions),
   };

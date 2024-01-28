@@ -5,10 +5,11 @@ export interface ActiveType {
   symbol: string;
   cryptoValue: number;
   valueInvested: number;
-  profit: number; // lucro de cada valor investido
+  valueProfit: number; // lucro de cada valor investido
   fill: string;
   priceBuy: number;
   priceSell: number;
+  valueInvestedProfit: number;
 }
 export interface VeliabilitiesType {
   title: string;
@@ -53,7 +54,8 @@ const usersSchema = new Schema<UserDocumentType>({
       symbol: { type: String, required: false },
       cryptoValue: { type: Number, required: false },
       valueInvested: { type: Number, required: false },
-      profit: { type: Number, required: false },
+      valueProfit: { type: Number, required: false },
+      valueInvestedProfit: { type: Number, required: false },
       fill: { type: String, required: false },
       priceBuy: { type: Number, required: false },
       priceSell: { type: Number, required: false },

@@ -72,6 +72,7 @@ const config: Config = {
         '464c51ff': '#464c51ff',
         '00000066': '#00000066',
         'c-rgba(255,255,255,.3)': 'rgba(255,255,255,.3)',
+        '999': '#999',
       },
       boxShadow: {
         'effect-1': '0 0 0 0.2rem #bfdbfe',

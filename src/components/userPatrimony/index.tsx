@@ -3,18 +3,19 @@
 // import { useState } from 'react';
 import { FaEyeSlash, FaEye } from 'react-icons/fa6';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import PatrimonyGraph from './patrimonyGraph';
 import { UserPatrimonyInvestedType } from '@/app/home/page';
 import formatPrice from '@/services/formatPrice';
+import getInvestedProfit from '@/services/getInvestedProfit';
 
 export default function UserPatrimony({
   userPatrimonyInvested,
 }: {
   userPatrimonyInvested: UserPatrimonyInvestedType<number>;
 }) {
-  const hidePatrimonyInvested: UserPatrimonyInvestedType<number | string> & {
+  const hidePatrimonyInvested: UserPatrimonyInvestedType<string> & {
     hide: boolean;
   } = {
     hide: true,
@@ -26,9 +27,22 @@ export default function UserPatrimony({
     balance: '••••••',
   };
   const showPatrimonyInvested = { hide: false, ...userPatrimonyInvested };
+  const [investedProfit, setInvestedProfit] = useState<{
+    value: string;
+    color: string;
+  } | null>(null);
 
   // eslint-disable-next-line
   const [stUserPatrimonyInvested, setStUserPatrimonyInvested] = useState(localStorage.getItem('hide-patrimony-invested') == 'true' ? hidePatrimonyInvested : showPatrimonyInvested);
+
+  useEffect(() => {
+    if (userPatrimonyInvested.invested.active.length) {
+      const { value, color } = getInvestedProfit(
+        userPatrimonyInvested.invested.active
+      );
+      setInvestedProfit({ value, color });
+    }
+  }, [userPatrimonyInvested]);
 
   const handlePatrimonyInvested = () => {
     setStUserPatrimonyInvested(hidePatrimonyInvested);
@@ -51,6 +65,13 @@ export default function UserPatrimony({
                 ? stUserPatrimonyInvested.patrimony
                 : formatPrice(+stUserPatrimonyInvested.patrimony)}
             </span>
+            {investedProfit && (
+              <span
+                className={`${investedProfit.color} font-normal text-sm mt-[2px] ml-[2px]`}
+              >
+                {investedProfit.value}
+              </span>
+            )}
           </div>
           {!stUserPatrimonyInvested.hide ? (
             <button

@@ -56,7 +56,7 @@ export default function PatrimonyGraph({
       name: val.name,
       symbol: val.symbol,
       cryptoValue: val.cryptoValue,
-      value: val.valueInvested + val.profit,
+      value: val.valueInvestedProfit,
       fill: val.fill,
       opacity: 1,
       default: false,
@@ -75,16 +75,13 @@ export default function PatrimonyGraph({
     setStData(data);
   }, [stUserPatrimonyInvested]);
 
+  // talvez eu coloque a porcentagem do lado do grafico pie
   const handleCalcPercentage = (data: ActiveType[], val: number) => {
-    const total = data.reduce(
-      (acc, val) => acc + val.valueInvested + val.profit,
-      0
-    );
+    const total = data.reduce((acc, val) => acc + val.valueInvestedProfit, 0);
     return (val / total) * 100;
   };
 
   const handlePieMouseEnter = (cellData: { payload: CellInfoType }) => {
-    console.log(cellData);
     if (cellData.payload.default) return;
     setCellInfo([
       {
