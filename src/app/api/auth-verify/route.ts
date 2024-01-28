@@ -33,6 +33,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
       body: {
         msg: 'Internal server error',
         type: 'server',
+        isValidToken: false,
       },
       status: 500,
     });
