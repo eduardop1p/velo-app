@@ -2,8 +2,11 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import dynamic from 'next/dynamic';
 
-import Notifications from '../notifications';
+const Notifications = dynamic(() => import('../notifications'), {
+  ssr: false,
+});
 import { FaComments } from 'react-icons/fa6';
 import type { ShowUserType } from '..';
 import Settings from '../settings';

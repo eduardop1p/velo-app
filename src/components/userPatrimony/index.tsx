@@ -99,7 +99,7 @@ export default function UserPatrimony({
       <div className="w-1/2">
         <PatrimonyGraph
           stUserPatrimonyInvested={stUserPatrimonyInvested}
-          fontSizeValueInvested="text-base"
+          fontSizeValueInvested="text-lg"
           fontSizeInvested="text-xs"
           innerRadius={76}
           outerRadius={90}
