@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 
-import TimeLineApp from '../../components/timeLineApp';
+import TimeLine from '@/components/timeLine';
 import SectionNewsletter from '@/components/sectionNewsletter';
 import PrevUrl from '@/components/prevUrl';
 import Footer from '@/components/footer';
@@ -118,7 +118,7 @@ export default function Page() {
               You can register our website
             </p>
             <div className="mt-7">
-              <TimeLineApp />
+              <TimeLine />
             </div>
           </div>
         </section>

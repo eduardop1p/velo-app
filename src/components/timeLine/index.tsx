@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-export default function TimeLineApp() {
+export default function TimeLine() {
   return (
     <div className="flex gap-8 flex-col">
       <div className="flex flex-col gap-3 relative z-[2]">

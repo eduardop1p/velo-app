@@ -4,7 +4,7 @@ import FormLandingPage from '@/components/forms/landingPage';
 import NewInVelo from '@/components/newInVelo';
 import SliderCryptoassets from '@/components/slides/cryptoassets';
 import SliderCompleteApp from '@/components/slides/completeApp';
-import TimeLineApp from '@/components/timeLineApp';
+import TimeLine from '@/components/timeLine';
 import SectionNewsletter from '@/components/sectionNewsletter';
 import Footer from '@/components/footer';
 import { HistorHourType } from './home/page';
@@ -192,7 +192,7 @@ export default async function Page() {
                 You can register on our website or directly in the app.
               </p>
             </div>
-            <TimeLineApp />
+            <TimeLine />
           </div>
           <Image
             className="flex-none"
