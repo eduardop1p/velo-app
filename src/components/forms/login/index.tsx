@@ -85,7 +85,7 @@ export default function FormLogin() {
         return;
       }
       setOpenAlert({
-        msg: `Welcome ${data.name.split(' ')[0]}`,
+        msg: `Welcome ${data.userName.split(' ')[0]}`,
         open: true,
         severity: 'success',
       });
@@ -95,7 +95,7 @@ export default function FormLogin() {
         router.refresh();
       }, 1000);
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       setOpenAlert({
         msg: 'An error occurred',
         open: true,
