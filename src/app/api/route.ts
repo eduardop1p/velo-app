@@ -30,7 +30,7 @@ export async function GET(request: Request) {
   );
 }
 
-export class BaseRoute {
+export default class BaseRoute {
   public errors: BodyResponseType[] = [];
 
   constructor(protected readonly authorization?: string | null) {}

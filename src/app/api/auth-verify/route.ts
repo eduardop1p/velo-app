@@ -2,7 +2,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 
-import { BaseRoute } from '../route';
+import BaseRoute from '../route';
 
 // eslint-disable-next-line
 export async function GET(req: NextRequest, res: NextResponse) {

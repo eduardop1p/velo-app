@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import usersModel, { UserType } from '../models/users';
 
-import { BaseRoute } from '../route';
+import BaseRoute from '../route';
 
 // eslint-disable-next-line
 export async function POST(req: NextRequest, res: NextResponse) {

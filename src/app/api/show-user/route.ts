@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import { Document, Types } from 'mongoose';
 
 import usersModel, { UserDocumentType } from '../models/users';
-import { BaseRoute } from '../route';
+import BaseRoute from '../route';
 
 // eslint-disable-next-line
 export async function GET(req: NextRequest, res: NextResponse) {
