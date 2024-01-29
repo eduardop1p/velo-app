@@ -95,7 +95,7 @@ export default function FormLogin() {
         router.refresh();
       }, 1000);
     } catch (err) {
-      // console.log(err);
+      console.log(err);
       setOpenAlert({
         msg: 'An error occurred',
         open: true,
