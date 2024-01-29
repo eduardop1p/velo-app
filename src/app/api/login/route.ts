@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import { type Document, Types } from 'mongoose';
 
 import usersModel, { UserDocumentType } from '../models/users';
-import BaseRoute from '../route';
+import BaseRoute from '../baseRoute';
 
 interface LoginType {
   email: string;

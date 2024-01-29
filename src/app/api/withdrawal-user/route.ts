@@ -4,7 +4,7 @@ import { Document, Types } from 'mongoose';
 
 import usersModel, { UserDocumentType } from '../models/users';
 import fetchKucoinApi from '@/services/fetchKucoinApi';
-import BaseRoute from '../route';
+import BaseRoute from '../baseRoute';
 
 interface BodyType {
   amountWithdrawalCrypto: number;
