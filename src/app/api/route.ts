@@ -10,7 +10,7 @@ export async function GET(request: Request) {
       status: 200,
       headers: {
         // subtstituir * pela origin certa do domain
-        'Access-Control-Allow-Origin': process.env.ORIGIN!,
+        'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization',
       },
