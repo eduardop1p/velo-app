@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic';
 
 import UnavailablePage from '@/components/UnavailablePage';
 import SkeletonFormCreatedAccount from '@/components/forms/createdAccount/skeletonFormCreatedAccount';
+import fetchGetCountries from '@/services/fetchGetCountries';
 const FormCreatedAccount = dynamic(
   () => import('@/components/forms/createdAccount'),
   {
@@ -24,22 +25,7 @@ export default async function Page() {
   let dataCountries: CountriesType[];
 
   try {
-    const res = await fetch(
-      'https://restcountries.com/v3.1/independent?status=true&fields=name',
-      {
-        method: 'GET',
-        next: { revalidate: 60 },
-      }
-    );
-
-    const metadata = await res.json();
-    dataCountries = metadata
-      .map((val: any) => ({
-        name: val.name.common,
-      }))
-      .sort((a: { name: string }, b: { name: string }) =>
-        a.name.localeCompare(b.name)
-      );
+    dataCountries = await fetchGetCountries();
   } catch {
     return <UnavailablePage />;
   }

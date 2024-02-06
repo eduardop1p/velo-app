@@ -8,15 +8,19 @@ import fetchGetUser from '@/services/fetchGetUser';
 import fetchGetFullCryptos from '@/services/fetchGetFullCryptos';
 import UnavailablePage from '@/components/UnavailablePage';
 import { CryptoType, ShowUserType } from '@/components/header';
+import fetchGetCountries from '@/services/fetchGetCountries';
+import { CountriesType } from '@/app/create-account/page';
 
 export default async function Page() {
   const token = cookies().get('token')?.value as string;
 
   let userData: ShowUserType;
   let dataCryptos: CryptoType[];
+  let dataCountries: CountriesType[];
 
   try {
     userData = await fetchGetUser(token);
+    dataCountries = await fetchGetCountries();
     dataCryptos = await fetchGetFullCryptos();
   } catch {
     return <UnavailablePage />;
@@ -46,6 +50,7 @@ export default async function Page() {
           <WalletSend
             dataCryptos={dataCryptos}
             balance={calBalance(userData.transactions)}
+            dataCountries={dataCountries}
           />
         </section>
       </div>

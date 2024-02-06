@@ -9,6 +9,7 @@ import AlertMsg from '../../alertMsg';
 import { OpenAlertType } from '../../alertMsg';
 import FormErrorMsg from '../errorMsg';
 import FormLoading from '../loading';
+import delay from '@/services/delay';
 
 const zodSchema = z.object({
   'full-name': z.string().trim().min(1, 'Required field'),
@@ -62,15 +63,6 @@ export default function FormNewsletter() {
     }
   }, [getValues, initialRender]);
 
-  const handleDelay = async (ms: number) => {
-    // eslint-disable-next-line
-    return new Promise((rs, rj) => {
-      setTimeout(() => {
-        rs('success');
-      }, ms);
-    });
-  };
-
   const handleFormSubmit: SubmitHandler<BodyType> = async body => {
     if (isLoading) return;
 
@@ -78,7 +70,7 @@ export default function FormNewsletter() {
       setIsLoading(true);
 
       // enviar email aqui de inscrição newsletter no lugar de delay
-      await handleDelay(3000);
+      await delay(3000);
 
       setOpenAlert({
         msg: 'Thanks for signing up',

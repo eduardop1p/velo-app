@@ -26,6 +26,11 @@ export interface TransactionsType {
   status: 'success' | 'pending' | 'error';
   date: number;
 }
+export interface WalletAddress {
+  cryptoName: string;
+  address: string;
+  privateKey: string;
+}
 
 export interface UserType {
   name: string;
@@ -37,6 +42,7 @@ export interface UserType {
   active: ActiveType[];
   veliabilities: VeliabilitiesType[];
   transactions: TransactionsType[]; // balance
+  wallet: WalletAddress[];
 }
 
 export interface UserDocumentType extends UserType, Document {}
@@ -78,6 +84,13 @@ const usersSchema = new Schema<UserDocumentType>({
       withdrawalId: { type: String, required: false },
       status: { type: String, required: false },
       date: { type: Number, required: false },
+    },
+  ],
+  wallet: [
+    {
+      cryptoName: { type: String, required: false },
+      address: { type: String, required: false },
+      privateKey: { type: String, required: false },
     },
   ],
 });

@@ -1,3 +1,3 @@
 export default function replaceCurrency(value: string): number {
-  return +value.replace(/[$+,]/g, '');
+  return +value.replace(/[^\d]/g, '');
 }

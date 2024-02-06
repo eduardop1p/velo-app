@@ -136,6 +136,7 @@ class CreateAccount extends BaseRoute {
       active: [],
       veliabilities: [],
       transactions: [],
+      wallet: [],
     };
   }
 
