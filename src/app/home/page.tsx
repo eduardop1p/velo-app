@@ -7,7 +7,7 @@ import { IoMdTime } from 'react-icons/io';
 import { DateTime } from 'luxon';
 
 import UserPatrimony from '@/components/userPatrimony';
-import { CryptoType, ShowUserType } from '@/components/header';
+import { CryptoType } from '@/components/header';
 import SlideMarketOverview from '@/components/slides/marketOverview';
 import FollowMarket from '@/components/followMarket';
 import calcPatrimonyTotal from '@/services/calcPatrimonyTotal';
@@ -16,7 +16,7 @@ import calInvested from '@/services/calcInvested';
 import UnavailablePage from '@/components/UnavailablePage';
 import fetchGetUser from '@/services/fetchGetUser';
 import fetchGetFullCryptos from '@/services/fetchGetFullCryptos';
-import { ActiveType } from '../api/models/users';
+import { ActiveType, UserType } from '../api/models/users';
 
 export const metadata: Metadata = {
   title: 'Bitcoin, Ethereum and other cryptocurrencies | Velo',
@@ -65,7 +65,7 @@ export default async function Page() {
   let newDataHistoHour = [];
 
   try {
-    const userData: ShowUserType = await fetchGetUser(token);
+    const userData: UserType = await fetchGetUser(token);
     userPatrimonyInvested = {
       patrimony: calcPatrimonyTotal(
         userData.active,

@@ -1,4 +1,5 @@
 import dbConnect from '@/lib/dbConnect';
+import { cryptosNames } from '@/services/formatDataCrypto';
 import { NextResponse } from 'next/server';
 
 export interface BodyResponseType {
@@ -11,15 +12,21 @@ export interface BodyResponseType {
   status: number;
 }
 
+export type SymbolType = (typeof cryptosNames)[number]['symbol'] | null;
+
 export default class BaseRoute {
   public errors: BodyResponseType[] = [];
 
-  constructor(protected readonly authorization?: string | null) {}
+  constructor(
+    protected readonly authorization?: string | null,
+    protected readonly symbol?: SymbolType
+  ) {}
 
   async connectDb() {
     try {
       await dbConnect();
     } catch (err) {
+      // console.log(err);
       this.errorInServer();
     }
   }
@@ -33,6 +40,22 @@ export default class BaseRoute {
           isValidToken: false,
         },
         status: 401,
+      });
+      return;
+    }
+  }
+
+  verifySymbol() {
+    if (
+      !this.symbol ||
+      !cryptosNames.map(val => val.symbol).includes(this.symbol)
+    ) {
+      this.errors.push({
+        body: {
+          msg: 'Symbol not found',
+          type: 'server',
+        },
+        status: 400,
       });
       return;
     }

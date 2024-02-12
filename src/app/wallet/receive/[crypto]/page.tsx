@@ -4,7 +4,7 @@ import { cookies } from 'next/headers';
 
 import Back from '@/components/searchFaq/back';
 import PrevUrl from '@/components/prevUrl';
-import { CryptoType, ShowUserType } from '@/components/header';
+import { CryptoType } from '@/components/header';
 import { cryptosNames } from '@/services/formatDataCrypto';
 import UnavailablePage from '@/components/UnavailablePage';
 import fetchGetUser from '@/services/fetchGetUser';

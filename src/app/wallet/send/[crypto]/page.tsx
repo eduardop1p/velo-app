@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic';
 
 import Back from '@/components/searchFaq/back';
 import PrevUrl from '@/components/prevUrl';
-import { CryptoType, ShowUserType } from '@/components/header';
+import { CryptoType } from '@/components/header';
 import CryptoCurrentPrice from '@/components/cryptoCurrentPrice';
 import fetchKucoinApi from '@/services/fetchKucoinApi';
 import BalanceMinimum from '@/components/forms/sendCrypto/balanceMinimum';
@@ -19,6 +19,7 @@ const FormSendCrypto = dynamic(
 import { cryptosNames } from '@/services/formatDataCrypto';
 import UnavailablePage from '@/components/UnavailablePage';
 import fetchGetUser from '@/services/fetchGetUser';
+import { UserType } from '@/app/api/models/users';
 
 interface WithdrawalsQuotasType {
   withdrawMinFee: number;
@@ -32,7 +33,7 @@ export default async function Page({ params }: { params: { crypto: string } }) {
 
   const token = cookies().get('token')?.value as string;
 
-  let userData: ShowUserType;
+  let userData: UserType;
   let userCryptoBalance: number;
   let dataCrypto: CryptoType;
   let dataWithdrawalsQuotas: WithdrawalsQuotasType = {

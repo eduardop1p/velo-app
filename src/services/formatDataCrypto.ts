@@ -388,4 +388,4 @@ export const cryptosNames = [
     symbol: 'APE',
     name: 'ApeCoin',
   },
-];
+] as const;

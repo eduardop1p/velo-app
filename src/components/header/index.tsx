@@ -3,12 +3,9 @@ import { cookies } from 'next/headers';
 import formatDataCrypto from '@/services/formatDataCrypto';
 import { ActiveCryptoType } from '../products';
 import NoAuthHeader from './noAuthHeader';
-import {
-  TransactionsType,
-  ActiveType,
-  VeliabilitiesType,
-} from '@/app/api/models/users';
+
 import AuthHeader from './authHeader';
+import { UserType } from '@/app/api/models/users';
 
 export interface CryptoType {
   NAME: string;
@@ -36,17 +33,6 @@ export interface CryptoType {
   IMAGEURL: string;
 }
 
-export interface ShowUserType {
-  name: string;
-  email: string;
-  dateBirth: string;
-  cellPhone: string;
-  country: string;
-  active: ActiveType[];
-  veliabilities: VeliabilitiesType[];
-  transactions: TransactionsType[];
-}
-
 const getData = async (url: string, activeCrypto: ActiveCryptoType) => {
   const res = await fetch(url, {
     method: 'GET',
@@ -60,7 +46,7 @@ export default async function Header() {
   const cookie = cookies();
   let isAuth = cookie.has('token');
   const token = cookie.get('token')?.value;
-  let userData: ShowUserType;
+  let userData: UserType;
 
   if (isAuth && token) {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/show-user`, {

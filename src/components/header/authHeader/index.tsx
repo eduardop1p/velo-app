@@ -8,10 +8,10 @@ const Notifications = dynamic(() => import('../notifications'), {
   ssr: false,
 });
 import { FaComments } from 'react-icons/fa6';
-import type { ShowUserType } from '..';
 import Settings from '../settings';
+import { UserType } from '@/app/api/models/users';
 
-export default function AuthHeader({ userData }: { userData: ShowUserType }) {
+export default function AuthHeader({ userData }: { userData: UserType }) {
   const pathName = usePathname();
 
   const handleFormatNameProfile = (name: string) => {

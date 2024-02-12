@@ -9,8 +9,14 @@ import WalletGraphic from '@/components/walletGraphic';
 import calTransit from '@/services/calcTransit';
 import fetchGetUser from '@/services/fetchGetUser';
 import { UserPatrimonyInvestedType } from '../home/page';
+import AlertSuccessDeposit from '@/components/walletReceive/alertSuccessDeposit';
 
-export default async function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: { 'confirm-deposit': string };
+}) {
+  const confirmDeposit = searchParams['confirm-deposit'] === 'true';
   const token = cookies().get('token')?.value as string;
 
   const userData = await fetchGetUser(token);
@@ -31,6 +37,9 @@ export default async function Page() {
   return (
     <>
       <main className="mt-20">
+        {confirmDeposit && (
+          <AlertSuccessDeposit confirmDeposit={confirmDeposit} />
+        )}
         <div className="min-h-full-screen-80px bg-black-section px-20 py-14 flex flex-col gap-16">
           <WalletGraphic userPatrimonyInvested={userPatrimonyInvested} />
           <section className="w-full flex flex-col gap-5">
@@ -130,7 +139,7 @@ export default async function Page() {
               Velo.
             </p>
             <Link
-              href="/deposit"
+              href="/wallet/deposit"
               className="text-primary w-fit bg-195ab4ff text-sm font-medium h-9 px-4 py-2 rounded flex items-center justify-center"
             >
               Deposit now

@@ -22,13 +22,13 @@ export interface TransactionsType {
   title: string;
   cryptoValue: number;
   dollarValue: number;
-  withdrawalId: string;
+  withdrawalId?: string;
   status: 'success' | 'pending' | 'error';
   date: number;
 }
 export interface WalletAddress {
-  cryptoName: string;
-  address: string;
+  symbol: string;
+  address?: string;
   privateKey: string;
 }
 
@@ -88,7 +88,7 @@ const usersSchema = new Schema<UserDocumentType>({
   ],
   wallet: [
     {
-      cryptoName: { type: String, required: false },
+      symbol: { type: String, required: false },
       address: { type: String, required: false },
       privateKey: { type: String, required: false },
     },

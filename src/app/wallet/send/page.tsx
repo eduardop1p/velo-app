@@ -7,14 +7,15 @@ import calBalance from '@/services/calcBalance';
 import fetchGetUser from '@/services/fetchGetUser';
 import fetchGetFullCryptos from '@/services/fetchGetFullCryptos';
 import UnavailablePage from '@/components/UnavailablePage';
-import { CryptoType, ShowUserType } from '@/components/header';
+import { CryptoType } from '@/components/header';
 import fetchGetCountries from '@/services/fetchGetCountries';
 import { CountriesType } from '@/app/create-account/page';
+import { UserType } from '@/app/api/models/users';
 
 export default async function Page() {
   const token = cookies().get('token')?.value as string;
 
-  let userData: ShowUserType;
+  let userData: UserType;
   let dataCryptos: CryptoType[];
   let dataCountries: CountriesType[];
 

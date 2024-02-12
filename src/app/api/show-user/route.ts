@@ -27,6 +27,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
 
     return NextResponse.json({ ...user });
   } catch (err) {
+    console.log(err);
     return showUser.responseError({
       body: {
         msg: 'Internal server error',
@@ -69,7 +70,7 @@ class ShowUser extends BaseRoute {
       }
 
       return user;
-    } catch {
+    } catch (err) {
       this.errorInServer();
     }
   }
