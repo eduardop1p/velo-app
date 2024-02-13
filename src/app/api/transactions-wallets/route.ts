@@ -139,9 +139,8 @@ class TransactionsWallets extends BaseRoute {
 
       const user = await usersModel.findById(authData.id);
       if (!user) return;
-      const lastTransactions = user.transactions[user.transactions.length - 1];
 
-      if (lastTransactions && 'paymentIntent' in lastTransactions && lastTransactions.paymentIntent === paymentIntent) return; // eslint-disable-line
+      if (user.transactions.length && user.transactions.map(val => val.paymentIntent).includes(paymentIntent)) return; // eslint-disable-line
       user.transactions.push({
         cryptoValue: 0,
         date: Date.now(),

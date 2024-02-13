@@ -13,6 +13,7 @@ import { UserPatrimonyInvestedType } from '../home/page';
 import AlertSuccessDeposit from '@/components/walletReceive/alertSuccessDeposit';
 import UnavailablePage from '@/components/UnavailablePage';
 import { UserType } from '../api/models/users';
+import ButtonDepositNow from '@/components/walletReceive/buttonDepositNow';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
@@ -178,12 +179,10 @@ export default async function Page({
               also possible to bring your crypto assets from another account to
               Velo.
             </p>
-            <Link
-              href="/wallet/deposit"
-              className="text-primary w-fit bg-195ab4ff text-sm font-medium h-9 px-4 py-2 rounded flex items-center justify-center"
-            >
-              Deposit now
-            </Link>
+            <ButtonDepositNow
+              balance={calBalance(userData.transactions)}
+              token={token}
+            />
           </section>
         </div>
       </main>

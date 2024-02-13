@@ -135,7 +135,7 @@ const zodSchema = z.object({
 
 type BodyType = z.infer<typeof zodSchema>;
 
-function ReceiveInDollar({
+export function ReceiveInDollar({
   showReceiveDollar,
   setShowReceiveDollar,
   balance,
