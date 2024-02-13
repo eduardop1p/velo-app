@@ -47,6 +47,7 @@ export default async function Page() {
           <WalletReceive
             dataCryptos={dataCryptos}
             balance={calBalance(userData.transactions)}
+            token={token}
           />
         </section>
       </div>

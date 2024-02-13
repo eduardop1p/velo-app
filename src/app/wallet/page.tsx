@@ -1,45 +1,85 @@
 import { cookies } from 'next/headers';
 import { FaArrowUp, FaArrowDown } from 'react-icons/fa6';
 import Link from 'next/link';
+import Stripe from 'stripe';
 
+import WalletGraphic from '@/components/walletGraphic';
 import calBalance from '@/services/calcBalance';
 import calcPatrimonyTotal from '@/services/calcPatrimonyTotal';
 import calInvested from '@/services/calcInvested';
-import WalletGraphic from '@/components/walletGraphic';
 import calTransit from '@/services/calcTransit';
 import fetchGetUser from '@/services/fetchGetUser';
 import { UserPatrimonyInvestedType } from '../home/page';
 import AlertSuccessDeposit from '@/components/walletReceive/alertSuccessDeposit';
+import UnavailablePage from '@/components/UnavailablePage';
+import { UserType } from '../api/models/users';
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
 export default async function Page({
   searchParams,
 }: {
-  searchParams: { 'confirm-deposit': string };
-}) {
-  const confirmDeposit = searchParams['confirm-deposit'] === 'true';
-  const token = cookies().get('token')?.value as string;
-
-  const userData = await fetchGetUser(token);
-  const userPatrimonyInvested: UserPatrimonyInvestedType<number> = {
-    patrimony: calcPatrimonyTotal(
-      userData.active,
-      userData.veliabilities,
-      calBalance(userData.transactions)
-    ),
-    invested: {
-      active: userData.active,
-      value: calInvested(userData.active),
-    },
-    balance: calBalance(userData.transactions),
-    transit: calTransit(userData.transactions),
+  searchParams: {
+    payment_intent: string | undefined;
   };
+}) {
+  const token = cookies().get('token')?.value as string;
+  let userData: UserType;
+  let userPatrimonyInvested: UserPatrimonyInvestedType<number>;
+
+  try {
+    try {
+      const payment_intent = searchParams.payment_intent;
+      if (payment_intent) {
+        const paymentIntent = await stripe.paymentIntents.retrieve(payment_intent); // eslint-disable-line
+        if (paymentIntent.status === 'succeeded') { // eslint-disable-line
+          await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/transactions-wallets`,
+            {
+              method: 'POST',
+              body: JSON.stringify({
+                type: 'dollar',
+                method: 'deposit',
+                symbol: 'USD',
+                value: paymentIntent.amount_received,
+                paymentIntent: payment_intent,
+              }),
+              headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+              },
+            }
+          );
+        }
+      }
+    } catch (err) {
+      console.log(err);
+    }
+
+    userData = await fetchGetUser(token);
+    userPatrimonyInvested = {
+      patrimony: calcPatrimonyTotal(
+        userData.active,
+        userData.veliabilities,
+        calBalance(userData.transactions)
+      ),
+      invested: {
+        active: userData.active,
+        value: calInvested(userData.active),
+      },
+      balance: calBalance(userData.transactions),
+      transit: calTransit(userData.transactions),
+    };
+  } catch (err) {
+    console.log(err);
+    return <UnavailablePage />;
+  }
 
   return (
     <>
       <main className="mt-20">
-        {confirmDeposit && (
-          <AlertSuccessDeposit confirmDeposit={confirmDeposit} />
-        )}
+        <AlertSuccessDeposit />
+
         <div className="min-h-full-screen-80px bg-black-section px-20 py-14 flex flex-col gap-16">
           <WalletGraphic userPatrimonyInvested={userPatrimonyInvested} />
           <section className="w-full flex flex-col gap-5">

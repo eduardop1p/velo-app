@@ -1,4 +1,5 @@
 import { Schema, model, models, type Document, Model } from 'mongoose';
+import { SymbolType } from '../baseRoute';
 
 export interface ActiveType {
   name: string;
@@ -17,14 +18,14 @@ export interface VeliabilitiesType {
 }
 export interface TransactionsType {
   name: string;
-  symbol: string;
+  symbol: SymbolType;
   type: 'crypto' | 'dollar';
   title: string;
   cryptoValue: number;
   dollarValue: number;
-  withdrawalId?: string;
   status: 'success' | 'pending' | 'error';
   date: number;
+  paymentIntent?: string;
 }
 export interface WalletAddress {
   symbol: string;
@@ -84,6 +85,7 @@ const usersSchema = new Schema<UserDocumentType>({
       withdrawalId: { type: String, required: false },
       status: { type: String, required: false },
       date: { type: Number, required: false },
+      paymentIntent: { type: String, required: false },
     },
   ],
   wallet: [

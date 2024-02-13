@@ -7,7 +7,13 @@ import Payment from './payment';
 
 export type StripePromiseType = Promise<Stripe | null> | null;
 
-export default function Deposit({ token }: { token: string }) {
+export default function Deposit({
+  token,
+  depositAmount,
+}: {
+  token: string;
+  depositAmount: number;
+}) {
   const [stripePromise, setStripePromise] = useState<StripePromiseType>(null);
 
   useEffect(() => {
@@ -31,5 +37,11 @@ export default function Deposit({ token }: { token: string }) {
     getStripe();
   }, [token]);
 
-  return <Payment stripePromise={stripePromise} token={token} />;
+  return (
+    <Payment
+      stripePromise={stripePromise}
+      token={token}
+      depositAmount={depositAmount}
+    />
+  );
 }

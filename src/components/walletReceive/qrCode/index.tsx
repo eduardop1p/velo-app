@@ -4,7 +4,7 @@ import QRcode from 'react-qr-code';
 
 export default function QRcodeReceive({ qrvalue }: { qrvalue: string }) {
   return (
-    <div className="flex flex-col gap-2 items-start">
+    <div className="flex flex-col gap-2 items-start flex-none">
       <h2 className="text-primary font-normal text-[15px] opacity-70">
         QRCode
       </h2>

@@ -1,10 +1,6 @@
-import minimumDeposit from '@/services/minimunDeposit';
 import { NextRequest, NextResponse } from 'next/server';
-import { has } from 'lodash';
-import jwt from 'jsonwebtoken';
 
 import Stripe from 'stripe';
-import usersModel from '../../models/users';
 import BaseRoute from '../../baseRoute';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
@@ -52,41 +48,12 @@ class CreatePayment extends BaseRoute {
 
   async deposit(body: BodyType) {
     try {
-      if (!this.authorization) return;
-
-      if (!has(body, 'depositAmount')) {
-        const paymentIntent = await stripe.paymentIntents.create({
-          currency: 'BRL', // default USD
-          amount: minimumDeposit,
-          automatic_payment_methods: { enabled: true },
-        });
-
-        return paymentIntent;
-      }
-
-      const [, token] = this.authorization.split(' ');
-      const authData = jwt.decode(token) as { id: string };
-
       const { depositAmount } = body;
       const paymentIntent = await stripe.paymentIntents.create({
-        currency: 'BRL', // default USD
+        currency: 'USD', // default USD
         amount: depositAmount,
         automatic_payment_methods: { enabled: true },
       });
-
-      const user = await usersModel.findById(authData.id);
-      if (!user) return;
-      user.transactions.push({
-        cryptoValue: 0,
-        date: Date.now(),
-        dollarValue: +(depositAmount / 100).toFixed(2),
-        name: 'Dollar',
-        status: 'success',
-        symbol: 'USD',
-        title: 'Deposit',
-        type: 'dollar',
-      });
-      await user.save();
 
       return paymentIntent;
     } catch (err: any) {

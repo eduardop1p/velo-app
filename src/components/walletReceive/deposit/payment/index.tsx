@@ -10,9 +10,11 @@ import SkeletonUi from '@/components/skeletonUI';
 export default function Payment({
   stripePromise,
   token,
+  depositAmount,
 }: {
   stripePromise: StripePromiseType;
   token: string;
+  depositAmount: number;
 }) {
   const [clientSecret, setClientSecret] = useState<string | undefined>('');
   const [initalRender, setInitialRender] = useState(true);
@@ -27,7 +29,7 @@ export default function Payment({
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({}),
+          body: JSON.stringify({ depositAmount }),
         }
       );
       const data: { clientSecret: string } = await res.json();
@@ -35,7 +37,7 @@ export default function Payment({
     } catch (err) {
       console.log(err);
     }
-  }, [token]);
+  }, [token, depositAmount]);
 
   useEffect(() => {
     if (initalRender) {
@@ -78,7 +80,7 @@ export default function Payment({
             },
           }}
         >
-          <CheckoutForm setClientSecret={setClientSecret} token={token} />
+          <CheckoutForm />
         </Elements>
       )}
     </>
@@ -87,7 +89,7 @@ export default function Payment({
 
 const SkeletonForm = () => {
   return (
-    <div className="w-1/2 flex flex-col gap-3">
+    <div className="w-full flex flex-col gap-3">
       <SkeletonUi width="100%" height={44} />
       <div className="flex gap-3 w-full">
         <div className="flex flex-col gap-2 w-1/2">

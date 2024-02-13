@@ -53,7 +53,7 @@ export default function WalletSend({
 
   return (
     <>
-      <ReceiveInDollar
+      <SendInDollar
         balance={balance}
         setShowSendDollar={setShowSendDollar}
         showSendDollar={showSendDollar}
@@ -173,7 +173,7 @@ interface AddBankType {
   currency: string;
 }
 
-function ReceiveInDollar({
+function SendInDollar({
   showSendDollar,
   setShowSendDollar,
   balance,
@@ -254,7 +254,7 @@ function ReceiveInDollar({
         ) : (
           <form
             onSubmit={handleSubmit(handleFormSubmit)}
-            className="bg-272a2eff rounded-md p-6 w-[380px] min-h-[60%] max-h-[90%] overflow-x-hidden overflow-y-auto flex flex-col gap-6 relative"
+            className="bg-272a2eff rounded-md p-6 w-[380px] min-h-[55%] max-h-[90%] overflow-x-hidden overflow-y-auto flex flex-col gap-6 relative"
             onClick={event => event.stopPropagation()}
           >
             <h2 className="text-xl text-primary font-normal">
@@ -264,7 +264,7 @@ function ReceiveInDollar({
               <div className="flex flex-col gap-1">
                 <div className="flex gap-2">
                   <h4 className="text-c1c5d0 text-sm font-normal">
-                    Available balance:
+                    Your current balance:
                   </h4>
                   <h4 className="text-c1c5d0 text-sm font-normal">
                     {formatPrice(balance)}

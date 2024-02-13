@@ -4,6 +4,7 @@ import ECPairFactory from 'ecpair';
 import * as ecc from 'tiny-secp256k1';
 import { NextRequest, NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
+import { upperFirst } from 'lodash';
 
 import BaseRoute, { SymbolType } from '../baseRoute';
 import usersModel from '../models/users';
@@ -11,15 +12,19 @@ import { cryptosNames } from '@/services/formatDataCrypto';
 import btcToSatoshis from '@/services/btcToSatoshis';
 
 interface BodyType {
+  type: 'dollar' | 'crypto';
+  method: 'deposit' | 'send';
   symbol: SymbolType;
-  address: string;
   value: number;
-  privateKey: string;
+  address?: string;
+  privateKey?: string;
+  paymentIntent?: string;
 }
 
 export async function POST(req: NextRequest, res: NextResponse) {
   const authorization = req.headers.get('authorization');
   const body: BodyType = await req.json();
+  const { type, method, symbol } = body;
 
   const transactionsWallets = new TransactionsWallets(authorization, body);
   const errors = transactionsWallets.errors;
@@ -36,16 +41,36 @@ export async function POST(req: NextRequest, res: NextResponse) {
     if (errors.length) {
       return transactionsWallets.responseError(errors[0]);
     }
-    await transactionsWallets.createTransaction();
-    if (errors.length) {
-      return transactionsWallets.responseError(errors[0]);
+
+    if (type === 'crypto' && method === 'send' && symbol !== 'USD') {
+      await transactionsWallets.createTransactionSendCrypto();
+      if (errors.length) {
+        return transactionsWallets.responseError(errors[0]);
+      }
+      return transactionsWallets.responseSuccess({
+        body: {
+          msg: 'Cryptos sent to the specified destination address',
+          type: 'server',
+        },
+        status: 200,
+      });
     }
 
-    return transactionsWallets.responseSuccess({
-      body: {
-        msg: 'Cryptos sent to the specified destination address',
-        type: 'server',
-      },
+    if (type === 'dollar' && method === 'deposit' && symbol === 'USD') {
+      await transactionsWallets.createTransactionDepositDollar();
+      if (errors.length) {
+        return transactionsWallets.responseError(errors[0]);
+      }
+      return transactionsWallets.responseSuccess({
+        body: {
+          msg: 'Your deposit has been processed',
+          type: 'server',
+        },
+        status: 200,
+      });
+    }
+
+    return NextResponse.json({
       status: 200,
     });
   } catch (err) {
@@ -69,8 +94,8 @@ class TransactionsWallets extends BaseRoute {
   }
 
   verifyBody() {
-    const { symbol, address, value, privateKey } = this.body;
-    if (!symbol || !address || !privateKey || !value) {
+    const { symbol, value, type, method } = this.body;
+    if (!symbol || !value || !type || !method) {
       this.errors.push({
         body: {
           msg: 'Incomplete request body',
@@ -81,19 +106,62 @@ class TransactionsWallets extends BaseRoute {
       return;
     }
     if (!cryptosNames.map(val => val.symbol).includes(symbol)) {
-      this.errors.push({
-        body: {
-          msg: 'symbol not found',
-          type: 'server',
-        },
-        status: 400,
-      });
+      this.errorInbody('Symbol not found');
+      return;
+    }
+    if (type !== 'crypto' && type !== 'dollar') {
+      this.errorInbody('Type not allowed');
+      return;
+    }
+    if (method !== 'deposit' && method !== 'send') {
+      this.errorInbody('Method not allowed');
       return;
     }
   }
 
-  async createTransaction() {
+  errorInbody(msg: string) {
+    this.errors.push({
+      body: {
+        msg,
+        type: 'server',
+      },
+      status: 400,
+    });
+  }
+
+  async createTransactionDepositDollar() {
+    try {
+      if (!this.authorization) return;
+      const { value, type, symbol, method, paymentIntent } = this.body;
+
+      const [, token] = this.authorization.split(' ');
+      const authData = jwt.decode(token) as { id: string };
+
+      const user = await usersModel.findById(authData.id);
+      if (!user) return;
+      const lastTransactions = user.transactions[user.transactions.length - 1];
+
+      if (lastTransactions && 'paymentIntent' in lastTransactions && lastTransactions.paymentIntent === paymentIntent) return; // eslint-disable-line
+      user.transactions.push({
+        cryptoValue: 0,
+        date: Date.now(),
+        dollarValue: +(value / 100).toFixed(2),
+        status: 'success',
+        name: upperFirst(type),
+        title: upperFirst(method),
+        symbol,
+        type,
+        paymentIntent,
+      });
+      await user.save();
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async createTransactionSendCrypto() {
     const { symbol, address, value, privateKey } = this.body;
+    if (!address || !privateKey) return;
     switch (symbol) {
       case 'BTC': {
         try {
@@ -111,7 +179,7 @@ class TransactionsWallets extends BaseRoute {
           const transaction = psbt.extractTransaction();
           const toRex = transaction.toHex();
         } catch (err) {
-          console.log(err);
+          // console.log(err);
           this.errors.push({
             body: {
               msg: `Error when sending ${symbol}`,

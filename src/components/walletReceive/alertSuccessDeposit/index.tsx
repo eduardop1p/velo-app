@@ -2,20 +2,28 @@
 
 import { FaCheck } from 'react-icons/fa6';
 import { useState } from 'react';
+import { usePathname, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
-export default function AlertSuccessDeposit({
-  confirmDeposit,
-}: {
-  confirmDeposit: boolean;
-}) {
-  const [showSuccessDeposit, setShowSuccessDeposit] = useState(confirmDeposit);
+export default function AlertSuccessDeposit() {
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [showSuccessDeposit, setShowSuccessDeposit] = useState(
+    searchParams.has('redirect_status')
+  );
 
   if (!showSuccessDeposit) return;
+
+  const handleClick = () => {
+    setShowSuccessDeposit(false);
+    router.replace(pathname);
+  };
 
   return (
     <div
       className="bg-0006 w-full z-20 fixed h-screen flex justify-center items-center inset-0"
-      onClick={() => setShowSuccessDeposit(false)}
+      onClick={handleClick}
     >
       <div
         onClick={event => event.stopPropagation()}
@@ -35,7 +43,7 @@ export default function AlertSuccessDeposit({
         <button
           className="text-primary w-[80px] self-end py-2 rounded bg-blue hover:bg-bluehover transition-colors duration-200 text-sm font-sm"
           type="button"
-          onClick={() => setShowSuccessDeposit(false)}
+          onClick={handleClick}
         >
           OK
         </button>

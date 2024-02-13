@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import Image from 'next/image';
 import { cookies } from 'next/headers';
 
@@ -37,7 +38,7 @@ export default async function Page() {
           </p>
         </div>
         <div className="flex items-start gap-8 justify-between">
-          <Deposit token={token} />
+          {/* <Deposit token={token} /> */}
           <Image
             src="/assets/imgs/velo-img-8.png"
             alt="velo-img-8"

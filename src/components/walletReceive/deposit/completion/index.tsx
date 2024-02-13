@@ -1,6 +1,6 @@
 // 'use client';
 
-// import { StripePromiseType } from '@/app/page';
+// import { StripePromiseType } from '..';
 // import { useEffect, useState } from 'react';
 
 // function Completion({ stripePromise }: { stripePromise: StripePromiseType }) {

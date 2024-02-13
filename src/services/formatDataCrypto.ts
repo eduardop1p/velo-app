@@ -279,6 +279,7 @@ export default function formatDataCrypto(
 }
 
 export const cryptosNames = [
+  { symbol: 'USD', name: 'Dollar' },
   { symbol: 'BTC', name: 'Bitcoin' },
   {
     symbol: 'DOGE',
