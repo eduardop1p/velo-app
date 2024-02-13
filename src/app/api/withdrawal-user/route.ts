@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextRequest, NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 import { Document, Types } from 'mongoose';
 
 import usersModel, { UserDocumentType } from '../models/users';
 import fetchKucoinApi from '@/services/fetchKucoinApi';
-import BaseRoute from '../baseRoute';
+import BaseRoute, { SymbolType } from '../baseRoute';
 
 interface BodyType {
   amountWithdrawalCrypto: number;
@@ -12,7 +13,7 @@ interface BodyType {
   amountSendCryptoKucoin: number;
   walletAddress: string;
   cryptoName: string;
-  cryptoSymbol: string;
+  cryptoSymbol: SymbolType;
 }
 
 // eslint-disable-next-line
@@ -156,14 +157,14 @@ class WithdrawalUser extends BaseRoute {
         });
         return;
       }
-      const withdrawalId: string = dataKucoin.withdrawalId;
-      await this.sendCryptoUser(withdrawalId);
+      // const withdrawalId: string = dataKucoin.withdrawalId;
+      await this.sendCryptoUser();
     } catch {
       this.errorInServer();
     }
   }
 
-  private async sendCryptoUser(withdrawalId: string) {
+  private async sendCryptoUser() {
     if (!this.user) return;
     try {
       const { cryptoName, cryptoSymbol, amountWithdrawalCrypto } = this.body;
@@ -177,7 +178,6 @@ class WithdrawalUser extends BaseRoute {
         type: 'crypto',
         cryptoValue: -amountWithdrawalCrypto,
         dollarValue: 0,
-        withdrawalId,
       });
       await this.user.save();
     } catch {
@@ -191,7 +191,7 @@ class WithdrawalUser extends BaseRoute {
       amountWithdrawalDollar: this.body.amountWithdrawalDollar || 0,
       amountSendCryptoKucoin: this.body.amountSendCryptoKucoin || 0,
       cryptoName: this.body.cryptoName || '',
-      cryptoSymbol: this.body.cryptoSymbol || '',
+      cryptoSymbol: this.body.cryptoSymbol || null,
       walletAddress: this.body.walletAddress || '',
     };
   }
