@@ -127,7 +127,7 @@ export default async function Page() {
     )
       return val;
   });
-  const defiCryptos = dataCryptos.filter(val => {
+  const layer2DeFiCryptos = dataCryptos.filter(val => {
     if (
       val.FROMSYMBOL === 'LDO' ||
       val.FROMSYMBOL === 'SNX' ||
@@ -137,7 +137,7 @@ export default async function Page() {
     )
       return val;
   });
-  const recommendedWallet1 = dataCryptos.filter(val => {
+  const layer3Cryptos = dataCryptos.filter(val => {
     if (
       val.FROMSYMBOL === 'SOL' ||
       val.FROMSYMBOL === 'OP' ||
@@ -146,16 +146,16 @@ export default async function Page() {
     )
       return val;
   });
-  const recommendedWallet2 = dataCryptos.filter(val => {
+  const layer4Cryptos = dataCryptos.filter(val => {
     if (
-      val.FROMSYMBOL === 'USDT' ||
+      val.FROMSYMBOL === 'ARB' ||
       val.FROMSYMBOL === 'SOL' ||
       val.FROMSYMBOL === 'ETH' ||
       val.FROMSYMBOL === 'BTC'
     )
       return val;
   });
-  const recommendedWallet3 = dataCryptos.filter(val => {
+  const layer5Cryptos = dataCryptos.filter(val => {
     if (
       val.FROMSYMBOL === 'USDC' ||
       val.FROMSYMBOL === 'ETH' ||
@@ -181,11 +181,11 @@ export default async function Page() {
             dataHistoHour={newDataHistoHour}
           />
           <NegotiateRecommendations
-            defiCryptos={defiCryptos}
+            layer2DeFiCryptos={layer2DeFiCryptos}
             layer1Cryptos={layer1Cryptos}
-            recommendedWallet1={recommendedWallet1}
-            recommendedWallet2={recommendedWallet2}
-            recommendedWallet3={recommendedWallet3}
+            layer3Cryptos={layer3Cryptos}
+            layer4Cryptos={layer4Cryptos}
+            layer5Cryptos={layer5Cryptos}
             showTitle
           />
           <section className="w-full flex flex-col gap-4">

@@ -13,7 +13,7 @@ import calTransit from '@/services/calcTransit';
 import { CryptoType } from '@/components/header';
 import formatDataCrypto from '@/services/formatDataCrypto';
 import formatLastComma from '@/services/formatLastComma';
-import { SmartContractsImages } from '@/components/negotiate/recommendations';
+import { WalletRecommendation4Images } from '@/components/negotiate/recommendations';
 
 export default async function Page() {
   const token = cookies().get('token')?.value as string;
@@ -24,7 +24,7 @@ export default async function Page() {
   try {
     userData = await fetchGetUser(token);
     const resCryptos = await fetch(
-      `${process.env.CRYPTO_API_URL}&fsyms=ETH,SOL,MATIC,OP,AVAX`,
+      `${process.env.CRYPTO_API_URL}&fsyms=BTC,ETH,SOL,ARB,LDO,OP,AVAX,MATIC`,
       {
         method: 'GET',
         next: {
@@ -33,7 +33,7 @@ export default async function Page() {
       }
     );
     const metaData = await resCryptos.json();
-    dataCryptos = formatDataCrypto('layer-1-smart-contracts', metaData.RAW);
+    dataCryptos = formatDataCrypto('layer-4', metaData.RAW);
   } catch (err) {
     console.log(err);
     return <UnavailablePage />;
@@ -61,7 +61,7 @@ export default async function Page() {
           <div className="mt-5 flex flex-col gap-5 w-[65%]">
             <div className="flex gap-4 items-center">
               <h2 className="text-primary font-normal text-2xl">
-                Smart contracts
+                Wallet recommendation
               </h2>
               <span className="bg-3d2d66ff text-primary font-normal text-xs px-3 py-[6px] rounded-2xl">
                 Moderate
@@ -74,7 +74,7 @@ export default async function Page() {
                     Minimum investment
                   </h2>
                   <span className="text-primary font-normal text-base">
-                    {formatPrice(500)}
+                    {formatPrice(820)}
                   </span>
                 </div>
                 <button className="text-primary font-normal text-sm bg-bluehover w-[90px] h-10 flex justify-center items-center rounded cursor-pointer hover:bg-blue transition-colors duration-200">
@@ -103,18 +103,18 @@ export default async function Page() {
                 Description
               </h3>
               <p className="text-sm font-normal text-primary opacity-70">
-                This portfolio is structured for investors who want to closely
-                follow the evolution of the main technological layers of the
-                digital asset universe. The portfolio focuses on solutions that
-                are at the forefront of blockchain scalability and efficiency.
-                The asset selection reflects a combination of stability coming
-                from market leaders, such as Ethereum, with the innovation of
-                emerging networks that promise to revolutionize decentralized
-                transactions and applications through scalability.
+                Velo Moderate Portfolio is designed for investors with an
+                intermediate risk tolerance. While maintaining a solid
+                foundation, it also seeks to diversify into innovative
+                technologies and solutions in the crypto space. The portfolio
+                balances stability with growth potential, making it suitable for
+                those who want a more diversified and comprehensive exposure to
+                the cryptoasset market, without excessive exposure to extreme
+                volatility.
               </p>
             </div>
             <div className="flex flex-col">
-              <SmartContractsImages layer1Cryptos={dataCryptos} />
+              <WalletRecommendation4Images layer4Cryptos={dataCryptos} />
               <span className="text-[15px] font-normal text-primary opacity-70">
                 {formatLastComma(dataCryptos.map(val => val.NAME).join(', '))}
               </span>
@@ -135,14 +135,13 @@ export default async function Page() {
             <div className="flex flex-col gap-6">
               <div className="flex justify-between gap-2 items-center">
                 <div className="flex items-start gap-2">
-                  <div className="relative rounded-full flex items-center justify-center bg-627eea w-[36px] h-[36px]">
-                    <Image
-                      src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}/${dataCryptos[0].IMAGEURL}`}
-                      width={31}
-                      height={31}
-                      alt={dataCryptos[0].NAME}
-                    />
-                  </div>
+                  <Image
+                    src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}/${dataCryptos[0].IMAGEURL}`}
+                    width={36}
+                    height={36}
+                    alt={dataCryptos[0].NAME}
+                    className="rounded-full !object-none"
+                  />
                   <div className="flex flex-col">
                     <span className="text-primary font-normal text-sm">
                       {dataCryptos[0].FROMSYMBOL}
@@ -153,12 +152,13 @@ export default async function Page() {
                   </div>
                 </div>
                 <span className="text-[15px] font-normal text-primary">
-                  50%
+                  40%
                 </span>
               </div>
+
               <div className="flex justify-between gap-2 items-center">
                 <div className="flex items-start gap-2">
-                  <div className="relative z-[2] rounded-full flex items-center justify-center bg-primary w-[36px] h-[36px]">
+                  <div className="relative z-[2] rounded-full flex items-center justify-center bg-627eea w-[36px] h-[36px]">
                     <Image
                       src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}/${dataCryptos[1].IMAGEURL}`}
                       width={31}
@@ -176,9 +176,10 @@ export default async function Page() {
                   </div>
                 </div>
                 <span className="text-[15px] font-normal text-primary">
-                  20%
+                  27.5%
                 </span>
               </div>
+
               <div className="flex justify-between gap-2 items-center">
                 <div className="flex items-start gap-2">
                   <div className="relative z-[2] rounded-full flex items-center justify-center bg-primary w-[36px] h-[36px]">
@@ -199,32 +200,35 @@ export default async function Page() {
                   </div>
                 </div>
                 <span className="text-[15px] font-normal text-primary">
-                  15%
+                  7.5%
                 </span>
               </div>
+
               <div className="flex justify-between gap-2 items-center">
                 <div className="flex items-start gap-2">
-                  <div className="relative z-[2] rounded-full flex items-center justify-center bg-ff0420 w-[36px] h-[36px]">
-                    <span className="text-primary text-[13px] italic font-semibold">
-                      OP
-                    </span>
+                  <div className="relative z-[2] rounded-full flex items-center justify-center bg-9dcced w-[36px] h-[36px]">
+                    <Image
+                      src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}/${dataCryptos[3].IMAGEURL}`}
+                      width={31}
+                      height={31}
+                      alt={dataCryptos[3].NAME}
+                    />
                   </div>
                   <div className="flex flex-col">
                     <span className="text-primary font-normal text-sm">
-                      {dataCryptos[4].FROMSYMBOL}
+                      {dataCryptos[3].FROMSYMBOL}
                     </span>
                     <span className="text-primary font-normal text-xs opacity-70">
-                      {dataCryptos[4].NAME}
+                      {dataCryptos[3].NAME}
                     </span>
                   </div>
                 </div>
-                <span className="text-[15px] font-normal text-primary">
-                  10%
-                </span>
+                <span className="text-[15px] font-normal text-primary">5%</span>
               </div>
+
               <div className="flex justify-between gap-2 items-center">
                 <div className="flex items-start gap-2">
-                  <div className="relative z-[2] rounded-full flex items-center justify-center bg-ed3e43 w-[36px] h-[36px]">
+                  <div className="relative z-[2] rounded-full flex items-center justify-center bg-primary w-[36px] h-[36px]">
                     <Image
                       src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}/${dataCryptos[4].IMAGEURL}`}
                       width={31}
@@ -242,6 +246,72 @@ export default async function Page() {
                   </div>
                 </div>
                 <span className="text-[15px] font-normal text-primary">5%</span>
+              </div>
+
+              <div className="flex justify-between gap-2 items-center">
+                <div className="flex items-start gap-2">
+                  <div className="relative z-[2] rounded-full flex items-center justify-center bg-ff0420 w-[36px] h-[36px]">
+                    <span className="text-primary text-[13px] italic font-semibold">
+                      OP
+                    </span>
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-primary font-normal text-sm">
+                      {dataCryptos[5].FROMSYMBOL}
+                    </span>
+                    <span className="text-primary font-normal text-xs opacity-70">
+                      {dataCryptos[5].NAME}
+                    </span>
+                  </div>
+                </div>
+                <span className="text-[15px] font-normal text-primary">5%</span>
+              </div>
+
+              <div className="flex justify-between gap-2 items-center">
+                <div className="flex items-start gap-2">
+                  <Image
+                    src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}/${dataCryptos[6].IMAGEURL}`}
+                    width={36}
+                    height={36}
+                    alt={dataCryptos[6].NAME}
+                    className="relative z-[2] rounded-full !object-none"
+                  />
+                  <div className="flex flex-col">
+                    <span className="text-primary font-normal text-sm">
+                      {dataCryptos[6].FROMSYMBOL}
+                    </span>
+                    <span className="text-primary font-normal text-xs opacity-70">
+                      {dataCryptos[6].NAME}
+                    </span>
+                  </div>
+                </div>
+                <span className="text-[15px] font-normal text-primary">
+                  2.5%
+                </span>
+              </div>
+
+              <div className="flex justify-between gap-2 items-center">
+                <div className="flex items-start gap-2">
+                  <div className="relative rounded-full flex items-center justify-center bg-primary w-[36px] h-[36px]">
+                    <Image
+                      src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}/${dataCryptos[7].IMAGEURL}`}
+                      width={31}
+                      height={31}
+                      alt={dataCryptos[7].NAME}
+                    />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-primary font-normal text-sm">
+                      {dataCryptos[7].FROMSYMBOL}
+                    </span>
+                    <span className="text-primary font-normal text-xs opacity-70">
+                      {dataCryptos[7].NAME}
+                    </span>
+                  </div>
+                </div>
+                <span className="text-[15px] font-normal text-primary">
+                  7.5%
+                </span>
               </div>
             </div>
           </div>

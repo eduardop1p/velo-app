@@ -4,17 +4,17 @@ import Link from 'next/link';
 
 export default function NegotiateRecommendations({
   layer1Cryptos,
-  defiCryptos,
-  recommendedWallet1,
-  recommendedWallet2,
-  recommendedWallet3,
+  layer2DeFiCryptos,
+  layer3Cryptos,
+  layer4Cryptos,
+  layer5Cryptos,
   showTitle,
 }: {
   layer1Cryptos: CryptoType[];
-  defiCryptos: CryptoType[];
-  recommendedWallet1: CryptoType[];
-  recommendedWallet2: CryptoType[];
-  recommendedWallet3: CryptoType[];
+  layer2DeFiCryptos: CryptoType[];
+  layer3Cryptos: CryptoType[];
+  layer4Cryptos: CryptoType[];
+  layer5Cryptos: CryptoType[];
   showTitle: boolean;
 }) {
   return (
@@ -40,45 +40,7 @@ export default function NegotiateRecommendations({
           <p className="text-xs opacity-50 text-primary font-normal">
             Smart Contract Networks
           </p>
-          <div className="flex my-3 items-center">
-            <div className="relative rounded-full flex items-center justify-center bg-627eea w-[35px] h-[35px]">
-              <Image
-                src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}/${layer1Cryptos[0].IMAGEURL}`}
-                width={30}
-                height={30}
-                alt={layer1Cryptos[0].NAME}
-              />
-            </div>
-            <div className="relative z-[2] -ml-2 rounded-full flex items-center justify-center bg-primary w-[35px] h-[35px]">
-              <Image
-                src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}/${layer1Cryptos[1].IMAGEURL}`}
-                width={30}
-                height={30}
-                alt={layer1Cryptos[1].NAME}
-              />
-            </div>
-            <div className="relative z-[2] -ml-2 rounded-full flex items-center justify-center bg-primary w-[35px] h-[35px]">
-              <Image
-                src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}/${layer1Cryptos[2].IMAGEURL}`}
-                width={30}
-                height={30}
-                alt={layer1Cryptos[2].NAME}
-              />
-            </div>
-            <div className="relative z-[2] -ml-2 rounded-full flex items-center justify-center bg-ff0420 w-[35px] h-[35px]">
-              <span className="text-primary text-xs italic font-semibold">
-                OP
-              </span>
-            </div>
-            <div className="relative z-[2] -ml-2 rounded-full flex items-center justify-center bg-ed3e43 w-[35px] h-[35px]">
-              <Image
-                src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}/${layer1Cryptos[4].IMAGEURL}`}
-                width={30}
-                height={30}
-                alt={layer1Cryptos[4].NAME}
-              />
-            </div>
-          </div>
+          <SmartContractsImages layer1Cryptos={layer1Cryptos} />
           <div className="flex flex-col">
             <p className="text-xs opacity-50 text-primary font-normal">
               Minimum investment
@@ -89,7 +51,6 @@ export default function NegotiateRecommendations({
           </div>
           <span className="text-primary text-sm font-medium group-hover:text-blue group-hover:underline transition-all duration-200">{`Check out >`}</span>
         </Link>
-
         <Link
           className="w-full p-6 rounded flex flex-col gap-1 bg-black-section-2 cursor-pointer group hover:bg-black-neutral-383b3eff transition-colors duration-200"
           href="/negotiate/recommendations/defi"
@@ -103,46 +64,7 @@ export default function NegotiateRecommendations({
           <p className="text-xs opacity-50 text-primary font-normal">
             Decentralized Finance
           </p>
-          <div className="flex my-3 items-center">
-            <div className="relative rounded-full flex items-center justify-center bg-primary w-[35px] h-[35px]">
-              <Image
-                src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}/${defiCryptos[0].IMAGEURL}`}
-                width={30}
-                height={30}
-                alt={defiCryptos[0].NAME}
-              />
-            </div>
-            <Image
-              src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}/${defiCryptos[1].IMAGEURL}`}
-              width={35}
-              height={35}
-              alt={defiCryptos[1].NAME}
-              className="relative z-[2] -ml-2 rounded-full !object-none"
-            />
-            <div className="relative z-[2] -ml-2 rounded-full flex items-center justify-center bg-12d2b0 w-[35px] h-[35px]">
-              <Image
-                src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}/${defiCryptos[2].IMAGEURL}`}
-                width={30}
-                height={30}
-                alt={defiCryptos[2].NAME}
-              />
-            </div>
-            <div className="relative z-[2] -ml-2 rounded-full flex items-center justify-center bg-primary w-[35px] h-[35px]">
-              <Image
-                src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}/${defiCryptos[3].IMAGEURL}`}
-                width={30}
-                height={30}
-                alt={defiCryptos[3].NAME}
-              />
-            </div>
-            <Image
-              src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}/${defiCryptos[4].IMAGEURL}`}
-              width={35}
-              height={35}
-              alt={defiCryptos[4].NAME}
-              className="relative z-[2] -ml-2 rounded-full !object-none"
-            />
-          </div>
+          <DeFiImages layer2DeFiCryptos={layer2DeFiCryptos} />
           <div className="flex flex-col">
             <p className="text-xs opacity-50 text-primary font-normal">
               Minimum investment
@@ -153,7 +75,6 @@ export default function NegotiateRecommendations({
           </div>
           <span className="text-primary text-sm font-medium group-hover:text-blue group-hover:underline transition-all duration-200">{`Check out >`}</span>
         </Link>
-
         <Link
           className="w-full p-6 rounded flex flex-col gap-1 bg-black-section-2 cursor-pointer group hover:bg-black-neutral-383b3eff transition-colors duration-200"
           href="/negotiate/recommendations/3"
@@ -169,39 +90,7 @@ export default function NegotiateRecommendations({
           <p className="text-xs opacity-50 text-primary font-normal">
             Recommended Crypto Wallet
           </p>
-          <div className="flex my-3 items-center">
-            <Image
-              src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}/${recommendedWallet1[0].IMAGEURL}`}
-              width={35}
-              height={35}
-              alt={recommendedWallet1[0].NAME}
-              className="rounded-full !object-none"
-            />
-            <div className="relative z-[2] -ml-2 rounded-full flex items-center justify-center bg-primary w-[35px] h-[35px]">
-              <Image
-                src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}/${recommendedWallet1[1].IMAGEURL}`}
-                width={30}
-                height={30}
-                alt={recommendedWallet1[1].NAME}
-              />
-            </div>
-            <div className="relative z-[2] -ml-2 rounded-full flex items-center justify-center bg-ff0420 w-[35px] h-[35px]">
-              <span className="text-primary text-xs italic font-semibold">
-                OP
-              </span>
-            </div>
-            <div className="relative z-[2] -ml-2 rounded-full flex items-center justify-center bg-primary w-[35px] h-[35px]">
-              <Image
-                src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}/${recommendedWallet1[3].IMAGEURL}`}
-                width={30}
-                height={30}
-                alt={recommendedWallet1[3].NAME}
-              />
-            </div>
-            <div className="text-primary font-medium text-sm relative z-[2] -ml-2 rounded-full flex items-center justify-center bg-34383cff w-[35px] h-[35px]">
-              +6
-            </div>
-          </div>
+          <WalletRecommendation3Images layer3Cryptos={layer3Cryptos} />
           <div className="flex flex-col">
             <p className="text-xs opacity-50 text-primary font-normal">
               Minimum investment
@@ -212,7 +101,6 @@ export default function NegotiateRecommendations({
           </div>
           <span className="text-primary text-sm font-medium group-hover:text-blue group-hover:underline transition-all duration-200">{`Check out >`}</span>
         </Link>
-
         <Link
           className="w-full p-6 rounded flex flex-col gap-1 bg-black-section-2 cursor-pointer group hover:bg-black-neutral-383b3eff transition-colors duration-200"
           href="/negotiate/recommendations/4"
@@ -228,42 +116,7 @@ export default function NegotiateRecommendations({
           <p className="text-xs opacity-50 text-primary font-normal">
             Recommended Crypto Wallet
           </p>
-          <div className="flex my-3 items-center">
-            <Image
-              src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}/${recommendedWallet2[0].IMAGEURL}`}
-              width={35}
-              height={35}
-              alt={recommendedWallet2[0].NAME}
-              className="rounded-full !object-none"
-            />
-            <div className="relative z-[2] -ml-2 rounded-full flex items-center justify-center bg-627eea w-[35px] h-[35px]">
-              <Image
-                src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}/${recommendedWallet2[1].IMAGEURL}`}
-                width={30}
-                height={30}
-                alt={recommendedWallet2[1].NAME}
-              />
-            </div>
-            <div className="relative z-[2] -ml-2 rounded-full flex items-center justify-center bg-primary w-[35px] h-[35px]">
-              <Image
-                src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}/${recommendedWallet2[2].IMAGEURL}`}
-                width={30}
-                height={30}
-                alt={recommendedWallet2[2].NAME}
-              />
-            </div>
-            <div className="relative z-[2] -ml-2 rounded-full flex items-center justify-center bg-primary w-[35px] h-[35px]">
-              <Image
-                src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}/${recommendedWallet2[3].IMAGEURL}`}
-                width={30}
-                height={30}
-                alt={recommendedWallet2[3].NAME}
-              />
-            </div>
-            <div className="text-primary font-medium text-sm relative z-[2] -ml-2 rounded-full flex items-center justify-center bg-34383cff w-[35px] h-[35px]">
-              +5
-            </div>
-          </div>
+          <WalletRecommendation4Images layer4Cryptos={layer4Cryptos} />
           <div className="flex flex-col">
             <p className="text-xs opacity-50 text-primary font-normal">
               Minimum investment
@@ -289,30 +142,7 @@ export default function NegotiateRecommendations({
           <p className="text-xs opacity-50 text-primary font-normal">
             Recommended Crypto Wallet
           </p>
-          <div className="flex my-3 items-center">
-            <Image
-              src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}/${recommendedWallet3[0].IMAGEURL}`}
-              width={35}
-              height={35}
-              alt={recommendedWallet3[0].NAME}
-              className="rounded-full !object-none"
-            />
-            <div className="relative z-[2] -ml-2 rounded-full flex items-center justify-center bg-627eea w-[35px] h-[35px]">
-              <Image
-                src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}/${recommendedWallet3[1].IMAGEURL}`}
-                width={30}
-                height={30}
-                alt={recommendedWallet3[1].NAME}
-              />
-            </div>
-            <Image
-              src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}/${recommendedWallet3[2].IMAGEURL}`}
-              width={35}
-              height={35}
-              alt={recommendedWallet3[2].NAME}
-              className="rounded-full !object-none relative z-[2] -ml-2"
-            />
-          </div>
+          <WalletRecommendation5Images layer5Cryptos={layer5Cryptos} />
           <div className="flex flex-col">
             <p className="text-xs opacity-50 text-primary font-normal">
               Minimum investment
@@ -327,3 +157,216 @@ export default function NegotiateRecommendations({
     </section>
   );
 }
+
+export const SmartContractsImages = ({
+  layer1Cryptos,
+}: {
+  layer1Cryptos: CryptoType[];
+}) => {
+  return (
+    <div className="flex my-3 items-center">
+      <div className="relative rounded-full flex items-center justify-center bg-627eea w-[35px] h-[35px]">
+        <Image
+          src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}/${layer1Cryptos[0].IMAGEURL}`}
+          width={30}
+          height={30}
+          alt={layer1Cryptos[0].NAME}
+        />
+      </div>
+      <div className="relative z-[2] -ml-2 rounded-full flex items-center justify-center bg-primary w-[35px] h-[35px]">
+        <Image
+          src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}/${layer1Cryptos[1].IMAGEURL}`}
+          width={30}
+          height={30}
+          alt={layer1Cryptos[1].NAME}
+        />
+      </div>
+      <div className="relative z-[2] -ml-2 rounded-full flex items-center justify-center bg-primary w-[35px] h-[35px]">
+        <Image
+          src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}/${layer1Cryptos[2].IMAGEURL}`}
+          width={30}
+          height={30}
+          alt={layer1Cryptos[2].NAME}
+        />
+      </div>
+      <div className="relative z-[2] -ml-2 rounded-full flex items-center justify-center bg-ff0420 w-[35px] h-[35px]">
+        <span className="text-primary text-xs italic font-semibold">OP</span>
+      </div>
+      <div className="relative z-[2] -ml-2 rounded-full flex items-center justify-center bg-ed3e43 w-[35px] h-[35px]">
+        <Image
+          src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}/${layer1Cryptos[4].IMAGEURL}`}
+          width={30}
+          height={30}
+          alt={layer1Cryptos[4].NAME}
+        />
+      </div>
+    </div>
+  );
+};
+
+export const DeFiImages = ({
+  layer2DeFiCryptos,
+}: {
+  layer2DeFiCryptos: CryptoType[];
+}) => {
+  return (
+    <div className="flex my-3 items-center">
+      <div className="relative rounded-full flex items-center justify-center bg-primary w-[35px] h-[35px]">
+        <Image
+          src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}/${layer2DeFiCryptos[0].IMAGEURL}`}
+          width={30}
+          height={30}
+          alt={layer2DeFiCryptos[0].NAME}
+        />
+      </div>
+      <Image
+        src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}/${layer2DeFiCryptos[1].IMAGEURL}`}
+        width={35}
+        height={35}
+        alt={layer2DeFiCryptos[1].NAME}
+        className="relative z-[2] -ml-2 rounded-full !object-none"
+      />
+      <div className="relative z-[2] -ml-2 rounded-full flex items-center justify-center bg-12d2b0 w-[35px] h-[35px]">
+        <Image
+          src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}/${layer2DeFiCryptos[2].IMAGEURL}`}
+          width={30}
+          height={30}
+          alt={layer2DeFiCryptos[2].NAME}
+        />
+      </div>
+      <div className="relative z-[2] -ml-2 rounded-full flex items-center justify-center bg-primary w-[35px] h-[35px]">
+        <Image
+          src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}/${layer2DeFiCryptos[3].IMAGEURL}`}
+          width={30}
+          height={30}
+          alt={layer2DeFiCryptos[3].NAME}
+        />
+      </div>
+      <Image
+        src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}/${layer2DeFiCryptos[4].IMAGEURL}`}
+        width={35}
+        height={35}
+        alt={layer2DeFiCryptos[4].NAME}
+        className="relative z-[2] -ml-2 rounded-full !object-none"
+      />
+    </div>
+  );
+};
+
+export const WalletRecommendation3Images = ({
+  layer3Cryptos,
+}: {
+  layer3Cryptos: CryptoType[];
+}) => {
+  return (
+    <div className="flex my-3 items-center">
+      <Image
+        src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}/${layer3Cryptos[0].IMAGEURL}`}
+        width={35}
+        height={35}
+        alt={layer3Cryptos[0].NAME}
+        className="rounded-full !object-none"
+      />
+      <div className="relative z-[2] -ml-2 rounded-full flex items-center justify-center bg-primary w-[35px] h-[35px]">
+        <Image
+          src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}/${layer3Cryptos[1].IMAGEURL}`}
+          width={30}
+          height={30}
+          alt={layer3Cryptos[1].NAME}
+        />
+      </div>
+      <div className="relative z-[2] -ml-2 rounded-full flex items-center justify-center bg-ff0420 w-[35px] h-[35px]">
+        <span className="text-primary text-xs italic font-semibold">OP</span>
+      </div>
+      <div className="relative z-[2] -ml-2 rounded-full flex items-center justify-center bg-primary w-[35px] h-[35px]">
+        <Image
+          src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}/${layer3Cryptos[3].IMAGEURL}`}
+          width={30}
+          height={30}
+          alt={layer3Cryptos[3].NAME}
+        />
+      </div>
+      <div className="text-primary font-medium text-sm relative z-[2] -ml-2 rounded-full flex items-center justify-center bg-34383cff w-[35px] h-[35px]">
+        +6
+      </div>
+    </div>
+  );
+};
+
+export const WalletRecommendation4Images = ({
+  layer4Cryptos,
+}: {
+  layer4Cryptos: CryptoType[];
+}) => {
+  return (
+    <div className="flex my-3 items-center">
+      <Image
+        src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}/${layer4Cryptos[0].IMAGEURL}`}
+        width={35}
+        height={35}
+        alt={layer4Cryptos[0].NAME}
+        className="rounded-full !object-none"
+      />
+      <div className="relative z-[2] -ml-2 rounded-full flex items-center justify-center bg-627eea w-[35px] h-[35px]">
+        <Image
+          src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}/${layer4Cryptos[1].IMAGEURL}`}
+          width={30}
+          height={30}
+          alt={layer4Cryptos[1].NAME}
+        />
+      </div>
+      <div className="relative z-[2] -ml-2 rounded-full flex items-center justify-center bg-primary w-[35px] h-[35px]">
+        <Image
+          src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}/${layer4Cryptos[2].IMAGEURL}`}
+          width={30}
+          height={30}
+          alt={layer4Cryptos[2].NAME}
+        />
+      </div>
+      <div className="relative z-[2] -ml-2 rounded-full flex items-center justify-center bg-627eea w-[35px] h-[35px]">
+        <Image
+          src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}/${layer4Cryptos[3].IMAGEURL}`}
+          width={30}
+          height={30}
+          alt={layer4Cryptos[3].NAME}
+        />
+      </div>
+      <div className="text-primary font-medium text-sm relative z-[2] -ml-2 rounded-full flex items-center justify-center bg-34383cff w-[35px] h-[35px]">
+        +4
+      </div>
+    </div>
+  );
+};
+
+export const WalletRecommendation5Images = ({
+  layer5Cryptos,
+}: {
+  layer5Cryptos: CryptoType[];
+}) => {
+  return (
+    <div className="flex my-3 items-center">
+      <Image
+        src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}/${layer5Cryptos[0].IMAGEURL}`}
+        width={35}
+        height={35}
+        alt={layer5Cryptos[0].NAME}
+        className="rounded-full !object-none"
+      />
+      <div className="relative z-[2] -ml-2 rounded-full flex items-center justify-center bg-627eea w-[35px] h-[35px]">
+        <Image
+          src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}/${layer5Cryptos[1].IMAGEURL}`}
+          width={30}
+          height={30}
+          alt={layer5Cryptos[1].NAME}
+        />
+      </div>
+      <Image
+        src={`${process.env.NEXT_PUBLIC_BASE_URL_IMAGE}/${layer5Cryptos[2].IMAGEURL}`}
+        width={35}
+        height={35}
+        alt={layer5Cryptos[2].NAME}
+        className="rounded-full !object-none relative z-[2] -ml-2"
+      />
+    </div>
+  );
+};

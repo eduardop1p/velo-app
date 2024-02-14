@@ -2,7 +2,15 @@ import { ActiveCryptoType } from '@/components/products';
 import type { CryptoType } from '@/components/header';
 
 export default function formatDataCrypto(
-  activeCrypto: ActiveCryptoType | 'full-data' | 'follow-market' | 'layer-1',
+  activeCrypto:
+    | ActiveCryptoType
+    | 'full-data'
+    | 'follow-market'
+    | 'layer-1-smart-contracts'
+    | 'layer-2-defi'
+    | 'layer-5'
+    | 'layer-4'
+    | 'layer-3',
   metaData: any
 ): CryptoType[] {
   switch (activeCrypto) {
@@ -73,13 +81,54 @@ export default function formatDataCrypto(
       const xlm = { NAME: 'Stellar', ...metaData.XLM.USD };
       return [btc, usdt, eth, sol, xrp, doge, ada, link, uni, xlm];
     }
-    case 'layer-1': {
+    case 'layer-1-smart-contracts': {
       const eth = { NAME: 'Ethereum', ...metaData.ETH.USD };
       const sol = { NAME: 'Solana', ...metaData.SOL.USD };
       const matic = { NAME: 'Polygon', ...metaData.MATIC.USD };
       const op = { NAME: 'Optimism', ...metaData.OP.USD };
       const avax = { NAME: 'Avalanche', ...metaData.AVAX.USD };
       return [eth, sol, matic, op, avax];
+    }
+    case 'layer-2-defi': {
+      const ldo = { NAME: 'Lido', ...metaData.LDO.USD };
+      const snx = { NAME: 'Synthetix', ...metaData.SNX.USD };
+      const mkr = { NAME: 'MakerDAO', ...metaData.MKR.USD };
+      const uni = { NAME: 'Uniswap', ...metaData.UNI.USD };
+      const aave = { NAME: 'Aave', ...metaData.AAVE.USD };
+      return [ldo, snx, mkr, uni, aave];
+    }
+    case 'layer-3': {
+      const btc = { NAME: 'Bitcoin', ...metaData.BTC.USD };
+      const sol = { NAME: 'Solana', ...metaData.SOL.USD };
+      const op = { NAME: 'Optimism', ...metaData.OP.USD };
+      const uni = { NAME: 'Uniswap', ...metaData.UNI.USD };
+
+      const matic = { NAME: 'Polygon', ...metaData.MATIC.USD };
+      const arb = { NAME: 'Arbitrum', ...metaData.ARB.USD };
+      const snx = { NAME: 'Synthetix', ...metaData.SNX.USD };
+      const ldo = { NAME: 'Lido', ...metaData.LDO.USD };
+      const eth = { NAME: 'Ethereum', ...metaData.ETH.USD };
+      const avax = { NAME: 'Avalanche', ...metaData.AVAX.USD };
+      return [btc, sol, op, uni, matic, arb, snx, ldo, eth, avax];
+    }
+    case 'layer-4': {
+      const btc = { NAME: 'Bitcoin', ...metaData.BTC.USD };
+      const eth = { NAME: 'Ethereum', ...metaData.ETH.USD };
+      const sol = { NAME: 'Solana', ...metaData.SOL.USD };
+      const arb = { NAME: 'Arbitrum', ...metaData.ARB.USD };
+
+      const ldo = { NAME: 'Lido', ...metaData.LDO.USD };
+      const op = { NAME: 'Optimism', ...metaData.OP.USD };
+      const avax = { NAME: 'Avalanche', ...metaData.AVAX.USD };
+      const matic = { NAME: 'Polygon', ...metaData.MATIC.USD };
+
+      return [btc, eth, sol, arb, ldo, op, avax, matic];
+    }
+    case 'layer-5': {
+      const btc = { NAME: 'Bitcoin', ...metaData.BTC.USD };
+      const eth = { NAME: 'Ethereum', ...metaData.ETH.USD };
+      const usdc = { NAME: 'USD Coin', ...metaData.USDC.USD };
+      return [btc, eth, usdc];
     }
     case 'full-data': {
       const btc = {
@@ -237,6 +286,12 @@ export default function formatDataCrypto(
           'Quant is a platform that allows you to create decentralized applications with ease.',
         ...metaData.QNT.USD,
       };
+      const arb = {
+        NAME: 'Arbitrum',
+        DESCRIPTION:
+          'Arbitrum is a second-layer scalability solution for Ethereum, aiming to enable faster and more cost-effective transactions.',
+        ...metaData.ARB.USD,
+      };
       const atom = {
         NAME: 'Cosmos',
         DESCRIPTION:
@@ -276,6 +331,7 @@ export default function formatDataCrypto(
         crv,
         comp,
         qnt,
+        arb,
         atom,
         ape,
       ];
@@ -388,6 +444,10 @@ export const cryptosNames = [
   {
     symbol: 'QNT',
     name: 'Quant',
+  },
+  {
+    symbol: 'ARB',
+    name: 'Arbitrum',
   },
   {
     symbol: 'ATOM',
