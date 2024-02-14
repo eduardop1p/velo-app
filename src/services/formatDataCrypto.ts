@@ -2,7 +2,7 @@ import { ActiveCryptoType } from '@/components/products';
 import type { CryptoType } from '@/components/header';
 
 export default function formatDataCrypto(
-  activeCrypto: ActiveCryptoType | 'full-data' | 'follow-market',
+  activeCrypto: ActiveCryptoType | 'full-data' | 'follow-market' | 'layer-1',
   metaData: any
 ): CryptoType[] {
   switch (activeCrypto) {
@@ -73,6 +73,14 @@ export default function formatDataCrypto(
       const xlm = { NAME: 'Stellar', ...metaData.XLM.USD };
       return [btc, usdt, eth, sol, xrp, doge, ada, link, uni, xlm];
     }
+    case 'layer-1': {
+      const eth = { NAME: 'Ethereum', ...metaData.ETH.USD };
+      const sol = { NAME: 'Solana', ...metaData.SOL.USD };
+      const matic = { NAME: 'Polygon', ...metaData.MATIC.USD };
+      const op = { NAME: 'Optimism', ...metaData.OP.USD };
+      const avax = { NAME: 'Avalanche', ...metaData.AVAX.USD };
+      return [eth, sol, matic, op, avax];
+    }
     case 'full-data': {
       const btc = {
         NAME: 'Bitcoin',
@@ -121,6 +129,18 @@ export default function formatDataCrypto(
           'Solana is a high-performance network for smart contracts, characterized by its scalability.',
         ...metaData.SOL.USD,
       };
+      const matic = {
+        NAME: 'Polygon',
+        DESCRIPTION:
+          'Polygon offers scalability solutions for Ethereum, improving transaction efficiency.',
+        ...metaData.MATIC.USD,
+      };
+      const op = {
+        NAME: 'Optimism',
+        DESCRIPTION:
+          'Optimism is a scaling solution designed for Ethereum to improve network efficiency.',
+        ...metaData.OP.USD,
+      };
       const dot = {
         NAME: 'Polkadot',
         DESCRIPTION:
@@ -150,18 +170,6 @@ export default function formatDataCrypto(
         DESCRIPTION:
           'Tether is a stablecoin pegged to the US dollar, providing value stability and widely used in cryptocurrency transactions.',
         ...metaData.USDT.USD,
-      };
-      const matic = {
-        NAME: 'Polygon',
-        DESCRIPTION:
-          'Polygon offers scalability solutions for Ethereum, improving transaction efficiency.',
-        ...metaData.MATIC.USD,
-      };
-      const op = {
-        NAME: 'Optimism',
-        DESCRIPTION:
-          'Optimism is a scaling solution designed for Ethereum to improve network efficiency.',
-        ...metaData.OP.USD,
       };
       const link = {
         NAME: 'Chainlink',
@@ -250,22 +258,22 @@ export default function formatDataCrypto(
         eth,
         ada,
         sol,
+        matic,
+        op,
         dot,
         avax,
         algo,
+        ldo,
         usdc,
+        snx,
+        mkr,
+        uni,
+        aave,
         usdt,
-        matic,
-        op,
         link,
         sand,
         mana,
         crv,
-        ldo,
-        aave,
-        uni,
-        mkr,
-        snx,
         comp,
         qnt,
         atom,

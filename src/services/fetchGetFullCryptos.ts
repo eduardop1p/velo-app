@@ -3,7 +3,7 @@ import formatDataCrypto from './formatDataCrypto';
 
 export default async function fetchGetFullCryptos() {
   const resCryptos = await fetch(
-    `${process.env.CRYPTO_API_URL}&fsyms=BTC,DOGE,XLM,XRP,LTC,ETH,ADA,SOL,DOT,AVAX,ALGO,USDC,USDT,MATIC,OP,LINK,SAND,MANA,CRV,LDO,AAVE,UNI,MKR,SNX,COMP,QNT,ATOM,APE`,
+    `${process.env.CRYPTO_API_URL}&fsyms=BTC,DOGE,XLM,XRP,LTC,ETH,ADA,SOL,MATIC,OP,DOT,AVAX,ALGO,USDC,USDT,LINK,SAND,MANA,CRV,LDO,AAVE,UNI,MKR,SNX,COMP,QNT,ATOM,APE`,
     {
       method: 'GET',
       next: {

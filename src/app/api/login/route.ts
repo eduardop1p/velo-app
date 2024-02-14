@@ -38,15 +38,15 @@ export async function POST(req: NextRequest) {
 
     const cookie = cookies();
 
+    const expiryDate = new Date();
+    expiryDate.setMonth(expiryDate.getMonth() + 1); // expiração de cookies correta
     cookie.set('token', userToken, {
       httpOnly: true,
       path: '/',
-      maxAge: 2592000000, // esse cookie vai expirar em 1 mês
+      expires: expiryDate, // esse cookie vai expirar em 1 mês
       secure: true,
       sameSite: 'none',
       priority: 'high',
-      // domain: 'pornonly.xyz',
-      // maxAge: new Date(Date.now() + 864000000)
     });
 
     return NextResponse.json({ userToken, userName });

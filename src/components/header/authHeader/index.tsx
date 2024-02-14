@@ -40,28 +40,28 @@ export default function AuthHeader({ userData }: { userData: UserType }) {
             <Link
               href="/wallet"
               // eslint-disable-next-line
-              className={`text-primary font-normal text-sm h-9 px-4 flex items-center justify-center relative rounded ${pathName === '/wallet' ? 'before:content-[""] before:absolute before:w-full before:h-[3px] before:bg-blue before:top-[55px] before:left-1/2 before:-translate-x-1/2' : 'hover:bg-383b3eff'} transition-colors duration-200`}
+              className={`text-primary font-normal text-sm h-9 px-4 flex items-center justify-center relative rounded ${pathName.includes('/wallet') ? 'before:content-[""] before:absolute before:w-full before:h-[3px] before:bg-blue before:top-[55px] before:left-1/2 before:-translate-x-1/2' : 'hover:bg-383b3eff'} transition-colors duration-200`}
             >
               Wallet
             </Link>
             <Link
               href="/negotiate"
               // eslint-disable-next-line
-              className={`text-primary font-normal text-sm h-9 px-4 flex items-center justify-center rounded relative ${pathName === '/negotiate' ? 'before:content-[""] before:absolute before:w-full before:h-[3px] before:bg-blue before:top-[55px] before:left-1/2 before:-translate-x-1/2' : 'hover:bg-383b3eff'} transition-colors duration-200`}
+              className={`text-primary font-normal text-sm h-9 px-4 flex items-center justify-center rounded relative ${pathName.includes('/negotiate') ? 'before:content-[""] before:absolute before:w-full before:h-[3px] before:bg-blue before:top-[55px] before:left-1/2 before:-translate-x-1/2' : 'hover:bg-383b3eff'} transition-colors duration-200`}
             >
               Negotiate
             </Link>
             <Link
               href="/historic"
               // eslint-disable-next-line
-              className={`text-primary font-normal text-sm h-9 px-4 flex items-center justify-center rounded relative ${pathName === '/historic' ? 'before:content-[""] before:absolute before:w-full before:h-[3px] before:bg-blue before:top-[55px] before:left-1/2 before:-translate-x-1/2' : 'hover:bg-383b3eff'} transition-colors duration-200`}
+              className={`text-primary font-normal text-sm h-9 px-4 flex items-center justify-center rounded relative ${pathName.includes('/historic') ? 'before:content-[""] before:absolute before:w-full before:h-[3px] before:bg-blue before:top-[55px] before:left-1/2 before:-translate-x-1/2' : 'hover:bg-383b3eff'} transition-colors duration-200`}
             >
               Historic
             </Link>
             <Link
               href="/content"
               // eslint-disable-next-line
-              className={`text-primary font-normal text-sm h-9 px-4 flex items-center justify-center rounded relative ${pathName === '/content' ? 'before:content-[""] before:absolute before:w-full before:h-[3px] before:bg-blue before:top-[55px] before:left-1/2 before:-translate-x-1/2' : 'hover:bg-383b3eff'} transition-colors duration-200`}
+              className={`text-primary font-normal text-sm h-9 px-4 flex items-center justify-center rounded relative ${pathName.includes('/content') ? 'before:content-[""] before:absolute before:w-full before:h-[3px] before:bg-blue before:top-[55px] before:left-1/2 before:-translate-x-1/2' : 'hover:bg-383b3eff'} transition-colors duration-200`}
             >
               Content
             </Link>

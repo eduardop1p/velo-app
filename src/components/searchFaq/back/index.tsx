@@ -11,7 +11,7 @@ export default function Back() {
       className="flex gap-4 items-center cursor-pointer"
       onClick={() => router.back()}
     >
-      <div className="w-4 h4 flex items-center justify-center fill-primary">
+      <div className="w-4 h-4 flex items-center justify-center fill-primary">
         <FaArrowLeft />
       </div>
       {/* <span className="text-base text-primary font-normal ">Back</span> */}

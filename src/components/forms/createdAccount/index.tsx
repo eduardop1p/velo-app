@@ -102,6 +102,7 @@ export default function FormCreatedAccount({
 
     return () => {
       if (dateBirth.inputmask) dateBirth.inputmask.remove();
+      setIsLoading(false);
     };
   }, []);
 
@@ -163,6 +164,7 @@ export default function FormCreatedAccount({
           open: true,
           severity: 'error',
         });
+        setIsLoading(false);
         return;
       }
       // setOpenAlert({
@@ -182,14 +184,13 @@ export default function FormCreatedAccount({
         open: true,
         severity: 'error',
       });
-    } finally {
       setIsLoading(false);
     }
   };
 
   const handleLogin = async (email: string, password: string) => {
     try {
-      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
         method: 'POST',
         body: JSON.stringify({ email, password }),
         headers: {
@@ -198,6 +199,11 @@ export default function FormCreatedAccount({
         cache: 'no-cache',
         credentials: 'include',
       });
+
+      if (!res.ok) {
+        router.push('/login');
+        return;
+      }
 
       router.push('/home');
       router.refresh();

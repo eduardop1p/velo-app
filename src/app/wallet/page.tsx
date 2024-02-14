@@ -80,7 +80,6 @@ export default async function Page({
     <>
       <main className="mt-20">
         <AlertSuccessDeposit />
-
         <div className="min-h-full-screen-80px bg-black-section px-20 py-14 flex flex-col gap-16">
           <WalletGraphic userPatrimonyInvested={userPatrimonyInvested} />
           <section className="w-full flex flex-col gap-5">

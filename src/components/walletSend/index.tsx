@@ -640,6 +640,15 @@ function BankAccount({
           Withdraw
         </button>
       </div>
+
+      <div className="bg-34383cff mt-2 p-4 rounded flex items-center gap-4">
+        <div className="bg-bluehover flex-none rounded-full flex items-center justify-center text-sm font-normal text-primary w-5 h-5">
+          !
+        </div>
+        <p className="text-primary text-xs font-normal">
+          Please ensure that the bank account provided is correct.
+        </p>
+      </div>
     </form>
   );
 }

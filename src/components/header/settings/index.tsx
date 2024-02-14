@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { FaChevronDown } from 'react-icons/fa6';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 
@@ -21,6 +21,10 @@ export default function Settings() {
     severity: 'success',
   });
 
+  useEffect(() => {
+    return () => setIsLoading(false);
+  }, []);
+
   const handleLogout = async () => {
     if (isLoading) return;
 
@@ -37,6 +41,7 @@ export default function Settings() {
           open: true,
           severity: 'error',
         });
+        setIsLoading(false);
         return;
       }
 
@@ -49,7 +54,6 @@ export default function Settings() {
         open: true,
         severity: 'error',
       });
-    } finally {
       setIsLoading(false);
     }
   };

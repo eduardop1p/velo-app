@@ -56,6 +56,8 @@ export default function FormLogin() {
       }
       setInitialRender(false);
     }
+
+    return () => setIsLoading(false);
   }, [getValues, initialRender]);
 
   const handleFormSubmit: SubmitHandler<BodyType> = async body => {
@@ -82,6 +84,7 @@ export default function FormLogin() {
           open: true,
           severity: 'error',
         });
+        setIsLoading(false);
         return;
       }
       setOpenAlert({
@@ -89,11 +92,8 @@ export default function FormLogin() {
         open: true,
         severity: 'success',
       });
-
-      setTimeout(() => {
-        router.push('/home');
-        router.refresh();
-      }, 1000);
+      router.push('/home');
+      router.refresh();
     } catch (err) {
       // console.log(err);
       setOpenAlert({
@@ -101,7 +101,6 @@ export default function FormLogin() {
         open: true,
         severity: 'error',
       });
-    } finally {
       setIsLoading(false);
     }
   };
