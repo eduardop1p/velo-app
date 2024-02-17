@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Image from 'next/image';
 import { cookies } from 'next/headers';
@@ -19,10 +20,7 @@ interface WalletAddressType {
 
 export default async function Page({ params }: { params: { crypto: string } }) {
   const cryptoSymbol = params.crypto.toUpperCase();
-  const cryptoName = cryptosNames.find(val => val.symbol === cryptoSymbol)
-    ?.name as string;
-
-  const token = cookies().get('token')?.value as string;
+  const cryptoName = cryptosNames.find(val => val.symbol === cryptoSymbol)?.name!; // eslint-disable-line
 
   let dataWalletAddress: WalletAddressType;
   let dataCrypto: CryptoType;

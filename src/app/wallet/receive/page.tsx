@@ -42,7 +42,7 @@ export default async function Page() {
             />
           </div>
           <h2 className="text-primary text-2xl font-normal my-2">
-            Select which currency you want to receive
+            Select which currency you want to deposit
           </h2>
           <WalletReceive
             dataCryptos={dataCryptos}

@@ -27,7 +27,7 @@ export default async function Page() {
     const metaDataHistoHour = await resHistoHour.json();
     const dataHistoHour = metaDataHistoHour.Data.Data.map(
       ({ time, close, open }: HistorHourType) => ({
-        timestamp: time * 1000,
+        time: +time * 1000,
         close,
         open,
         FROMSYMBOL: dataCryptos[i].FROMSYMBOL,

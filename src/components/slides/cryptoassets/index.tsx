@@ -238,9 +238,7 @@ function SliderGraphicLine({
 
   return (
     <div className="flex flex-col pb-4 w-full items-center">
-      <h3 className="text-black font-semibold text-base border-b-2 border-black border-solid w-full text-left pl-4 pb-3">
-        H1 Graphic
-      </h3>
+      <span className="text-black font-semibold text-base border-b-2 border-black border-solid w-full text-left pl-4 pb-3 h-[37.6px]"></span>
       {valData.map((val, index) => (
         <GraphicLine
           key={index.toString()}

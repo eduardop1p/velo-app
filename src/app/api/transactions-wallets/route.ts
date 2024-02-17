@@ -6,16 +6,18 @@ import { NextRequest, NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 import { upperFirst } from 'lodash';
 
-import BaseRoute, { SymbolType } from '../baseRoute';
+import BaseRoute from '../baseRoute';
 import usersModel from '../models/users';
 import { cryptosNames } from '@/services/formatDataCrypto';
 import btcToSatoshis from '@/services/btcToSatoshis';
 
 interface BodyType {
-  type: 'dollar' | 'crypto';
+  type: 'money' | 'crypto';
   method: 'deposit' | 'send';
-  symbol: SymbolType;
+  symbol: string;
   value: number;
+  defaultValue?: number; // apenas para depositos em moedas ficundiarias
+  userId: string;
   address?: string;
   privateKey?: string;
   paymentIntent?: string;
@@ -56,8 +58,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
       });
     }
 
-    if (type === 'dollar' && method === 'deposit' && symbol === 'USD') {
-      await transactionsWallets.createTransactionDepositDollar();
+    if (type === 'money' && method === 'deposit') {
+      await transactionsWallets.createTransactionDeposit();
       if (errors.length) {
         return transactionsWallets.responseError(errors[0]);
       }
@@ -105,11 +107,7 @@ class TransactionsWallets extends BaseRoute {
       });
       return;
     }
-    if (!cryptosNames.map(val => val.symbol).includes(symbol)) {
-      this.errorInbody('Symbol not found');
-      return;
-    }
-    if (type !== 'crypto' && type !== 'dollar') {
+    if (type !== 'crypto' && type !== 'money') {
       this.errorInbody('Type not allowed');
       return;
     }
@@ -129,24 +127,32 @@ class TransactionsWallets extends BaseRoute {
     });
   }
 
-  async createTransactionDepositDollar() {
+  async createTransactionDeposit() {
     try {
-      if (!this.authorization) return;
-      const { value, type, symbol, method, paymentIntent } = this.body;
+      const {
+        value,
+        type,
+        symbol,
+        method,
+        paymentIntent,
+        userId,
+        defaultValue,
+      } = this.body;
 
-      const [, token] = this.authorization.split(' ');
+      const [, token] = this.authorization!.split(' ');
       const authData = jwt.decode(token) as { id: string };
 
       const user = await usersModel.findById(authData.id);
       if (!user) return;
 
       if (user.transactions.length && user.transactions.map(val => val.paymentIntent).includes(paymentIntent)) return; // eslint-disable-line
+      if (userId !== user._id.toString()) return;
       user.transactions.push({
         cryptoValue: 0,
         date: Date.now(),
         dollarValue: +(value / 100).toFixed(2),
+        defaultValue: +(defaultValue! / 100).toFixed(2),
         status: 'success',
-        name: upperFirst(type),
         title: upperFirst(method),
         symbol,
         type,

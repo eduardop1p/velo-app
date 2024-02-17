@@ -85,31 +85,7 @@ export default function CryptoNegotiate({
                   <span className="text-primary font-medium text-sm">
                     {formatPrice(val.PRICE)}
                   </span>
-                  {val.CHANGEPCTDAY < 0 && (
-                    <div className="flex gap-[5px] items-center">
-                      <div className="w-3 h-3 flex items-center justify-center fill-red-600">
-                        <FaArrowDown />
-                      </div>
-                      <span className={`font-normal text-sm text-red-600`}>
-                        {val.CHANGEPCTDAY.toFixed(2).replace('-', '')}%
-                      </span>
-                    </div>
-                  )}
-                  {val.CHANGEPCTDAY > 0 && (
-                    <div className="flex gap-[5px] items-center">
-                      <div className="w-3 h-3 flex items-center justify-center fill-blue">
-                        <FaArrowUp />
-                      </div>
-                      <span className={`font-normal text-sm text-blue`}>
-                        {val.CHANGEPCTDAY.toFixed(2)}%
-                      </span>
-                    </div>
-                  )}
-                  {val.CHANGEPCTDAY === 0 && (
-                    <span className={`font-normal text-sm text-999`}>
-                      {val.CHANGEPCTDAY.toFixed(2)}%
-                    </span>
-                  )}
+                  <ChangePctDay changePctDay={val.CHANGEPCTDAY} />
                 </div>
               </div>
               <span className="text-primary font-normal text-[13px] group-hover:text-blue transition-colors duration-200">
@@ -122,3 +98,35 @@ export default function CryptoNegotiate({
     </div>
   );
 }
+
+export const ChangePctDay = ({ changePctDay }: { changePctDay: number }) => {
+  return (
+    <>
+      {changePctDay < 0 && (
+        <div className="flex gap-[5px] items-center">
+          <div className="w-3 h-3 mb-[1px] flex items-center justify-center fill-red-600">
+            <FaArrowDown />
+          </div>
+          <span className={`font-normal text-sm text-red-600`}>
+            {changePctDay.toFixed(2).replace('-', '')}%
+          </span>
+        </div>
+      )}
+      {changePctDay > 0 && (
+        <div className="flex gap-[5px] items-center">
+          <div className="w-3 h-3 mb-[1px] flex items-center justify-center fill-blue">
+            <FaArrowUp />
+          </div>
+          <span className={`font-normal text-sm text-blue`}>
+            {changePctDay.toFixed(2)}%
+          </span>
+        </div>
+      )}
+      {changePctDay === 0 && (
+        <span className={`font-normal text-sm text-999`}>
+          {changePctDay.toFixed(2)}%
+        </span>
+      )}
+    </>
+  );
+};

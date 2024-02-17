@@ -4,18 +4,22 @@ export default function SkeletonUi({
   width,
   height,
   bgColor = 'grey.900',
+  variant = 'rectangular',
+  borderRadius = '5px',
 }: {
   width: string | number;
   height: string | number;
   bgColor?: string;
+  variant?: 'rectangular' | 'circular';
+  borderRadius?: string;
 }) {
   return (
     <Skeleton
-      variant="rectangular"
+      variant={variant}
       animation="pulse"
       sx={{
         bgcolor: bgColor,
-        borderRadius: '3px',
+        borderRadius: borderRadius,
       }}
       width={width}
       height={height}

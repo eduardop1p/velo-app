@@ -199,9 +199,9 @@ export default function FollowMarket({
               </OrderClick>
             )}
             <th className=" w-1/4 px-4 py-6 bg-272a2eff h-[70.5px]">
-              <h4 className="text-primary-2 font-normal text-[15px]">
+              {/* <h4 className="text-primary-2 font-normal text-[15px]">
                 H1 Graphic
-              </h4>
+              </h4> */}
             </th>
           </tr>
         </thead>

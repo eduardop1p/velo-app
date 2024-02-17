@@ -10,9 +10,11 @@ export type StripePromiseType = Promise<Stripe | null> | null;
 export default function Deposit({
   token,
   depositAmount,
+  currency,
 }: {
   token: string;
   depositAmount: number;
+  currency: string;
 }) {
   const [stripePromise, setStripePromise] = useState<StripePromiseType>(null);
 
@@ -42,6 +44,7 @@ export default function Deposit({
       stripePromise={stripePromise}
       token={token}
       depositAmount={depositAmount}
+      currency={currency}
     />
   );
 }

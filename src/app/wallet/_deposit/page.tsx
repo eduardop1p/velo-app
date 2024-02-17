@@ -5,7 +5,7 @@ import { cookies } from 'next/headers';
 import Deposit from '@/components/walletReceive/deposit';
 import Back from '@/components/searchFaq/back';
 import PrevUrl from '@/components/prevUrl';
-import minimumDeposit from '@/services/minimunDeposit';
+import minimumDeposit from '@/services/minimumDeposit';
 
 export default async function Page() {
   const token = cookies().get('token')?.value as string;

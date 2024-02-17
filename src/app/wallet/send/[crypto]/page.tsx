@@ -28,8 +28,8 @@ interface WithdrawalsQuotasType {
 
 export default async function Page({ params }: { params: { crypto: string } }) {
   const cryptoSymbol = params.crypto.toUpperCase();
-  const cryptoName = cryptosNames.find(val => val.symbol === cryptoSymbol)
-    ?.name as string;
+  const cryptoName = cryptosNames.find(val => val.symbol === cryptoSymbol)?.name!; // eslint-disable-line
+
 
   const token = cookies().get('token')?.value as string;
 

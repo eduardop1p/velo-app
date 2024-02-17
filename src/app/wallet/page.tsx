@@ -13,7 +13,6 @@ import { UserPatrimonyInvestedType } from '../home/page';
 import AlertSuccessDeposit from '@/components/walletReceive/alertSuccessDeposit';
 import UnavailablePage from '@/components/UnavailablePage';
 import { UserType } from '../api/models/users';
-import ButtonDepositNow from '@/components/walletReceive/buttonDepositNow';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
@@ -39,10 +38,12 @@ export default async function Page({
             {
               method: 'POST',
               body: JSON.stringify({
-                type: 'dollar',
+                type: 'money',
                 method: 'deposit',
-                symbol: 'USD',
-                value: paymentIntent.amount_received,
+                symbol: paymentIntent.currency.toUpperCase(),
+                userId: paymentIntent.metadata.userId,
+                value: paymentIntent.metadata.dollarAmountReceived,
+                defaultValue: paymentIntent.amount_received, // apenas para depositos em moedas ficundiarias
                 paymentIntent: payment_intent,
               }),
               headers: {
@@ -94,9 +95,7 @@ export default async function Page({
                 <div className="flex-none flex items-center justify-center h-3 w-3 fill-primary">
                   <FaArrowUp />
                 </div>
-                <span className="text-sm text-primary font-normal">
-                  To send
-                </span>
+                <span className="text-sm text-primary font-normal">Send</span>
               </Link>
               <Link
                 href="/wallet/receive"
@@ -106,7 +105,7 @@ export default async function Page({
                   <FaArrowDown />
                 </div>
                 <span className="text-sm text-primary font-normal">
-                  To receive
+                  Deposit
                 </span>
               </Link>
             </div>
@@ -178,10 +177,12 @@ export default async function Page({
               also possible to bring your crypto assets from another account to
               Velo.
             </p>
-            <ButtonDepositNow
-              balance={calBalance(userData.transactions)}
-              token={token}
-            />
+            <Link
+              href="/wallet/receive"
+              className="text-primary w-fit bg-195ab4ff hover:bg-blue transition-colors duration-200 text-sm font-medium h-9 px-4 py-2 rounded flex items-center justify-center"
+            >
+              Deposit now
+            </Link>
           </section>
         </div>
       </main>

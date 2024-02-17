@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import jwt from 'jsonwebtoken';
 
 import Stripe from 'stripe';
 import BaseRoute from '../../baseRoute';
@@ -7,6 +8,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
 interface BodyType {
   depositAmount: number;
+  currency: string;
 }
 
 export async function POST(req: NextRequest) {
@@ -48,15 +50,30 @@ class CreatePayment extends BaseRoute {
 
   async deposit(body: BodyType) {
     try {
-      const { depositAmount } = body;
+      let { depositAmount, currency } = body;
+      let dollarAmountReceived = depositAmount;
+      if (currency !== 'USD') {
+        const cambio = await this.getCambioDallar(currency);
+        if (!cambio) throw new Error('err');
+        dollarAmountReceived = Math.round(depositAmount * cambio);
+      }
+
+      const [, token] = this.authorization!.split(' ');
+      const { id } = jwt.decode(token) as { id: string };
+
       const paymentIntent = await stripe.paymentIntents.create({
-        currency: 'USD', // default USD
-        amount: depositAmount,
+        currency,
+        amount: depositAmount, // valor de deposito com a moeda ultilizada
         automatic_payment_methods: { enabled: true },
+        metadata: {
+          dollarAmountReceived, // valor de deposito sempre em dolares
+          userId: id,
+        },
       });
 
       return paymentIntent;
     } catch (err: any) {
+      // console.log(err);
       this.errors.push({
         body: {
           msg: 'Error when making deposit',
@@ -64,6 +81,20 @@ class CreatePayment extends BaseRoute {
         },
         status: 400,
       });
+    }
+  }
+
+  async getCambioDallar(currency: string) {
+    try {
+      const res = await fetch(
+        `https://economia.awesomeapi.com.br/last/${currency}-USD`
+      );
+      if (!res.ok) throw new Error('request error');
+      const data = await res.json();
+      const bid = +data[`${currency}USD`].bid;
+      return bid;
+    } catch (err) {
+      console.log(err);
     }
   }
 }
