@@ -42,8 +42,11 @@ export default function WalletReceive({ dataCryptos, balance, token }: Props) {
   const [showDepositCAD, setShowDepositCAD] = useState(false);
   const [showDepositBRL, setShowDepositBRL] = useState(false);
   const [showDepositMXN, setShowDepositMXN] = useState(false);
+  const [showDepositCOP, setShowDepositCOP] = useState(false);
+  const [showDepositCLP, setShowDepositCLP] = useState(false);
   const [showDepositINR, setShowDepositINR] = useState(false);
   const [showDepositIDR, setShowDepositIDR] = useState(false);
+  const [showDepositNGN, setShowDepositNGN] = useState(false);
 
   const dataCoins = [
     {
@@ -168,6 +171,37 @@ export default function WalletReceive({ dataCryptos, balance, token }: Props) {
     },
     {
       state: {
+        set: setShowDepositCOP,
+        value: showDepositCOP,
+      },
+      balance,
+      token,
+      minDeposit: minimumDeposit('$', 7500000),
+      location: { currency: 'COP', location: 'es-CO' },
+      converted: true,
+      name: 'Colombian peso',
+      img: {
+        src: '/assets/imgs/velo-img-32.png',
+      },
+    },
+    {
+      state: {
+        set: setShowDepositCLP,
+        value: showDepositCLP,
+      },
+      balance,
+      token,
+      minDeposit: minimumDeposit('$', 18000),
+      location: { currency: 'CLP', location: 'es-CL' },
+      converted: true,
+      name: 'Chilean Peso',
+      img: {
+        src: '/assets/imgs/velo-img-33.png',
+      },
+    },
+
+    {
+      state: {
         set: setShowDepositINR,
         value: showDepositINR,
       },
@@ -196,6 +230,21 @@ export default function WalletReceive({ dataCryptos, balance, token }: Props) {
         src: '/assets/imgs/velo-img-30.png',
       },
     },
+    // {
+    //   state: {
+    //     set: setShowDepositNGN,
+    //     value: showDepositNGN,
+    //   },
+    //   balance,
+    //   token,
+    //   minDeposit: minimumDeposit('₦', 3000000),
+    //   location: { currency: 'NGN', location: 'en-NG' },
+    //   converted: true,
+    //   name: 'Naira',
+    //   img: {
+    //     src: '/assets/imgs/velo-img-31.png',
+    //   },
+    // },
   ];
 
   const handleSearchCrypto = (name: string, symbol: string) => {
@@ -323,7 +372,7 @@ const zodSchema = z
     if (replaceCurrency(depositAmount) < minDeposit) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: `The minimum deposit amount is ${formatPrice(currency !== 'JPY' ? minDeposit / 100 : minDeposit, currency, location)}`, // eslint-disable-line
+        message: `The minimum deposit amount is ${formatPrice(currency !== 'JPY' && currency !== 'CLP' ? minDeposit / 100 : minDeposit, currency, location)}`, // eslint-disable-line
         fatal: true,
         path: ['depositAmount'],
       });
@@ -405,6 +454,9 @@ export function DepositInfo({
     (value: number, currency: string) => {
       switch (currency) {
         case 'JPY': {
+          return formatPrice(value, location.currency, location.location);
+        }
+        case 'CLP': {
           return formatPrice(value, location.currency, location.location);
         }
 
@@ -642,6 +694,12 @@ const BtnsAddValues = ({
     }
     case 'MXN': {
       return <Btns values={[300, 600, 1200, 2000, 3000]} />;
+    }
+    case 'COP': {
+      return <Btns values={[75000, 150000, 300000, 600000]} />;
+    }
+    case 'CLP': {
+      return <Btns values={[18000, 36000, 72000, 144000]} />;
     }
     case 'INR': {
       return <Btns values={[1500, 3000, 4000, 6000]} />;
