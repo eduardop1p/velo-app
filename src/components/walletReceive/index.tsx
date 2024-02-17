@@ -43,6 +43,160 @@ export default function WalletReceive({ dataCryptos, balance, token }: Props) {
   const [showDepositBRL, setShowDepositBRL] = useState(false);
   const [showDepositMXN, setShowDepositMXN] = useState(false);
   const [showDepositINR, setShowDepositINR] = useState(false);
+  const [showDepositIDR, setShowDepositIDR] = useState(false);
+
+  const dataCoins = [
+    {
+      state: {
+        set: setShowDepositUSD,
+        value: showDepositUSD,
+      },
+      balance,
+      token,
+      minDeposit: minimumDeposit('$', 2000),
+      location: { currency: 'USD', location: 'en-US' },
+      converted: false,
+      name: 'Dollar',
+      img: {
+        src: '/assets/imgs/velo-img-20.webp',
+      },
+    },
+    {
+      state: {
+        set: setShowDepositEUR,
+        value: showDepositEUR,
+      },
+      balance,
+      token,
+      minDeposit: minimumDeposit('€', 2000),
+      location: { currency: 'EUR', location: 'en-DE' },
+      converted: true,
+      name: 'Euro',
+      img: {
+        src: '/assets/imgs/velo-img-21.png',
+      },
+    },
+    {
+      state: {
+        set: setShowDepositGBP,
+        value: showDepositGBP,
+      },
+      balance,
+      token,
+      minDeposit: minimumDeposit('£', 1500),
+      location: { currency: 'GBP', location: 'en-GB' },
+      converted: true,
+      name: 'Pound sterling',
+      img: {
+        src: '/assets/imgs/velo-img-22.png',
+      },
+    },
+    {
+      state: {
+        set: setShowDepositJPY,
+        value: showDepositJPY,
+      },
+      balance,
+      token,
+      minDeposit: minimumDeposit('¥', 3000),
+      location: { currency: 'JPY', location: 'ja-JP' },
+      converted: true,
+      name: 'Yen',
+      img: {
+        src: '/assets/imgs/velo-img-23.png',
+      },
+    },
+    {
+      state: {
+        set: setShowDepositAUD,
+        value: showDepositAUD,
+      },
+      balance,
+      token,
+      minDeposit: minimumDeposit('$', 3000),
+      location: { currency: 'AUD', location: 'en-AU' },
+      converted: true,
+      name: 'Australian dollar',
+      img: {
+        src: '/assets/imgs/velo-img-24.png',
+      },
+    },
+    {
+      state: {
+        set: setShowDepositCAD,
+        value: showDepositCAD,
+      },
+      balance,
+      token,
+      minDeposit: minimumDeposit('$', 2500),
+      location: { currency: 'CAD', location: 'en-CA' },
+      converted: true,
+      name: 'Canadian dollar',
+      img: {
+        src: '/assets/imgs/velo-img-25.png',
+      },
+    },
+    {
+      state: {
+        set: setShowDepositBRL,
+        value: showDepositBRL,
+      },
+      balance,
+      token,
+      minDeposit: minimumDeposit('R$', 8000),
+      location: { currency: 'BRL', location: 'pt-BR' },
+      converted: true,
+      name: 'Real',
+      img: {
+        src: '/assets/imgs/velo-img-27.png',
+      },
+    },
+    {
+      state: {
+        set: setShowDepositMXN,
+        value: showDepositMXN,
+      },
+      balance,
+      token,
+      minDeposit: minimumDeposit('$', 30000),
+      location: { currency: 'MXN', location: 'es-MX' },
+      converted: true,
+      name: 'Mexican peso',
+      img: {
+        src: '/assets/imgs/velo-img-28.webp',
+      },
+    },
+    {
+      state: {
+        set: setShowDepositINR,
+        value: showDepositINR,
+      },
+      balance,
+      token,
+      minDeposit: minimumDeposit('₹', 150000),
+      location: { currency: 'INR', location: 'en-IN' },
+      converted: true,
+      name: 'Indian rupees',
+      img: {
+        src: '/assets/imgs/velo-img-29.png',
+      },
+    },
+    {
+      state: {
+        set: setShowDepositIDR,
+        value: showDepositIDR,
+      },
+      balance,
+      token,
+      minDeposit: minimumDeposit('Rp', 30000000),
+      location: { currency: 'IDR', location: 'id-ID' },
+      converted: true,
+      name: 'Rs',
+      img: {
+        src: '/assets/imgs/velo-img-30.png',
+      },
+    },
+  ];
 
   const handleSearchCrypto = (name: string, symbol: string) => {
     if (!searchValue.trim()) return 'flex';
@@ -54,152 +208,26 @@ export default function WalletReceive({ dataCryptos, balance, token }: Props) {
 
   return (
     <>
-      <DepositInfo
-        setShowDeposit={setShowDepositUSD}
-        showDeposit={showDepositUSD}
-        balance={balance}
-        token={token}
-        minDeposit={minimumDeposit('$', 2000)}
-        location={{ currency: 'USD', location: 'en-US' }}
-        converted={false}
-      >
-        <Image
-          src="/assets/imgs/velo-img-20.webp"
-          alt="dollar"
-          width={25}
-          height={25}
-          className="rounded-full"
-        />
-      </DepositInfo>
-      <DepositInfo
-        setShowDeposit={setShowDepositEUR}
-        showDeposit={showDepositEUR}
-        balance={balance}
-        token={token}
-        minDeposit={minimumDeposit('€', 2000)}
-        location={{ currency: 'EUR', location: 'en-DE' }}
-        converted={true}
-      >
-        <Image
-          src="/assets/imgs/velo-img-21.png"
-          alt="euro"
-          width={25}
-          height={25}
-        />
-      </DepositInfo>
-      <DepositInfo
-        setShowDeposit={setShowDepositGBP}
-        showDeposit={showDepositGBP}
-        balance={balance}
-        token={token}
-        minDeposit={minimumDeposit('£', 1500)}
-        location={{ currency: 'GBP', location: 'en-GB' }}
-        converted={true}
-      >
-        <Image
-          src="/assets/imgs/velo-img-22.png"
-          alt="gbp"
-          width={25}
-          height={25}
-        />
-      </DepositInfo>
-      <DepositInfo
-        setShowDeposit={setShowDepositJPY}
-        showDeposit={showDepositJPY}
-        balance={balance}
-        token={token}
-        minDeposit={minimumDeposit('¥', 3000)}
-        location={{ currency: 'JPY', location: 'ja-JP' }}
-        converted={true}
-      >
-        <Image
-          src="/assets/imgs/velo-img-23.png"
-          alt="yen"
-          width={25}
-          height={25}
-        />
-      </DepositInfo>
-      <DepositInfo
-        setShowDeposit={setShowDepositAUD}
-        showDeposit={showDepositAUD}
-        balance={balance}
-        token={token}
-        minDeposit={minimumDeposit('$', 3000)}
-        location={{ currency: 'AUD', location: 'en-AU' }}
-        converted={true}
-      >
-        <Image
-          src="/assets/imgs/velo-img-24.png"
-          alt="aud"
-          width={25}
-          height={25}
-        />
-      </DepositInfo>
-      <DepositInfo
-        setShowDeposit={setShowDepositCAD}
-        showDeposit={showDepositCAD}
-        balance={balance}
-        token={token}
-        minDeposit={minimumDeposit('$', 2500)}
-        location={{ currency: 'CAD', location: 'en-CA' }}
-        converted={true}
-      >
-        <Image
-          src="/assets/imgs/velo-img-25.png"
-          alt="cad"
-          width={25}
-          height={25}
-        />
-      </DepositInfo>
-      <DepositInfo
-        setShowDeposit={setShowDepositBRL}
-        showDeposit={showDepositBRL}
-        balance={balance}
-        token={token}
-        minDeposit={minimumDeposit('R$', 8000)}
-        location={{ currency: 'BRL', location: 'pt-BR' }}
-        converted={true}
-      >
-        <Image
-          src="/assets/imgs/velo-img-27.png"
-          alt="brl"
-          width={25}
-          height={25}
-        />
-      </DepositInfo>
-      <DepositInfo
-        setShowDeposit={setShowDepositMXN}
-        showDeposit={showDepositMXN}
-        balance={balance}
-        token={token}
-        minDeposit={minimumDeposit('$', 30000)}
-        location={{ currency: 'MXN', location: 'es-MX' }}
-        converted={true}
-      >
-        <Image
-          src="/assets/imgs/velo-img-28.webp"
-          alt="mxn"
-          width={25}
-          height={25}
-        />
-      </DepositInfo>
-
-      <DepositInfo
-        setShowDeposit={setShowDepositINR}
-        showDeposit={showDepositINR}
-        balance={balance}
-        token={token}
-        minDeposit={minimumDeposit('₹', 150000)}
-        location={{ currency: 'INR', location: 'en-IN' }}
-        converted={true}
-      >
-        <Image
-          src="/assets/imgs/velo-img-29.png"
-          alt="mxn"
-          width={25}
-          height={25}
-        />
-      </DepositInfo>
+      {dataCoins.map(val => (
+        <DepositInfo
+          key={val.name}
+          setShowDeposit={val.state.set}
+          showDeposit={val.state.value}
+          balance={val.balance}
+          token={val.token}
+          minDeposit={val.minDeposit}
+          location={val.location}
+          converted={val.converted}
+        >
+          <Image
+            src={val.img.src}
+            alt={val.name.toLowerCase()}
+            width={25}
+            height={25}
+            className="rounded-full"
+          />
+        </DepositInfo>
+      ))}
       <div className="relative w-full flex items-center gap-4 px-2 border-b-1 border-solid border-ffffff33 h-[40px]">
         <div className="flex justify-center items-center w-4 h-4 fill-primary">
           <FaSearch />
@@ -223,173 +251,30 @@ export default function WalletReceive({ dataCryptos, balance, token }: Props) {
         )}
       </div>
       <div className="grid grid-cols-3 gap-5 mt-4">
-        <div
-          className={`p-6 bg-1b1e20ff ${handleSearchCrypto(
-            'dollar',
-            'usd'
-          )} rounded flex-col hover:bg-383b3eff transition-colors duration-200 cursor-pointer`}
-          onClick={() => setShowDepositUSD(!showDepositUSD)}
-        >
-          <div className="flex items-center gap-2">
-            <Image
-              src="/assets/imgs/velo-img-20.webp"
-              alt="dollar"
-              width={25}
-              height={25}
-              className="rounded-full"
-            />
-            <h4 className="text-primary font-normal text-sm">Dollar</h4>
+        {dataCoins.map(val => (
+          <div
+            key={val.name}
+            className={`p-6 bg-1b1e20ff ${handleSearchCrypto(
+              `${val.name.toLowerCase()}`,
+              `${val.location.currency.toLowerCase()}`
+            )} rounded flex-col hover:bg-383b3eff transition-colors duration-200 cursor-pointer`}
+            onClick={() => val.state.set(!val.state.value)}
+          >
+            <div className="flex items-center gap-2">
+              <Image
+                src={val.img.src}
+                alt={val.name.toLowerCase()}
+                width={25}
+                height={25}
+                className="rounded-full"
+              />
+              <h4 className="text-primary font-normal text-sm">{val.name}</h4>
+            </div>
+            <h3 className="text-sm font-normal text-primary ml-[33px]">
+              {val.location.currency}
+            </h3>
           </div>
-          <h3 className="text-sm font-normal text-primary ml-[33px]">USD</h3>
-        </div>
-        <div
-          className={`p-6 bg-1b1e20ff ${handleSearchCrypto(
-            'euro',
-            'eur'
-          )} rounded flex-col hover:bg-383b3eff transition-colors duration-200 cursor-pointer`}
-          onClick={() => setShowDepositEUR(!showDepositEUR)}
-        >
-          <div className="flex items-center gap-2">
-            <Image
-              src="/assets/imgs/velo-img-21.png"
-              alt="euro"
-              width={25}
-              height={25}
-            />
-            <h4 className="text-primary font-normal text-sm">Euro</h4>
-          </div>
-          <h3 className="text-sm font-normal text-primary ml-[33px]">EUR</h3>
-        </div>
-        <div
-          className={`p-6 bg-1b1e20ff ${handleSearchCrypto(
-            'gbp',
-            'pound sterling'
-          )} rounded flex-col hover:bg-383b3eff transition-colors duration-200 cursor-pointer`}
-          onClick={() => setShowDepositGBP(!showDepositGBP)}
-        >
-          <div className="flex items-center gap-2">
-            <Image
-              src="/assets/imgs/velo-img-22.png"
-              alt="gbp"
-              width={25}
-              height={25}
-            />
-            <h4 className="text-primary font-normal text-sm">Pound sterling</h4>
-          </div>
-          <h3 className="text-sm font-normal text-primary ml-[33px]">GBP</h3>
-        </div>
-        <div
-          className={`p-6 bg-1b1e20ff ${handleSearchCrypto(
-            'jpy',
-            'Yen'
-          )} rounded flex-col hover:bg-383b3eff transition-colors duration-200 cursor-pointer`}
-          onClick={() => setShowDepositJPY(!showDepositJPY)}
-        >
-          <div className="flex items-center gap-2">
-            <Image
-              src="/assets/imgs/velo-img-23.png"
-              alt="yen"
-              width={25}
-              height={25}
-            />
-            <h4 className="text-primary font-normal text-sm">Yen</h4>
-          </div>
-          <h3 className="text-sm font-normal text-primary ml-[33px]">JPY</h3>
-        </div>
-        <div
-          className={`p-6 bg-1b1e20ff ${handleSearchCrypto(
-            'aud',
-            'australian dollar'
-          )} rounded flex-col hover:bg-383b3eff transition-colors duration-200 cursor-pointer`}
-          onClick={() => setShowDepositAUD(!showDepositAUD)}
-        >
-          <div className="flex items-center gap-2">
-            <Image
-              src="/assets/imgs/velo-img-24.png"
-              alt="aud"
-              width={25}
-              height={25}
-            />
-            <h4 className="text-primary font-normal text-sm">
-              Australian dollar
-            </h4>
-          </div>
-          <h3 className="text-sm font-normal text-primary ml-[33px]">AUD</h3>
-        </div>
-        <div
-          className={`p-6 bg-1b1e20ff ${handleSearchCrypto(
-            'cad',
-            'canadian dollar'
-          )} rounded flex-col hover:bg-383b3eff transition-colors duration-200 cursor-pointer`}
-          onClick={() => setShowDepositCAD(!showDepositCAD)}
-        >
-          <div className="flex items-center gap-2">
-            <Image
-              src="/assets/imgs/velo-img-25.png"
-              alt="cad"
-              width={25}
-              height={25}
-            />
-            <h4 className="text-primary font-normal text-sm">
-              Canadian dollar
-            </h4>
-          </div>
-          <h3 className="text-sm font-normal text-primary ml-[33px]">CAD</h3>
-        </div>
-        <div
-          className={`p-6 bg-1b1e20ff ${handleSearchCrypto(
-            'BRL',
-            'Real'
-          )} rounded flex-col hover:bg-383b3eff transition-colors duration-200 cursor-pointer`}
-          onClick={() => setShowDepositBRL(!showDepositBRL)}
-        >
-          <div className="flex items-center gap-2">
-            <Image
-              src="/assets/imgs/velo-img-27.png"
-              alt="brl"
-              width={25}
-              height={25}
-            />
-            <h4 className="text-primary font-normal text-sm">Real</h4>
-          </div>
-          <h3 className="text-sm font-normal text-primary ml-[33px]">BRL</h3>
-        </div>
-        <div
-          className={`p-6 bg-1b1e20ff ${handleSearchCrypto(
-            'MXN',
-            'mexican peso'
-          )} rounded flex-col hover:bg-383b3eff transition-colors duration-200 cursor-pointer`}
-          onClick={() => setShowDepositMXN(!showDepositMXN)}
-        >
-          <div className="flex items-center gap-2">
-            <Image
-              src="/assets/imgs/velo-img-28.webp"
-              alt="mxn"
-              width={25}
-              height={25}
-            />
-            <h4 className="text-primary font-normal text-sm">Mexican peso</h4>
-          </div>
-          <h3 className="text-sm font-normal text-primary ml-[33px]">MXN</h3>
-        </div>
-        <div
-          className={`p-6 bg-1b1e20ff ${handleSearchCrypto(
-            'INR',
-            'indian rupees'
-          )} rounded flex-col hover:bg-383b3eff transition-colors duration-200 cursor-pointer`}
-          onClick={() => setShowDepositINR(!showDepositINR)}
-        >
-          <div className="flex items-center gap-2">
-            <Image
-              src="/assets/imgs/velo-img-29.png"
-              alt="inr"
-              width={25}
-              height={25}
-            />
-            <h4 className="text-primary font-normal text-sm">Indian rupees</h4>
-          </div>
-          <h3 className="text-sm font-normal text-primary ml-[33px]">INR</h3>
-        </div>
+        ))}
         {dataCryptos.map((val, index) => (
           <Link
             // eslint-disable-next-line
@@ -724,14 +609,14 @@ const BtnsAddValues = ({
   handleReplaceOptionsCurrency(event: MouseEvent<HTMLButtonElement>): void;
 }) => {
   const Btns = ({ values }: { values: number[] }) => (
-    <div className="flex justify-between gap-2">
+    <div className="flex gap-2 justify-between ">
       {values.map(value => (
         <button
           key={value}
           type="button"
           value={value}
           onClick={handleReplaceOptionsCurrency}
-          className="bg-383b3eff rounded py-[10px] px-[14px] text-xs font-medium text-primary hover:opacity-70 transition-opacity duration-200 cursor-pointer"
+          className="bg-383b3eff w-full rounded py-[10px] px-3 text-xs font-medium text-primary hover:opacity-70 transition-opacity duration-200 cursor-pointer"
         >
           +{value}
         </button>
@@ -760,6 +645,9 @@ const BtnsAddValues = ({
     }
     case 'INR': {
       return <Btns values={[1500, 3000, 4000, 6000]} />;
+    }
+    case 'IDR': {
+      return <Btns values={[300000, 600000, 1200000, 1500000]} />;
     }
 
     default:

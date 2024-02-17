@@ -55,7 +55,7 @@ class CreatePayment extends BaseRoute {
       if (currency !== 'USD') {
         const cambio = await this.getCambioDallar(currency);
         if (!cambio) throw new Error('err');
-        dollarAmountReceived = Math.round(depositAmount * cambio);
+        dollarAmountReceived = depositAmount * cambio;
       }
 
       const [, token] = this.authorization!.split(' ');

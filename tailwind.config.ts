@@ -102,6 +102,9 @@ const config: Config = {
       minHeight: {
         'full-screen-80px': 'calc(100vh - 80px)',
       },
+      gridTemplateColumns: {
+        custom: 'repeat(4, minmax(0, 1fr)) auto',
+      },
     },
   },
   plugins: [],

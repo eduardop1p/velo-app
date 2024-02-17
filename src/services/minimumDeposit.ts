@@ -1,4 +1,4 @@
-export type MinDepositType = '$' | '€' | '£' | '¥' | 'CHF' | 'R$' | '₹';
+export type MinDepositType = '$' | '€' | '£' | '¥' | 'CHF' | 'R$' | '₹' | 'Rp';
 
 const minimumDeposit = (symbol: MinDepositType, value: number) => ({
   symbol,
