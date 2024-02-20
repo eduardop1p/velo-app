@@ -38,7 +38,9 @@ export default function Graphic({ cryptoSymbol, cryptoName }: Props) {
   const [cryptoDataHisto, setCryptoDataHisto] = useState<
     HistorHourType[] | null
   >();
-  const cryptoHistoLimit = useRef(24);
+  const cryptoHistoLimit = useRef(
+    !new Date().getUTCHours() ? 1 : new Date().getUTCHours()
+  );
 
   const handleGetDataCrypto = useCallback(async () => {
     try {
@@ -211,15 +213,15 @@ const CryptpGraphic = ({
     return '#f76970ff';
   };
 
-  const mork = cryptoDataHisto.map(val => ({
+  cryptoDataHisto = cryptoDataHisto.map(val => ({
     ...val,
     time: `${new Date(val.time).getHours()}h`,
   }));
-  const newMork = [];
-  for (let i = 0; i < mork.length; i += 3) {
-    newMork.push(mork[i]);
-  }
-  cryptoDataHisto = newMork;
+  // const newMork = [];
+  // for (let i = 0; i < mork.length; i += 3) {
+  //   newMork.push(mork[i]);
+  // }
+  // cryptoDataHisto = newMork;
 
   return (
     <ResponsiveContainer width="100%" height={350}>

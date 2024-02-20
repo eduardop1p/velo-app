@@ -15,8 +15,9 @@ interface BodyType {
   type: 'money' | 'crypto';
   method: 'deposit' | 'send';
   symbol: string;
-  value: number;
-  defaultValue?: number; // apenas para depositos em moedas ficundiarias
+  cryptoValue?: number;
+  dollarValue?: number;
+  amountReceived?: number; // apenas para depositos em moedas ficundiarias
   userId: string;
   address?: string;
   privateKey?: string;
@@ -96,8 +97,8 @@ class TransactionsWallets extends BaseRoute {
   }
 
   verifyBody() {
-    const { symbol, value, type, method } = this.body;
-    if (!symbol || !value || !type || !method) {
+    const { symbol, dollarValue, type, method } = this.body;
+    if (!symbol || !dollarValue || !type || !method) {
       this.errors.push({
         body: {
           msg: 'Incomplete request body',
@@ -129,14 +130,14 @@ class TransactionsWallets extends BaseRoute {
 
   async createTransactionDeposit() {
     try {
-      const {
-        value,
+      let {
+        dollarValue,
         type,
         symbol,
         method,
         paymentIntent,
         userId,
-        defaultValue,
+        amountReceived,
       } = this.body;
 
       const [, token] = this.authorization!.split(' ');
@@ -147,11 +148,39 @@ class TransactionsWallets extends BaseRoute {
 
       if (user.transactions.length && user.transactions.map(val => val.paymentIntent).includes(paymentIntent)) return; // eslint-disable-line
       if (userId !== user._id.toString()) return;
+      if (!amountReceived) return;
+
+      switch (symbol) {
+        case 'JPY': {
+          break;
+        }
+        case 'JOD': {
+          amountReceived /= 1000;
+          break;
+        }
+        case 'KWD': {
+          amountReceived /= 1000;
+          break;
+        }
+        case 'LAK': {
+          break;
+        }
+        case 'KRW': {
+          break;
+        }
+        case 'VND': {
+          break;
+        }
+        default:
+          amountReceived /= 100;
+          break;
+      }
+
       user.transactions.push({
         cryptoValue: 0,
         date: Date.now(),
-        dollarValue: +(value / 100).toFixed(2),
-        defaultValue: +(defaultValue! / 100).toFixed(2),
+        dollarValue: dollarValue! / 100,
+        amountReceived,
         status: 'success',
         title: upperFirst(method),
         symbol,
@@ -165,7 +194,7 @@ class TransactionsWallets extends BaseRoute {
   }
 
   async createTransactionSendCrypto() {
-    const { symbol, address, value, privateKey } = this.body;
+    const { symbol, address, cryptoValue, privateKey } = this.body;
     if (!address || !privateKey) return;
     switch (symbol) {
       case 'BTC': {
@@ -175,7 +204,7 @@ class TransactionsWallets extends BaseRoute {
           const psbt = new Psbt();
           psbt.addOutput({
             address,
-            value: btcToSatoshis(value), // valor em satoshis
+            value: btcToSatoshis(cryptoValue!), // valor em satoshis
           });
           const ECPair = ECPairFactory(ecc);
           const userWif = ECPair.fromWIF(privateKey);

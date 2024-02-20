@@ -11,11 +11,13 @@ export default function Payment({
   stripePromise,
   token,
   depositAmount,
+  depositAmountDollar,
   currency,
 }: {
   stripePromise: StripePromiseType;
   token: string;
   depositAmount: number;
+  depositAmountDollar: number;
   currency: string;
 }) {
   const [clientSecret, setClientSecret] = useState<string | undefined>('');
@@ -31,7 +33,11 @@ export default function Payment({
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ depositAmount, currency }),
+          body: JSON.stringify({
+            depositAmount,
+            depositAmountDollar,
+            currency,
+          }),
         }
       );
       const data: { clientSecret: string } = await res.json();
@@ -39,7 +45,7 @@ export default function Payment({
     } catch (err) {
       console.log(err);
     }
-  }, [token, depositAmount, currency]);
+  }, [token, depositAmount, depositAmountDollar, currency]);
 
   useEffect(() => {
     if (initalRender) {

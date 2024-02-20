@@ -10,242 +10,43 @@ import {
   type FormEvent,
   MouseEvent,
   useEffect,
-  type ReactNode,
-  useCallback,
 } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import {
+  useForm,
+  SubmitHandler,
+  type UseFormSetFocus,
+  type UseFormSetValue,
+} from 'react-hook-form';
 import z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FaArrowLeft } from 'react-icons/fa6';
+import { FaArrowLeft, FaCheck, FaMoneyBills } from 'react-icons/fa6';
+import { RiArrowDownSFill, RiArrowUpSFill } from 'react-icons/ri';
 
 import { CryptoType } from '../header';
 import replaceCurrency from '@/services/replaceCurrency';
-import minimumDeposit, { MinDepositType } from '@/services/minimumDeposit';
+import minimumDeposit from '@/services/minimumDeposit';
 import formatPrice from '@/services/formatPrice';
 import Deposit from './deposit';
+import { CurrenciesType } from '@/services/fetchGetCurrencies';
+import AlertMsg, { OpenAlertType } from '../alertMsg';
 
 interface Props {
   dataCryptos: CryptoType[];
   balance: number;
   token: string;
+  countriesCurrencies: CurrenciesType[];
 }
 
-export default function WalletReceive({ dataCryptos, balance, token }: Props) {
+export default function WalletReceive({
+  dataCryptos,
+  balance,
+  token,
+  countriesCurrencies,
+}: Props) {
   const [searchValue, setSearchValue] = useState('');
   const [showDepositUSD, setShowDepositUSD] = useState(false);
-  const [showDepositEUR, setShowDepositEUR] = useState(false);
-  const [showDepositGBP, setShowDepositGBP] = useState(false);
-  const [showDepositJPY, setShowDepositJPY] = useState(false);
-  const [showDepositAUD, setShowDepositAUD] = useState(false);
-  const [showDepositCAD, setShowDepositCAD] = useState(false);
-  const [showDepositBRL, setShowDepositBRL] = useState(false);
-  const [showDepositMXN, setShowDepositMXN] = useState(false);
-  const [showDepositCOP, setShowDepositCOP] = useState(false);
-  const [showDepositCLP, setShowDepositCLP] = useState(false);
-  const [showDepositINR, setShowDepositINR] = useState(false);
-  const [showDepositIDR, setShowDepositIDR] = useState(false);
-  const [showDepositNGN, setShowDepositNGN] = useState(false);
-
-  const dataCoins = [
-    {
-      state: {
-        set: setShowDepositUSD,
-        value: showDepositUSD,
-      },
-      balance,
-      token,
-      minDeposit: minimumDeposit('$', 2000),
-      location: { currency: 'USD', location: 'en-US' },
-      converted: false,
-      name: 'Dollar',
-      img: {
-        src: '/assets/imgs/velo-img-20.webp',
-      },
-    },
-    {
-      state: {
-        set: setShowDepositEUR,
-        value: showDepositEUR,
-      },
-      balance,
-      token,
-      minDeposit: minimumDeposit('€', 2000),
-      location: { currency: 'EUR', location: 'en-DE' },
-      converted: true,
-      name: 'Euro',
-      img: {
-        src: '/assets/imgs/velo-img-21.png',
-      },
-    },
-    {
-      state: {
-        set: setShowDepositGBP,
-        value: showDepositGBP,
-      },
-      balance,
-      token,
-      minDeposit: minimumDeposit('£', 1500),
-      location: { currency: 'GBP', location: 'en-GB' },
-      converted: true,
-      name: 'Pound sterling',
-      img: {
-        src: '/assets/imgs/velo-img-22.png',
-      },
-    },
-    {
-      state: {
-        set: setShowDepositJPY,
-        value: showDepositJPY,
-      },
-      balance,
-      token,
-      minDeposit: minimumDeposit('¥', 3000),
-      location: { currency: 'JPY', location: 'ja-JP' },
-      converted: true,
-      name: 'Yen',
-      img: {
-        src: '/assets/imgs/velo-img-23.png',
-      },
-    },
-    {
-      state: {
-        set: setShowDepositAUD,
-        value: showDepositAUD,
-      },
-      balance,
-      token,
-      minDeposit: minimumDeposit('$', 3000),
-      location: { currency: 'AUD', location: 'en-AU' },
-      converted: true,
-      name: 'Australian dollar',
-      img: {
-        src: '/assets/imgs/velo-img-24.png',
-      },
-    },
-    {
-      state: {
-        set: setShowDepositCAD,
-        value: showDepositCAD,
-      },
-      balance,
-      token,
-      minDeposit: minimumDeposit('$', 2500),
-      location: { currency: 'CAD', location: 'en-CA' },
-      converted: true,
-      name: 'Canadian dollar',
-      img: {
-        src: '/assets/imgs/velo-img-25.png',
-      },
-    },
-    {
-      state: {
-        set: setShowDepositBRL,
-        value: showDepositBRL,
-      },
-      balance,
-      token,
-      minDeposit: minimumDeposit('R$', 8000),
-      location: { currency: 'BRL', location: 'pt-BR' },
-      converted: true,
-      name: 'Real',
-      img: {
-        src: '/assets/imgs/velo-img-27.png',
-      },
-    },
-    {
-      state: {
-        set: setShowDepositMXN,
-        value: showDepositMXN,
-      },
-      balance,
-      token,
-      minDeposit: minimumDeposit('$', 30000),
-      location: { currency: 'MXN', location: 'es-MX' },
-      converted: true,
-      name: 'Mexican peso',
-      img: {
-        src: '/assets/imgs/velo-img-28.webp',
-      },
-    },
-    {
-      state: {
-        set: setShowDepositCOP,
-        value: showDepositCOP,
-      },
-      balance,
-      token,
-      minDeposit: minimumDeposit('$', 7500000),
-      location: { currency: 'COP', location: 'es-CO' },
-      converted: true,
-      name: 'Colombian peso',
-      img: {
-        src: '/assets/imgs/velo-img-32.png',
-      },
-    },
-    {
-      state: {
-        set: setShowDepositCLP,
-        value: showDepositCLP,
-      },
-      balance,
-      token,
-      minDeposit: minimumDeposit('$', 18000),
-      location: { currency: 'CLP', location: 'es-CL' },
-      converted: true,
-      name: 'Chilean Peso',
-      img: {
-        src: '/assets/imgs/velo-img-33.png',
-      },
-    },
-
-    {
-      state: {
-        set: setShowDepositINR,
-        value: showDepositINR,
-      },
-      balance,
-      token,
-      minDeposit: minimumDeposit('₹', 150000),
-      location: { currency: 'INR', location: 'en-IN' },
-      converted: true,
-      name: 'Indian rupees',
-      img: {
-        src: '/assets/imgs/velo-img-29.png',
-      },
-    },
-    {
-      state: {
-        set: setShowDepositIDR,
-        value: showDepositIDR,
-      },
-      balance,
-      token,
-      minDeposit: minimumDeposit('Rp', 30000000),
-      location: { currency: 'IDR', location: 'id-ID' },
-      converted: true,
-      name: 'Rs',
-      img: {
-        src: '/assets/imgs/velo-img-30.png',
-      },
-    },
-    // {
-    //   state: {
-    //     set: setShowDepositNGN,
-    //     value: showDepositNGN,
-    //   },
-    //   balance,
-    //   token,
-    //   minDeposit: minimumDeposit('₦', 3000000),
-    //   location: { currency: 'NGN', location: 'en-NG' },
-    //   converted: true,
-    //   name: 'Naira',
-    //   img: {
-    //     src: '/assets/imgs/velo-img-31.png',
-    //   },
-    // },
-  ];
 
   const handleSearchCrypto = (name: string, symbol: string) => {
     if (!searchValue.trim()) return 'flex';
@@ -257,26 +58,14 @@ export default function WalletReceive({ dataCryptos, balance, token }: Props) {
 
   return (
     <>
-      {dataCoins.map(val => (
-        <DepositInfo
-          key={val.name}
-          setShowDeposit={val.state.set}
-          showDeposit={val.state.value}
-          balance={val.balance}
-          token={val.token}
-          minDeposit={val.minDeposit}
-          location={val.location}
-          converted={val.converted}
-        >
-          <Image
-            src={val.img.src}
-            alt={val.name.toLowerCase()}
-            width={25}
-            height={25}
-            className="rounded-full"
-          />
-        </DepositInfo>
-      ))}
+      <DepositInfo
+        setShowDeposit={setShowDepositUSD}
+        showDeposit={showDepositUSD}
+        balance={balance}
+        token={token}
+        countriesCurrencies={countriesCurrencies}
+      ></DepositInfo>
+
       <div className="relative w-full flex items-center gap-4 px-2 border-b-1 border-solid border-ffffff33 h-[40px]">
         <div className="flex justify-center items-center w-4 h-4 fill-primary">
           <FaSearch />
@@ -299,31 +88,21 @@ export default function WalletReceive({ dataCryptos, balance, token }: Props) {
           </div>
         )}
       </div>
+
       <div className="grid grid-cols-3 gap-5 mt-4">
-        {dataCoins.map(val => (
-          <div
-            key={val.name}
-            className={`p-6 bg-1b1e20ff ${handleSearchCrypto(
-              `${val.name.toLowerCase()}`,
-              `${val.location.currency.toLowerCase()}`
-            )} rounded flex-col hover:bg-383b3eff transition-colors duration-200 cursor-pointer`}
-            onClick={() => val.state.set(!val.state.value)}
-          >
-            <div className="flex items-center gap-2">
-              <Image
-                src={val.img.src}
-                alt={val.name.toLowerCase()}
-                width={25}
-                height={25}
-                className="rounded-full"
-              />
-              <h4 className="text-primary font-normal text-sm">{val.name}</h4>
+        <div
+          className={`p-6 bg-1b1e20ff rounded flex-col hover:bg-383b3eff transition-colors duration-200 cursor-pointer`}
+          onClick={() => setShowDepositUSD(!showDepositUSD)}
+        >
+          <div className="flex items-center gap-2">
+            <div className="flex items-center justify-center h-7 w-h-7 fill-green-300 ">
+              <FaMoneyBills />
             </div>
-            <h3 className="text-sm font-normal text-primary ml-[33px]">
-              {val.location.currency}
-            </h3>
+            <h4 className="text-primary font-normal text-sm">Deposit fiat</h4>
           </div>
-        ))}
+          {/* <h3 className="text-sm font-normal text-primary ml-[36px]">USD</h3> */}
+        </div>
+
         {dataCryptos.map((val, index) => (
           <Link
             // eslint-disable-next-line
@@ -356,25 +135,20 @@ export default function WalletReceive({ dataCryptos, balance, token }: Props) {
 
 const zodSchema = z
   .object({
-    depositAmount: z.string().trim().min(1, 'Required field'),
-    minDeposit: z.number(),
-    formatPrice: z.object({
-      currency: z.string(),
-      location: z.string(),
-    }),
+    depositAmount: z // real
+      .string()
+      .trim()
+      .refine(val => replaceCurrency(val), 'Required field'),
+    depositAmountDollar: z.string().trim().min(1, 'Required field'),
   })
   .superRefine((val, ctx) => {
-    let {
-      depositAmount,
-      minDeposit,
-      formatPrice: { currency, location },
-    } = val;
-    if (replaceCurrency(depositAmount) < minDeposit) {
+    let { depositAmountDollar } = val;
+    if (replaceCurrency(depositAmountDollar) < minimumDeposit) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: `The minimum deposit amount is ${formatPrice(currency !== 'JPY' && currency !== 'CLP' ? minDeposit / 100 : minDeposit, currency, location)}`, // eslint-disable-line
+        message: `The minimum deposit amount is ${formatPrice(minimumDeposit / 100)}`, // eslint-disable-line
         fatal: true,
-        path: ['depositAmount'],
+        path: ['depositAmountDollar'],
       });
       return;
     }
@@ -387,22 +161,13 @@ export function DepositInfo({
   setShowDeposit,
   balance,
   token,
-  minDeposit,
-  location,
-  converted,
-  children,
+  countriesCurrencies,
 }: {
   showDeposit: boolean;
   setShowDeposit: Dispatch<SetStateAction<boolean>>;
   balance: number;
   token: string;
-  minDeposit: { symbol: MinDepositType; value: number };
-  location: {
-    currency: string;
-    location: string;
-  };
-  converted: boolean;
-  children: ReactNode;
+  countriesCurrencies: CurrenciesType[];
 }) {
   const {
     register,
@@ -411,75 +176,180 @@ export function DepositInfo({
     setValue,
     watch,
     trigger,
+    setFocus,
   } = useForm<BodyType>({
     resolver: zodResolver(zodSchema),
   });
   const [addDeposit, setAddDeposit] = useState({
     open: false,
-    depositAmount: minDeposit.value,
-    currency: location.currency,
+    depositAmount: 0, // real
+    depositAmountDollar: minimumDeposit,
   });
-  const [intialRender, setInitialRender] = useState(true);
+  const [selectCurrency, setSelectCurrency] = useState<
+    CurrenciesType & { open: boolean }
+  >({
+    name: 'United States dollar',
+    code: 'USD',
+    colors: {
+      bg: '#eceff2',
+      text: '#d73921',
+    },
+    symbol: '$',
+    open: false,
+  });
+  const [openAlert, setOpenAlert] = useState<OpenAlertType>({
+    open: false,
+    msg: '',
+    severity: 'success',
+  });
+  const [initialRender, setInitialRender] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (!showDeposit && watch('depositAmount')) setValue('depositAmount', '');
+    if (!showDeposit) {
+      setValue('depositAmount', ''); // real
+      setValue('depositAmountDollar', formatPrice(0));
+    }
   }, [showDeposit, setValue, watch]);
 
   useEffect(() => {
-    if (intialRender) {
-      register('minDeposit', { value: minDeposit.value });
-      register('formatPrice.currency', { value: location.currency });
-      register('formatPrice.location', { value: location.location });
+    if (errors.depositAmountDollar)
+      setTimeout(() => {
+        setFocus('depositAmount'); // real
+      }, 1);
+  }, [errors, setFocus]);
+
+  useEffect(() => {
+    if (initialRender) {
+      setValue('depositAmountDollar', formatPrice(0));
       setInitialRender(false);
     }
-  }, [register, intialRender, minDeposit, location]);
+  }, [initialRender, setValue]);
 
   const handleFormSubmit: SubmitHandler<BodyType> = async body => {
-    // console.log(body);
     setAddDeposit({
       open: true,
-      depositAmount: replaceCurrency(body.depositAmount),
-      currency: location.currency,
+      depositAmount: replaceCurrency(body.depositAmount), // real
+      depositAmountDollar: replaceCurrency(body.depositAmountDollar),
     });
   };
 
-  const handleMaskMoney = (event: FormEvent<HTMLInputElement>) => {
+  const handleMaskMoney = async (event: FormEvent<HTMLInputElement>) => {
     const currentTarget = event.currentTarget;
     let value = currentTarget.value.replace(/[^\d]/g, '');
-    value = handleFormatPrice(+value, location.currency);
+
+    let numberValue: number;
+    switch (selectCurrency.code) {
+      case 'JPY': {
+        numberValue = +value;
+        break;
+      }
+      case 'JOD': {
+        numberValue = +value / 1000;
+        break;
+      }
+      case 'KWD': {
+        numberValue = +value / 1000;
+        break;
+      }
+      case 'LAK': {
+        numberValue = +value;
+        break;
+      }
+      case 'KRW': {
+        numberValue = +value;
+        break;
+      }
+      case 'VND': {
+        numberValue = +value;
+        break;
+      }
+      default:
+        numberValue = +value / 100;
+        break;
+    }
+    value = formatPrice(
+      numberValue,
+      selectCurrency.code,
+      `en-${selectCurrency.code.slice(0, 2).toLowerCase()}`
+    );
+
     currentTarget.value = value;
+    if (!numberValue) return;
+    if (selectCurrency.code === 'USD') {
+      setValue('depositAmountDollar', formatPrice(numberValue));
+      return;
+    }
+    const dollarPriceToCurrency = await handleGetCambioDallar();
+    if (!dollarPriceToCurrency) {
+      setOpenAlert({
+        msg: 'An error occurred, try again',
+        open: true,
+        severity: 'error',
+      });
+      return;
+    }
+
+    const cambioCurrency = formatPrice(numberValue / dollarPriceToCurrency);
+    setValue('depositAmountDollar', cambioCurrency);
+    trigger('depositAmountDollar');
   };
 
-  const handleFormatPrice = useCallback(
-    (value: number, currency: string) => {
-      switch (currency) {
-        case 'JPY': {
-          return formatPrice(value, location.currency, location.location);
-        }
-        case 'CLP': {
-          return formatPrice(value, location.currency, location.location);
-        }
+  const handleGetCambioDallar = async () => {
+    try {
+      setIsLoading(true);
+      const res = await fetch(
+        `https://economia.awesomeapi.com.br/last/USD-${selectCurrency.code}`
+      );
+      if (!res.ok) throw new Error('request error');
+      const data = await res.json();
+      const bid = +data[`USD${selectCurrency.code}`].bid;
+      return bid;
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-        default:
-          return formatPrice(value / 100, location.currency, location.location);
-      }
-    },
-    [location]
-  );
-
-  const handleReplaceOptionsCurrency = (
+  const handleReplaceOptionsCurrency = async (
     event: MouseEvent<HTMLButtonElement>
   ) => {
-    const currentTargetValue = event.currentTarget.value;
+    const currentTargetValue = +event.currentTarget.value;
+    if (selectCurrency.code === 'USD') {
+      setValue('depositAmount', formatPrice(currentTargetValue));
+      setValue('depositAmountDollar', formatPrice(currentTargetValue));
+      trigger('depositAmountDollar');
+      return;
+    }
+
+    const currencyPrice = await handleGetCambioDallar();
+    if (!currencyPrice) {
+      setOpenAlert({
+        msg: 'An error occurred, try again',
+        open: true,
+        severity: 'error',
+      });
+      return;
+    }
+
     setValue(
       'depositAmount',
-      formatPrice(+currentTargetValue, location.currency, location.location)
+      formatPrice(
+        currentTargetValue * currencyPrice,
+        selectCurrency.code,
+        `en-${selectCurrency.code.slice(0, 2).toLowerCase()}`
+      )
     );
-    trigger('depositAmount');
+    setValue('depositAmountDollar', formatPrice(currentTargetValue));
+    trigger('depositAmountDollar');
   };
 
   return (
     <>
+      <div className="absolute">
+        <AlertMsg openAlert={openAlert} setOpenAlert={setOpenAlert} />
+      </div>
       <div
         // eslint-disable-next-line
         className={`bg-0006 w-full z-10 fixed h-screen justify-center items-center inset-0 ${showDeposit ? 'flex' : 'hidden'}`}
@@ -505,30 +375,38 @@ export function DepositInfo({
                 Deposit by card
               </h2>
               <div className="flex gap-2">
+                <h4 className="text-c1c5d0 text-sm font-normal">Value:</h4>
                 <h4 className="text-c1c5d0 text-sm font-normal">
-                  Value {location.currency}:
-                </h4>
-                <h4 className="text-c1c5d0 text-sm font-normal">
-                  {handleFormatPrice(
-                    addDeposit.depositAmount,
-                    location.currency
-                  )}
+                  {formatPrice(addDeposit.depositAmountDollar / 100)}
                 </h4>
               </div>
             </div>
             <Deposit
-              depositAmount={addDeposit.depositAmount}
-              currency={addDeposit.currency}
+              depositAmount={addDeposit.depositAmount} // real
+              depositAmountDollar={addDeposit.depositAmountDollar}
               token={token}
+              currency={selectCurrency.code}
             />
             <CardBrands />
           </div>
         ) : (
           <form
             onSubmit={handleSubmit(handleFormSubmit)}
-            className="bg-272a2eff rounded-md p-6 w-[380px] min-h-[55%] max-h-[90%] overflow-x-hidden overflow-y-auto flex flex-col gap-6 relative"
+            className="bg-272a2eff rounded-md  p-6 w-[380px] min-h-[55%] max-h-[90%] overflow-x-hidden overflow-y-auto flex flex-col gap-6 relative"
             onClick={event => event.stopPropagation()}
           >
+            {isLoading && (
+              <div className="absolute left-1/2 -translate-x-1/2 top-1/2 -trasnlate-y-1/2 z-[5]">
+                <Image
+                  src="/assets/imgs/velo-logo.png"
+                  alt="logo"
+                  width={35}
+                  height={35}
+                  className="animate-pulse duration-100"
+                />
+              </div>
+            )}
+
             <h2 className="text-xl text-primary font-normal">
               How much do you want to deposit?
             </h2>
@@ -547,46 +425,125 @@ export function DepositInfo({
                     Minimum deposit amount:
                   </h4>
                   <h4 className="text-c1c5d0 text-sm font-normal">
-                    {handleFormatPrice(minDeposit.value, location.currency)}
+                    {formatPrice(minimumDeposit / 100)}
                   </h4>
                 </div>
               </div>
             </div>
-            <div className="flex flex-col gap-1">
-              <p className="text-c1c5d0 font-normal text-xs">Deposit value</p>
-              <div className=" flex flex-col gap-1">
-                {/* eslint-disable-next-line */}
-                <div className={`flex items-center gap-4 border-b-[1.5px] border-solid ${errors.depositAmount ? 'border-red-600' : 'border-ffffff33'} pb-[5px] w-full`}>
-                  <div className="flex items-center gap-1">
-                    {children}
-                    <span className="text-primary font-medium text-sm">
-                      {location.currency}
-                    </span>
-                  </div>
+
+            <div className="flex flex-col">
+              <div className="flex flex-col">
+                <p className="text-c1c5d0 font-normal text-xs leading-none -mb-[2px]">
+                  Choose a currency and value
+                </p>
+                <div
+                  // eslint-disable-next-line
+                  className={`flex items-end gap-4 border-b-[1.5px] border-solid pb-[5px] w-full ${errors.depositAmount ? 'border-red-600' : 'border-ffffff33'}`}
+                >
                   <input
                     id="depositAmount"
                     type="text"
                     placeholder={formatPrice(
                       0,
-                      location.currency,
-                      location.location
+                      selectCurrency.code,
+                      `en-${selectCurrency.code.slice(0, 2).toLowerCase()}`
                     )}
-                    className="w-full bg-transparent text-sm font-normal text-primary"
-                    {...register('depositAmount')}
+                    className={`w-full bg-transparent text-sm font-normal text-primary`}
                     onInput={handleMaskMoney}
+                    {...register('depositAmount')}
                   />
+                  <div
+                    className="border-l-1 border-l-ffffff33 px-2 py-1 flex cursor-pointer"
+                    tabIndex={0}
+                    onBlur={event => {
+                      if (!event.currentTarget.contains(event.relatedTarget))
+                        setSelectCurrency(state => ({ ...state, open: false }));
+                    }}
+                  >
+                    <div
+                      className="flex gap-[6px] items-center relative"
+                      onClick={() =>
+                        setSelectCurrency(state => ({
+                          ...state,
+                          open: !state.open,
+                        }))
+                      }
+                    >
+                      <div
+                        className={`w-[26px] h-[26px] overflow-hidden rounded-full items-center justify-center flex text-[15px] font-medium`}
+                        style={{
+                          backgroundColor: selectCurrency.colors.bg,
+                          color: selectCurrency.colors.text,
+                        }}
+                      >
+                        {selectCurrency.symbol}
+                      </div>
+                      <span className="text-primary font-normal text-sm">
+                        {selectCurrency.code}
+                      </span>
+                      <button
+                        type="button"
+                        className="w-[18px] h-[18px] fill-primary flex items-center justify-center"
+                      >
+                        {selectCurrency.open ? (
+                          <RiArrowUpSFill />
+                        ) : (
+                          <RiArrowDownSFill />
+                        )}
+                      </button>
+                    </div>
+                    <SelectCurrency
+                      countriesCurrencies={countriesCurrencies}
+                      setSelectCurrency={setSelectCurrency}
+                      selectCurrency={selectCurrency}
+                      setFocus={setFocus}
+                      setValue={setValue}
+                    />
+                  </div>
                 </div>
                 <span className="text-[10px] h-[15px] text-red-600 font-normal">
                   {errors.depositAmount?.message}
                 </span>
               </div>
 
-              <BtnsAddValues
-                handleReplaceOptionsCurrency={handleReplaceOptionsCurrency}
-                currency={location.currency}
-              />
+              <div className="flex flex-col gap-1">
+                <p className="text-c1c5d0 font-normal text-xs">
+                  You will receive
+                </p>
+                <div className=" flex flex-col gap-[2px]">
+                  {/* eslint-disable-next-line */}
+                  <div className={`flex items-center gap-4 border-b-[1.5px] border-solid pb-[5px] w-full ${errors.depositAmountDollar ? 'border-red-600' : 'border-ffffff33'}`}>
+                    <div className="flex items-center gap-1">
+                      <Image
+                        src="/assets/imgs/velo-img-21.png"
+                        alt="usd"
+                        width={25}
+                        height={25}
+                      />
+                      <span className="text-primary font-medium text-sm">
+                        USD
+                      </span>
+                    </div>
+                    <input
+                      id="depositAmountDollar"
+                      type="text"
+                      className={`w-full bg-transparent text-sm font-normal text-primary`}
+                      {...register('depositAmountDollar')}
+                      readOnly
+                    />
+                  </div>
+                  <span className="text-[10px] h-[15px] text-red-600 font-normal">
+                    {errors.depositAmountDollar?.message}
+                  </span>
+                </div>
+
+                <BtnsAddValues
+                  handleReplaceOptionsCurrency={handleReplaceOptionsCurrency}
+                />
+              </div>
             </div>
-            <div className="border-ffffff33 border-solid border-b-[2px] w-full mt-4"></div>
+
+            <div className="border-ffffff33 border-solid border-b-[2px] w-full"></div>
             <div className="flex self-end gap-4">
               <button
                 type="button"
@@ -604,16 +561,14 @@ export function DepositInfo({
               </button>
             </div>
 
-            {converted && (
-              <div className="bg-34383cff p-4 rounded flex items-center gap-4">
-                <div className="bg-bluehover flex-none rounded-full flex items-center justify-center text-sm font-normal text-primary w-5 h-5">
-                  !
-                </div>
-                <p className="text-primary text-xs font-normal">
-                  Your deposit will be converted to US dollars
-                </p>
+            <div className="bg-34383cff p-4 rounded flex items-center gap-4">
+              <div className="bg-bluehover flex-none rounded-full flex items-center justify-center text-sm font-normal text-primary w-5 h-5">
+                !
               </div>
-            )}
+              <p className="text-primary text-xs font-normal">
+                Your deposit will be converted to US dollars
+              </p>
+            </div>
           </form>
         )}
       </div>
@@ -653,11 +608,107 @@ const CardBrands = () => {
   );
 };
 
+const SelectCurrency = ({
+  countriesCurrencies,
+  setSelectCurrency,
+  selectCurrency,
+  setFocus,
+  setValue,
+}: {
+  countriesCurrencies: CurrenciesType[];
+  setSelectCurrency: Dispatch<
+    SetStateAction<CurrenciesType & { open: boolean }>
+  >;
+  selectCurrency: CurrenciesType & { open: boolean };
+  setFocus: UseFormSetFocus<BodyType>;
+  setValue: UseFormSetValue<BodyType>;
+}) => {
+  const [searchValue, setSearchValue] = useState('');
+
+  const handleSearchCrypto = (name: string, symbol: string) => {
+    if (!searchValue.trim()) return 'flex';
+    return name.indexOf(searchValue.toLowerCase()) !== -1 ||
+      symbol.indexOf(searchValue.toLowerCase()) !== -1
+      ? 'flex'
+      : 'hidden';
+  };
+
+  return (
+    <div
+      // eslint-disable-next-line
+      className={`absolute bottom-10 w-[60%] right-6 bg-primary rounded-lg h-1/2 overflow-hidden ${selectCurrency.open ? 'block' : 'hidden'}`}
+      onClick={event => event.stopPropagation()}
+    >
+      <div className="overflow-x-hidden overflow-y-auto pt-3 pb-4 flex flex-col w-full h-full bg-inherit">
+        <div className="px-4 pb-2 border-b-1 border-solid border-b-e9ecef w-full flex items-center gap-2 bg-inherit">
+          <div className="flex justify-center items-center w-[14px] h-[14px] fill-gray-500">
+            <FaSearch />
+          </div>
+          <input
+            value={searchValue}
+            placeholder="Search"
+            id="search"
+            name="search"
+            type="text"
+            className="w-full bg-transparent text-secondary text-[13px] font-normal"
+            onChange={event => setSearchValue(event.target.value)}
+          />
+        </div>
+
+        {countriesCurrencies.map(val => (
+          <div
+            key={val.code}
+            // eslint-disable-next-line
+            className={`flex gap-2 justify-between items-center px-4 py-2 duration-200 transition-colors ${val.code === selectCurrency.code ? 'bg-e9ecef' : 'hover:bg-e9ecef'} ${handleSearchCrypto(
+              val.name.toLowerCase(),
+              val.code.toLowerCase()
+            )}`}
+            onClick={() => {
+              setSelectCurrency(() => ({ ...val, open: false }));
+              setValue('depositAmount', ''); // real
+              setValue('depositAmountDollar', formatPrice(0));
+              setFocus('depositAmount'); // real
+            }}
+          >
+            <div className="flex items-center gap-2">
+              <div
+                className={`w-[26px] h-[26px] flex-none rounded-full items-center justify-center flex overflow-hidden`}
+                style={{
+                  backgroundColor: val.colors.bg,
+                }}
+              >
+                <span
+                  style={{
+                    color: val.colors.text,
+                  }}
+                  className="text-[15px] font-medium leading-none"
+                >
+                  {val.symbol}
+                </span>
+              </div>
+              <div className="flex flex-col gap-[1px]">
+                <span className="text-secondary font-normal text-sm leading-none">
+                  {val.code}
+                </span>
+                <span className="text-secondary opacity-70 font-normal text-xs leading-none">
+                  {val.name}
+                </span>
+              </div>
+            </div>
+            {/* eslint-disable-next-line */}
+            <div className={`items-center justify-center h-4 w-4 fill-191919 ${val.code === selectCurrency.code ? 'flex' : 'hidden'}`}>
+              <FaCheck />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 const BtnsAddValues = ({
-  currency,
   handleReplaceOptionsCurrency,
 }: {
-  currency: string;
   handleReplaceOptionsCurrency(event: MouseEvent<HTMLButtonElement>): void;
 }) => {
   const Btns = ({ values }: { values: number[] }) => (
@@ -676,39 +727,5 @@ const BtnsAddValues = ({
     </div>
   );
 
-  switch (currency) {
-    case 'GBP': {
-      return <Btns values={[15, 50, 100, 250, 500]} />;
-    }
-    case 'JPY': {
-      return <Btns values={[3000, 5000, 10000, 25000]} />;
-    }
-    case 'AUD': {
-      return <Btns values={[30, 50, 100, 250, 500]} />;
-    }
-    case 'CAD': {
-      return <Btns values={[25, 50, 100, 250, 500]} />;
-    }
-    case 'BRL': {
-      return <Btns values={[80, 150, 300, 500, 1000]} />;
-    }
-    case 'MXN': {
-      return <Btns values={[300, 600, 1200, 2000, 3000]} />;
-    }
-    case 'COP': {
-      return <Btns values={[75000, 150000, 300000, 600000]} />;
-    }
-    case 'CLP': {
-      return <Btns values={[18000, 36000, 72000, 144000]} />;
-    }
-    case 'INR': {
-      return <Btns values={[1500, 3000, 4000, 6000]} />;
-    }
-    case 'IDR': {
-      return <Btns values={[300000, 600000, 1200000, 1500000]} />;
-    }
-
-    default:
-      return <Btns values={[20, 50, 100, 250, 500]} />;
-  }
+  return <Btns values={[20, 50, 100, 250, 500]} />;
 };

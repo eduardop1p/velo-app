@@ -15,6 +15,11 @@ const FormCreatedAccount = dynamic(
 
 export interface CountriesType {
   name: string;
+  currency: {
+    code: string;
+    name: string;
+    symbol: string;
+  };
 }
 
 export const metadata: Metadata = {

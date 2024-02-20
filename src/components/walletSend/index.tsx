@@ -134,7 +134,7 @@ export default function WalletSend({
 const zodSchemaRedeem = z
   .object({
     balance: z.string(),
-    currency: z
+    amountSend: z
       .string()
       .trim()
       .min(1, 'The field is mandatory')
@@ -148,7 +148,7 @@ const zodSchemaRedeem = z
           });
           return;
         }
-        if (newValue < 10) {
+        if (newValue < 1000) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
             message: 'Amount less than the minimum withdrawal',
@@ -159,9 +159,9 @@ const zodSchemaRedeem = z
       }),
   })
   .refine(
-    val => !(replaceCurrency(val.currency) > replaceCurrency(val.balance)),
+    val => !(replaceCurrency(val.amountSend) > replaceCurrency(val.balance)),
     {
-      path: ['currency'],
+      path: ['amountSend'],
       message: 'Insufficient funds',
     }
   );
@@ -170,7 +170,7 @@ type BodyRedeemType = z.infer<typeof zodSchemaRedeem>;
 
 interface AddBankType {
   open: boolean;
-  currency: string;
+  amountSend: string;
 }
 
 function SendInDollar({
@@ -201,7 +201,7 @@ function SendInDollar({
   const [isLoading, setIsLoading] = useState(false);
   const [addBank, setAddBank] = useState<AddBankType>({
     open: false,
-    currency: '',
+    amountSend: '',
   });
 
   useEffect(() => {
@@ -213,7 +213,7 @@ function SendInDollar({
   const handleFormSubmit: SubmitHandler<BodyRedeemType> = async body => {
     setAddBank({
       open: true,
-      currency: body.currency,
+      amountSend: body.amountSend,
     });
     return body;
   };
@@ -229,8 +229,8 @@ function SendInDollar({
     event: MouseEvent<HTMLButtonElement>
   ) => {
     const currentTargetValue = event.currentTarget.value;
-    setValue('currency', formatPrice(+currentTargetValue));
-    trigger('currency');
+    setValue('amountSend', formatPrice(+currentTargetValue));
+    trigger('amountSend');
   };
 
   return (
@@ -282,7 +282,7 @@ function SendInDollar({
               <p className="text-c1c5d0 font-normal text-xs">Value</p>
               <div className=" flex flex-col gap-1">
                 {/* eslint-disable-next-line */}
-                <div className={`flex items-center gap-4 border-b-[1.5px] border-solid ${errors.currency ? 'border-red-600' : 'border-ffffff33'} pb-[5px] w-full`}>
+                <div className={`flex items-center gap-4 border-b-[1.5px] border-solid ${errors.amountSend ? 'border-red-600' : 'border-ffffff33'} pb-[5px] w-full`}>
                   <div className="flex items-center gap-1">
                     <Image
                       src="/assets/imgs/velo-img-20.webp"
@@ -296,16 +296,16 @@ function SendInDollar({
                     </span>
                   </div>
                   <input
-                    id="currency"
+                    id="amountSend"
                     type="text"
                     placeholder="$0.00"
                     className="w-full bg-transparent text-sm font-normal text-primary"
-                    {...register('currency')}
+                    {...register('amountSend')}
                     onInput={handleMaskMoney}
                   />
                 </div>
                 <span className="text-[10px] h-[15px] text-red-600 font-normal">
-                  {errors.currency?.message}
+                  {errors.amountSend?.message}
                 </span>
               </div>
               <div className="flex justify-between gap-2">
@@ -313,7 +313,7 @@ function SendInDollar({
                   type="button"
                   value={50}
                   onClick={handleReplaceOptionsCurrency}
-                  className="bg-383b3eff rounded py-[10px] px-[14px] text-xs font-medium text-primary hover:opacity-70 transition-opacity duration-200 cursor-pointer"
+                  className="bg-383b3eff rounded py-[10px] w-full px-[14px] text-xs font-medium text-primary hover:opacity-70 transition-opacity duration-200 cursor-pointer"
                 >
                   +50
                 </button>
@@ -321,7 +321,7 @@ function SendInDollar({
                   type="button"
                   value={100}
                   onClick={handleReplaceOptionsCurrency}
-                  className="bg-383b3eff rounded py-[10px] px-[14px] text-xs font-medium text-primary hover:opacity-70 transition-opacity duration-200 cursor-pointer"
+                  className="bg-383b3eff rounded py-[10px] w-full px-[14px] text-xs font-medium text-primary hover:opacity-70 transition-opacity duration-200 cursor-pointer"
                 >
                   +100
                 </button>
@@ -329,7 +329,7 @@ function SendInDollar({
                   type="button"
                   value={250}
                   onClick={handleReplaceOptionsCurrency}
-                  className="bg-383b3eff rounded py-[10px] px-[14px] text-xs font-medium text-primary hover:opacity-70 transition-opacity duration-200 cursor-pointer"
+                  className="bg-383b3eff rounded py-[10px] w-full px-[14px] text-xs font-medium text-primary hover:opacity-70 transition-opacity duration-200 cursor-pointer"
                 >
                   +250
                 </button>
@@ -337,7 +337,7 @@ function SendInDollar({
                   type="button"
                   value={500}
                   onClick={handleReplaceOptionsCurrency}
-                  className="bg-383b3eff rounded py-[10px] px-[14px] text-xs font-medium text-primary hover:opacity-70 transition-opacity duration-200 cursor-pointer"
+                  className="bg-383b3eff rounded py-[10px] w-full px-[14px] text-xs font-medium text-primary hover:opacity-70 transition-opacity duration-200 cursor-pointer"
                 >
                   +500
                 </button>
@@ -345,7 +345,7 @@ function SendInDollar({
                   type="button"
                   value={balance}
                   onClick={handleReplaceOptionsCurrency}
-                  className="bg-383b3eff rounded py-[10px] px-[14px] text-xs font-medium text-primary hover:opacity-70 transition-opacity duration-200 cursor-pointer"
+                  className="bg-383b3eff rounded py-[10px] w-full px-[14px] text-xs font-medium text-primary hover:opacity-70 transition-opacity duration-200 cursor-pointer"
                 >
                   All
                 </button>
@@ -486,7 +486,7 @@ function BankAccount({
         onClick={() =>
           setAddBank({
             open: false,
-            currency: '',
+            amountSend: '',
           })
         }
       >
@@ -626,7 +626,7 @@ function BankAccount({
           onClick={() =>
             setAddBank({
               open: false,
-              currency: '',
+              amountSend: '',
             })
           }
         >

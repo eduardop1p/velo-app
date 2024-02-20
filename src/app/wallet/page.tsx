@@ -2,8 +2,11 @@ import { cookies } from 'next/headers';
 import { FaArrowUp, FaArrowDown } from 'react-icons/fa6';
 import Link from 'next/link';
 import Stripe from 'stripe';
+import dynamic from 'next/dynamic';
 
-import WalletGraphic from '@/components/walletGraphic';
+const WalletGraphic = dynamic(() => import('@/components/walletGraphic'), {
+  ssr: false,
+});
 import calBalance from '@/services/calcBalance';
 import calcPatrimonyTotal from '@/services/calcPatrimonyTotal';
 import calInvested from '@/services/calcInvested';
@@ -42,8 +45,8 @@ export default async function Page({
                 method: 'deposit',
                 symbol: paymentIntent.currency.toUpperCase(),
                 userId: paymentIntent.metadata.userId,
-                value: paymentIntent.metadata.dollarAmountReceived,
-                defaultValue: paymentIntent.amount_received, // apenas para depositos em moedas ficundiarias
+                dollarValue: paymentIntent.metadata.depositAmountDollar,
+                amountReceived: paymentIntent.amount_received, // apenas para depositos em moedas ficundiarias
                 paymentIntent: payment_intent,
               }),
               headers: {

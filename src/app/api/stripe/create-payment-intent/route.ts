@@ -8,6 +8,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
 interface BodyType {
   depositAmount: number;
+  depositAmountDollar: number;
   currency: string;
 }
 
@@ -50,30 +51,25 @@ class CreatePayment extends BaseRoute {
 
   async deposit(body: BodyType) {
     try {
-      let { depositAmount, currency } = body;
-      let dollarAmountReceived = depositAmount;
-      if (currency !== 'USD') {
-        const cambio = await this.getCambioDallar(currency);
-        if (!cambio) throw new Error('err');
-        dollarAmountReceived = depositAmount * cambio;
-      }
+      let { depositAmount, depositAmountDollar, currency } = body;
 
       const [, token] = this.authorization!.split(' ');
       const { id } = jwt.decode(token) as { id: string };
 
+      // console.log(depositAmount / 100);
       const paymentIntent = await stripe.paymentIntents.create({
         currency,
         amount: depositAmount, // valor de deposito com a moeda ultilizada
         automatic_payment_methods: { enabled: true },
         metadata: {
-          dollarAmountReceived, // valor de deposito sempre em dolares
+          depositAmountDollar, // valor de deposito sempre em dolares
           userId: id,
         },
       });
 
       return paymentIntent;
     } catch (err: any) {
-      // console.log(err);
+      console.log(err);
       this.errors.push({
         body: {
           msg: 'Error when making deposit',
@@ -81,20 +77,6 @@ class CreatePayment extends BaseRoute {
         },
         status: 400,
       });
-    }
-  }
-
-  async getCambioDallar(currency: string) {
-    try {
-      const res = await fetch(
-        `https://economia.awesomeapi.com.br/last/${currency}-USD`
-      );
-      if (!res.ok) throw new Error('request error');
-      const data = await res.json();
-      const bid = +data[`${currency}USD`].bid;
-      return bid;
-    } catch (err) {
-      console.log(err);
     }
   }
 }

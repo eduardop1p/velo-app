@@ -9,16 +9,21 @@ import UnavailablePage from '@/components/UnavailablePage';
 import { CryptoType } from '@/components/header';
 import calBalance from '@/services/calcBalance';
 import { UserType } from '@/app/api/models/users';
+import fetchGetCurrencies, {
+  CurrenciesType,
+} from '@/services/fetchGetCurrencies';
 
 export default async function Page() {
   const token = cookies().get('token')?.value as string;
 
   let userData: UserType;
   let dataCryptos: CryptoType[];
+  let countriesCurrencies: CurrenciesType[];
 
   try {
     userData = await fetchGetUser(token);
     dataCryptos = await fetchGetFullCryptos();
+    countriesCurrencies = await fetchGetCurrencies();
   } catch {
     return <UnavailablePage />;
   }
@@ -48,6 +53,7 @@ export default async function Page() {
             dataCryptos={dataCryptos}
             balance={calBalance(userData.transactions)}
             token={token}
+            countriesCurrencies={countriesCurrencies}
           />
         </section>
       </div>
