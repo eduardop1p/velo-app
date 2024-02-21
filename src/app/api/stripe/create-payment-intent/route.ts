@@ -69,10 +69,10 @@ class CreatePayment extends BaseRoute {
 
       return paymentIntent;
     } catch (err: any) {
-      console.log(err);
+      // console.log(err);
       this.errors.push({
         body: {
-          msg: 'Error when making deposit',
+          msg: 'An error occurred while processing deposit, please try again',
           type: 'server',
         },
         status: 400,

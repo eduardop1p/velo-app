@@ -156,6 +156,12 @@ const zodSchema = z
 
 type BodyType = z.infer<typeof zodSchema>;
 
+export interface AddDepositType {
+  open: boolean;
+  depositAmount: number;
+  depositAmountDollar: number;
+}
+
 export function DepositInfo({
   showDeposit,
   setShowDeposit,
@@ -177,10 +183,11 @@ export function DepositInfo({
     watch,
     trigger,
     setFocus,
+    getValues,
   } = useForm<BodyType>({
     resolver: zodResolver(zodSchema),
   });
-  const [addDeposit, setAddDeposit] = useState({
+  const [addDeposit, setAddDeposit] = useState<AddDepositType>({
     open: false,
     depositAmount: 0, // real
     depositAmountDollar: minimumDeposit,
@@ -244,14 +251,6 @@ export function DepositInfo({
         numberValue = +value;
         break;
       }
-      case 'JOD': {
-        numberValue = +value / 1000;
-        break;
-      }
-      case 'KWD': {
-        numberValue = +value / 1000;
-        break;
-      }
       case 'LAK': {
         numberValue = +value;
         break;
@@ -273,8 +272,11 @@ export function DepositInfo({
       selectCurrency.code,
       `en-${selectCurrency.code.slice(0, 2).toLowerCase()}`
     );
-
+    await handleSetCambioDollar(numberValue);
     currentTarget.value = value;
+  };
+
+  const handleSetCambioDollar = async (numberValue: number) => {
     if (!numberValue) return;
     if (selectCurrency.code === 'USD') {
       setValue('depositAmountDollar', formatPrice(numberValue));
@@ -372,20 +374,22 @@ export function DepositInfo({
             </div>
             <div className="flex flex-col gap-[2px]">
               <h2 className="text-xl text-primary font-normal">
-                Deposit by card
+                Deposit information
               </h2>
-              <div className="flex gap-2">
-                <h4 className="text-c1c5d0 text-sm font-normal">Value:</h4>
-                <h4 className="text-c1c5d0 text-sm font-normal">
-                  {formatPrice(addDeposit.depositAmountDollar / 100)}
-                </h4>
-              </div>
+              <p className="text-c1c5d0 font-normal text-sm mt-2">
+                When making the deposit you receive{' '}
+                {formatPrice(addDeposit.depositAmountDollar / 100)} in your Velo
+                wallet which is the equivalent of {getValues('depositAmount')}{' '}
+                in your local currency
+              </p>
             </div>
             <Deposit
               depositAmount={addDeposit.depositAmount} // real
               depositAmountDollar={addDeposit.depositAmountDollar}
               token={token}
               currency={selectCurrency.code}
+              setOpenAlert={setOpenAlert}
+              setAddDeposit={setAddDeposit}
             />
             <CardBrands />
           </div>

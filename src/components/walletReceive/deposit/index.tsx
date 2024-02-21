@@ -1,9 +1,11 @@
 'use client';
 import { loadStripe } from '@stripe/stripe-js';
 import type { Stripe } from '@stripe/stripe-js';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Dispatch, SetStateAction } from 'react';
 
 import Payment from './payment';
+import { OpenAlertType } from '@/components/alertMsg';
+import { AddDepositType } from '..';
 
 export type StripePromiseType = Promise<Stripe | null> | null;
 
@@ -12,11 +14,15 @@ export default function Deposit({
   depositAmount,
   depositAmountDollar,
   currency = 'USD',
+  setOpenAlert,
+  setAddDeposit,
 }: {
   token: string;
   depositAmount: number;
   depositAmountDollar: number;
   currency?: string;
+  setOpenAlert: Dispatch<SetStateAction<OpenAlertType>>;
+  setAddDeposit: Dispatch<SetStateAction<AddDepositType>>;
 }) {
   const [stripePromise, setStripePromise] = useState<StripePromiseType>(null);
 
@@ -48,6 +54,8 @@ export default function Deposit({
       depositAmount={depositAmount}
       depositAmountDollar={depositAmountDollar}
       currency={currency}
+      setOpenAlert={setOpenAlert}
+      setAddDeposit={setAddDeposit}
     />
   );
 }

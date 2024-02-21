@@ -154,14 +154,6 @@ class TransactionsWallets extends BaseRoute {
         case 'JPY': {
           break;
         }
-        case 'JOD': {
-          amountReceived /= 1000;
-          break;
-        }
-        case 'KWD': {
-          amountReceived /= 1000;
-          break;
-        }
         case 'LAK': {
           break;
         }

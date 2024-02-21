@@ -1,11 +1,19 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 
 import { Elements } from '@stripe/react-stripe-js';
 import CheckoutForm from '../checkoutForm';
 import { StripePromiseType } from '..';
 import SkeletonUi from '@/components/skeletonUI';
+import { OpenAlertType } from '@/components/alertMsg';
+import { AddDepositType } from '../..';
 
 export default function Payment({
   stripePromise,
@@ -13,12 +21,16 @@ export default function Payment({
   depositAmount,
   depositAmountDollar,
   currency,
+  setOpenAlert,
+  setAddDeposit,
 }: {
   stripePromise: StripePromiseType;
   token: string;
   depositAmount: number;
   depositAmountDollar: number;
   currency: string;
+  setOpenAlert: Dispatch<SetStateAction<OpenAlertType>>;
+  setAddDeposit: Dispatch<SetStateAction<AddDepositType>>;
 }) {
   const [clientSecret, setClientSecret] = useState<string | undefined>('');
   const [initalRender, setInitialRender] = useState(true);
@@ -40,12 +52,35 @@ export default function Payment({
           }),
         }
       );
-      const data: { clientSecret: string } = await res.json();
-      setClientSecret(data.clientSecret);
-    } catch (err) {
-      console.log(err);
+      const data = await res.json();
+      if (!res.ok) throw new Error(JSON.stringify(data));
+      const { clientSecret } = data;
+      setClientSecret(clientSecret);
+    } catch (err: any) {
+      const paserErr = JSON.parse(err.message);
+      if ('error' in paserErr) {
+        setOpenAlert({
+          msg: paserErr.error,
+          open: true,
+          severity: 'error',
+        });
+      } else {
+        setOpenAlert({
+          msg: 'Internal server error.',
+          open: true,
+          severity: 'error',
+        });
+      }
+      setAddDeposit(state => ({ ...state, open: false }));
     }
-  }, [token, depositAmount, depositAmountDollar, currency]);
+  }, [
+    token,
+    depositAmount,
+    depositAmountDollar,
+    currency,
+    setOpenAlert,
+    setAddDeposit,
+  ]);
 
   useEffect(() => {
     if (initalRender) {

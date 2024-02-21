@@ -68,10 +68,6 @@ export default async function fetchGetCurrencies(): Promise<CurrenciesType[]> {
       text: '#f3c402',
     },
     {
-      bg: '#f2d24b', // ghs
-      text: '#000',
-    },
-    {
       bg: '#f22542', // hkd
       text: '#fff',
     },
@@ -92,19 +88,11 @@ export default async function fetchGetCurrencies(): Promise<CurrenciesType[]> {
       text: '#f22c47',
     },
     {
-      bg: '#000', // jod
-      text: '#fff',
-    },
-    {
       bg: '#39adf6', // kzt
       text: '#effd62',
     },
     {
       bg: '#f22542', // kes
-      text: '#fff',
-    },
-    {
-      bg: '#000', // kwd
       text: '#fff',
     },
     {
@@ -210,10 +198,6 @@ export default async function fetchGetCurrencies(): Promise<CurrenciesType[]> {
     {
       bg: '#eceff2', // usd
       text: '#d73921',
-    },
-    {
-      bg: '#f22542', // ves
-      text: '#f2d24b',
     },
     {
       bg: '#ca4e49', // vnd
