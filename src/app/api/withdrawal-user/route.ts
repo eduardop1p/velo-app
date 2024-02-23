@@ -13,7 +13,7 @@ interface BodyType {
   amountSendCryptoKucoin: number;
   walletAddress: string;
   cryptoName: string;
-  cryptoSymbol: SymbolType;
+  cryptoSymbol: string;
 }
 
 // eslint-disable-next-line
@@ -104,7 +104,7 @@ class WithdrawalUser extends BaseRoute {
     const { transactions } = this.user;
     const userCryptoBalance = transactions
       .filter(val => val.symbol === cryptoSymbol && val.type === 'crypto')
-      .reduce((prev, val) => prev + val.cryptoValue, 0);
+      .reduce((prev, val) => prev + val.cryptoValue!, 0);
     return userCryptoBalance;
   }
 
@@ -170,8 +170,8 @@ class WithdrawalUser extends BaseRoute {
       const { cryptoName, cryptoSymbol, amountWithdrawalCrypto } = this.body;
 
       this.user.transactions.push({
-        title: 'withdrawal',
-        date: Date.now() * 1000,
+        title: 'Withdrawal',
+        date: Date.now(),
         name: cryptoName,
         status: 'pending',
         symbol: cryptoSymbol,
@@ -191,7 +191,7 @@ class WithdrawalUser extends BaseRoute {
       amountWithdrawalDollar: this.body.amountWithdrawalDollar || 0,
       amountSendCryptoKucoin: this.body.amountSendCryptoKucoin || 0,
       cryptoName: this.body.cryptoName || '',
-      cryptoSymbol: this.body.cryptoSymbol || null,
+      cryptoSymbol: this.body.cryptoSymbol || '',
       walletAddress: this.body.walletAddress || '',
     };
   }

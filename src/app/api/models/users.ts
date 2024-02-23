@@ -19,6 +19,7 @@ export interface TransactionsType {
   symbol: string;
   type: 'money' | 'crypto';
   title: string;
+  name?: string;
   cryptoValue?: number;
   dollarValue?: number;
   amountReceived?: number; // apenas para depositos em moedas ficundiarias
@@ -79,6 +80,7 @@ const usersSchema = new Schema<UserDocumentType>({
       symbol: { type: String, required: false },
       type: { type: String, required: false },
       title: { type: String, required: false },
+      name: { type: String, required: false },
       cryptoValue: { type: Number, required: false },
       dollarValue: { type: Number, required: false },
       amountReceived: { type: Number, required: false },
