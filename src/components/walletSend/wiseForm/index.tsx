@@ -35,7 +35,7 @@ const zodSchema = z
           });
           return;
         }
-        if (newValue < 1000) {
+        if (newValue < 500) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
             message: 'Amount less than the minimum withdrawal',
@@ -55,7 +55,7 @@ const zodSchema = z
 
 type BodyType = z.infer<typeof zodSchema>;
 
-export default function PaypalForm({
+export default function WiseForm({
   balance,
   token,
   minimumWithdraw,
@@ -92,14 +92,14 @@ export default function PaypalForm({
   const handleFormSubmit: SubmitHandler<BodyType> = async body => {
     if (isLoading) return;
     const newBody = {
-      method: 'withdraw',
+      method: 'Withdraw',
       type: 'money',
       symbol: 'USD',
       dollarValue: replaceCurrency(body.amountSend) / 100,
       metadataDestination: {
         email: body.email,
         fullName: body.fullName,
-        wallet: 'PayPal',
+        wallet: 'Wise',
         description: body.description,
       },
     };
@@ -169,7 +169,7 @@ export default function PaypalForm({
               <input
                 id="email"
                 type="text"
-                placeholder="PayPal account email"
+                placeholder="Wise account email"
                 className={`w-[80%] bg-transparent text-sm font-normal ${errors.email ? 'text-red-600' : 'text-primary'}`} // eslint-disable-line
                 {...register('email')}
               />
@@ -187,7 +187,7 @@ export default function PaypalForm({
               <input
                 id="fullName"
                 type="text"
-                placeholder="PayPal account full name"
+                placeholder="Wise account full name"
                 className={`w-[80%] bg-transparent text-sm font-normal ${errors.fullName ? 'text-red-600' : 'text-primary'}`} // eslint-disable-line
                 {...register('fullName')}
               />
@@ -328,5 +328,5 @@ const BtnsAddValues = ({
     </div>
   );
 
-  return <Btns values={[20, 50, 100, 250, 500]} />;
+  return <Btns values={[10, 50, 100, 230, 500]} />;
 };

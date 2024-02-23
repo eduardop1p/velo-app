@@ -9,12 +9,12 @@ import fetchGetUser from '@/services/fetchGetUser';
 import { UserType } from '@/app/api/models/users';
 import formatPrice from '@/services/formatPrice';
 import calBalance from '@/services/calcBalance';
-import PayoneerForm from '@/components/walletSend/payoneerForm';
+import NetellerForm from '@/components/walletSend/netellerForm';
 
 export default async function Page() {
   const token = cookies().get('token')?.value!;
   let userData: UserType;
-  const minimumWithdraw = 50;
+  const minimumWithdraw = 10;
 
   try {
     userData = await fetchGetUser(token);
@@ -37,19 +37,19 @@ export default async function Page() {
           }}
           color="text-primary"
           fill="fill-primary"
-          currentPage="Payoneer"
+          currentPage="Neteller"
         />
-        <div className="w-[70px] h-[70px] flex items-center justify-center rounded-full bg-primary -ml-2 py-1">
+        <div className="flex items-center justify-center bg-primary w-[70px] h-[70px] rounded-full -ml-2">
           <Image
             width={65}
             height={65}
-            src="/assets/imgs/payoneer.png"
-            alt="payoneer"
+            src="/assets/imgs/neteller.png"
+            alt="neteller"
           />
         </div>
         <div className="flex flex-col gap-1">
           <h2 className="text-primary text-xl font-normal">
-            Send funds to a Payoneer wallet
+            Send funds to a neteller wallet
           </h2>
           <p className="text-primary font-normal text-sm">
             Your data registered with Velo will be used to send funds. Fill in
@@ -75,7 +75,7 @@ export default async function Page() {
               </span>
             </div>
           </div>
-          <PayoneerForm
+          <NetellerForm
             balance={calBalance(userData.transactions)}
             minimumWithdraw={minimumWithdraw}
             token={token}

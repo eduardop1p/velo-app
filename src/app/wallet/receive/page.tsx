@@ -24,7 +24,8 @@ export default async function Page() {
     userData = await fetchGetUser(token);
     dataCryptos = await fetchGetFullCryptos();
     countriesCurrencies = await fetchGetCurrencies();
-  } catch {
+  } catch (err) {
+    // console.log(err);
     return <UnavailablePage />;
   }
 

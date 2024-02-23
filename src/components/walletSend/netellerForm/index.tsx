@@ -19,7 +19,6 @@ const zodSchema = z
       .string()
       .email({ message: 'Invalid email address' })
       .min(1, 'The field is mandatory'),
-    fullName: z.string().min(1, 'The field is mandatory'),
     description: z.string().optional(),
     amountSend: z
       .string()
@@ -55,7 +54,7 @@ const zodSchema = z
 
 type BodyType = z.infer<typeof zodSchema>;
 
-export default function PaypalForm({
+export default function NetellerForm({
   balance,
   token,
   minimumWithdraw,
@@ -92,14 +91,13 @@ export default function PaypalForm({
   const handleFormSubmit: SubmitHandler<BodyType> = async body => {
     if (isLoading) return;
     const newBody = {
-      method: 'withdraw',
+      method: 'Withdraw',
       type: 'money',
       symbol: 'USD',
       dollarValue: replaceCurrency(body.amountSend) / 100,
       metadataDestination: {
         email: body.email,
-        fullName: body.fullName,
-        wallet: 'PayPal',
+        wallet: 'Neteller',
         description: body.description,
       },
     };
@@ -169,7 +167,7 @@ export default function PaypalForm({
               <input
                 id="email"
                 type="text"
-                placeholder="PayPal account email"
+                placeholder="Neteller account email"
                 className={`w-[80%] bg-transparent text-sm font-normal ${errors.email ? 'text-red-600' : 'text-primary'}`} // eslint-disable-line
                 {...register('email')}
               />
@@ -178,27 +176,7 @@ export default function PaypalForm({
               {errors.email?.message}
             </span>
           </div>
-          <div className="flex flex-col gap-[2px] w-1/2">
-            <small className="text-primary-2 font-normal text-xs">
-              Full name
-            </small>
-            {/* eslint-disable-next-line */}
-            <div className={`flex items-center gap-1 border-b-[1.5px] border-solid ${errors.fullName ? 'border-red-600' : 'border-ffffff33'} pb-[5px] w-full`}>
-              <input
-                id="fullName"
-                type="text"
-                placeholder="PayPal account full name"
-                className={`w-[80%] bg-transparent text-sm font-normal ${errors.fullName ? 'text-red-600' : 'text-primary'}`} // eslint-disable-line
-                {...register('fullName')}
-              />
-            </div>
-            <span className="text-[10px] mt-[2px] h-[15px] text-red-600 font-normal">
-              {errors.fullName?.message}
-            </span>
-          </div>
-        </div>
 
-        <div className="w-full flex gap-8 items-start">
           <div className="flex flex-col gap-1 w-1/2">
             <div className="flex flex-col gap-[2px] w-full">
               <small className="text-primary-2 font-normal text-xs mb-[2px]">
@@ -238,19 +216,20 @@ export default function PaypalForm({
               minimumWithdraw={minimumWithdraw}
             />
           </div>
-          <div className="flex flex-col gap-2 w-1/2">
-            <small className="text-primary-2 font-normal text-xs">
-              Optional transaction description
-            </small>
-            {/* eslint-disable-next-line */}
-            <div className='overflow-hidden rounded-lg w-full  h-[130px]'>
-              <textarea
-                {...register('description')}
-                id="desciption"
-                placeholder="Your description"
-                className="text-primary w-full h-full font-normal text-sm p-3 resize-none border border-solid border-ffffff33 rounded-lg bg-transparent"
-              ></textarea>
-            </div>
+        </div>
+
+        <div className="flex flex-col gap-2 w-full">
+          <small className="text-primary-2 font-normal text-xs">
+            Optional transaction description
+          </small>
+          {/* eslint-disable-next-line */}
+          <div className='overflow-hidden rounded-lg w-full  h-[130px]'>
+            <textarea
+              {...register('description')}
+              id="desciption"
+              placeholder="Your description"
+              className="text-primary w-full h-full font-normal text-sm p-3 resize-none border border-solid border-ffffff33 rounded-lg bg-transparent"
+            ></textarea>
           </div>
         </div>
 
@@ -328,5 +307,5 @@ const BtnsAddValues = ({
     </div>
   );
 
-  return <Btns values={[20, 50, 100, 250, 500]} />;
+  return <Btns values={[20, 50, 100, 230, 500]} />;
 };

@@ -51,7 +51,8 @@ export default async function Page() {
             Send funds to a PayPal wallet
           </h2>
           <p className="text-primary font-normal text-sm">
-            Fill in the fields below with the destination details
+            Your data registered with Velo will be used to send funds. Fill in
+            the fields below with the destination details:
           </p>
         </div>
         <div className="flex flex-col gap-5 ">
