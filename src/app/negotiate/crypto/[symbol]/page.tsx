@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
 import { cookies } from 'next/headers';
 import { GoHome } from 'react-icons/go';
@@ -25,7 +26,7 @@ export default async function Page({ params }: Props) {
   try {
     userData = await fetchGetUser(token);
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     return <UnavailablePage />;
   }
 
