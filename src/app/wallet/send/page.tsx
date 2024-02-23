@@ -46,7 +46,7 @@ export default async function Page() {
             />
           </div>
           <h2 className="text-primary text-2xl font-normal my-2">
-            Select which currency you want to send
+            Select the network you want to send funds to
           </h2>
           <WalletSend
             dataCryptos={dataCryptos}

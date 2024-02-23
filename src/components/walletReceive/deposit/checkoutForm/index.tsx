@@ -31,6 +31,7 @@ export default function CheckoutForm() {
           return_url: `${window.location.origin}/wallet`,
         },
       });
+      // console.log(error);
       if (error.type === 'card_error' || error.type === 'validation_error') {
         setOpenAlert({
           msg: error.message as string,
@@ -40,7 +41,7 @@ export default function CheckoutForm() {
       } else {
         throw new Error('err');
       }
-    } catch {
+    } catch (err) {
       setOpenAlert({
         msg: 'An unexpected error occurred',
         open: true,

@@ -6,6 +6,7 @@ import dynamic from 'next/dynamic';
 
 const WalletGraphic = dynamic(() => import('@/components/walletGraphic'), {
   ssr: false,
+  loading: () => <SkeletonWalletGraphic />,
 });
 import calBalance from '@/services/calcBalance';
 import calcPatrimonyTotal from '@/services/calcPatrimonyTotal';
@@ -16,6 +17,8 @@ import { UserPatrimonyInvestedType } from '../home/page';
 import AlertSuccessDeposit from '@/components/walletReceive/alertSuccessDeposit';
 import UnavailablePage from '@/components/UnavailablePage';
 import { UserType } from '../api/models/users';
+import SkeletonWalletGraphic from '@/components/walletGraphic/skeletonWalletGraphic';
+import AlertSuccessWithdraw from '@/components/walletSend/alertSuccessWithdraw';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
@@ -24,6 +27,7 @@ export default async function Page({
 }: {
   searchParams: {
     payment_intent: string | undefined;
+    payment_withdraw: string | undefined;
   };
 }) {
   const token = cookies().get('token')?.value as string;
@@ -83,7 +87,8 @@ export default async function Page({
   return (
     <>
       <main className="mt-20">
-        <AlertSuccessDeposit />
+        {searchParams.payment_intent && <AlertSuccessDeposit />}
+        {searchParams.payment_withdraw && <AlertSuccessWithdraw />}
         <div className="min-h-full-screen-80px bg-black-section px-20 py-14 flex flex-col gap-16">
           <WalletGraphic userPatrimonyInvested={userPatrimonyInvested} />
           <section className="w-full flex flex-col gap-5">

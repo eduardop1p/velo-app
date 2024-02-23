@@ -6,12 +6,12 @@ import { usePathname, useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import JSConfetti from 'js-confetti';
 
-export default function AlertSuccessDeposit() {
+export default function AlertSuccessWithdraw() {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [showSuccessDeposit, setShowSuccessDeposit] = useState(
-    searchParams.has('redirect_status')
+  const [showSuccessWithdraw, setShowSuccessWithdraw] = useState(
+    searchParams.has('payment_withdraw')
   );
 
   useEffect(() => {
@@ -24,10 +24,10 @@ export default function AlertSuccessDeposit() {
     });
   }, []);
 
-  if (!showSuccessDeposit) return;
+  if (!showSuccessWithdraw) return;
 
   const handleClick = () => {
-    setShowSuccessDeposit(false);
+    setShowSuccessWithdraw(false);
     router.replace(pathname);
   };
 
@@ -49,7 +49,7 @@ export default function AlertSuccessDeposit() {
           Success
         </h2>
         <p className="text-base text-secondary font-normal">
-          Your deposit has been processed
+          Your withdraw has been processed
         </p>
         <button
           className="text-primary w-[80px] self-end py-2 rounded bg-blue hover:bg-bluehover transition-colors duration-200 text-sm font-sm"

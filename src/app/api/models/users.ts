@@ -25,6 +25,7 @@ export interface TransactionsType {
   status: 'success' | 'pending' | 'error';
   date: number;
   paymentIntent?: string;
+  metadataDestination?: Record<string, string>;
 }
 export interface WalletAddress {
   symbol: string;
@@ -85,6 +86,7 @@ const usersSchema = new Schema<UserDocumentType>({
       status: { type: String, required: false },
       date: { type: Number, required: false },
       paymentIntent: { type: String, required: false },
+      metadataDestination: { type: Object, required: false },
     },
   ],
   wallet: [

@@ -20,6 +20,7 @@ import { cryptosNames } from '@/services/formatDataCrypto';
 import UnavailablePage from '@/components/UnavailablePage';
 import fetchGetUser from '@/services/fetchGetUser';
 import { UserType } from '@/app/api/models/users';
+import { notFound } from 'next/navigation';
 
 interface WithdrawalsQuotasType {
   withdrawMinFee: number;
@@ -28,8 +29,8 @@ interface WithdrawalsQuotasType {
 
 export default async function Page({ params }: { params: { crypto: string } }) {
   const cryptoSymbol = params.crypto.toUpperCase();
-  const cryptoName = cryptosNames.find(val => val.symbol === cryptoSymbol)?.name!; // eslint-disable-line
-
+  const cryptoName = cryptosNames.find(val => val.symbol === cryptoSymbol)?.name; // eslint-disable-line
+  if (!cryptoName || !cryptoSymbol) notFound();
 
   const token = cookies().get('token')?.value as string;
 
@@ -45,7 +46,7 @@ export default async function Page({ params }: { params: { crypto: string } }) {
     userData = await fetchGetUser(token);
     userCryptoBalance = userData.transactions
       .filter(val => val.symbol === cryptoSymbol && val.type === 'crypto')
-      .reduce((prev, val) => prev + val.cryptoValue, 0);
+      .reduce((prev, val) => prev + val.cryptoValue!, 0);
 
     const resCrypto = await fetch(
       `${process.env.CRYPTO_API_URL}&fsyms=${cryptoSymbol}`,

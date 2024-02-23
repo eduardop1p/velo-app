@@ -7,13 +7,14 @@ import jwt from 'jsonwebtoken';
 import { upperFirst } from 'lodash';
 
 import BaseRoute from '../baseRoute';
-import usersModel from '../models/users';
+import usersModel, { TransactionsType } from '../models/users';
 import { cryptosNames } from '@/services/formatDataCrypto';
 import btcToSatoshis from '@/services/btcToSatoshis';
+import calBalance from '@/services/calcBalance';
 
 interface BodyType {
   type: 'money' | 'crypto';
-  method: 'deposit' | 'send';
+  method: 'deposit' | 'withdraw';
   symbol: string;
   cryptoValue?: number;
   dollarValue?: number;
@@ -22,6 +23,7 @@ interface BodyType {
   address?: string;
   privateKey?: string;
   paymentIntent?: string;
+  metadataDestination?: Record<string, string>;
 }
 
 export async function POST(req: NextRequest, res: NextResponse) {
@@ -45,8 +47,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
       return transactionsWallets.responseError(errors[0]);
     }
 
-    if (type === 'crypto' && method === 'send' && symbol !== 'USD') {
-      await transactionsWallets.createTransactionSendCrypto();
+    if (type === 'crypto' && method === 'withdraw' && symbol !== 'USD') {
+      await transactionsWallets.createTransactionWithdrawCrypto();
       if (errors.length) {
         return transactionsWallets.responseError(errors[0]);
       }
@@ -55,6 +57,20 @@ export async function POST(req: NextRequest, res: NextResponse) {
           msg: 'Cryptos sent to the specified destination address',
           type: 'server',
         },
+        status: 200,
+      });
+    }
+    if (type === 'money' && method === 'withdraw' && symbol === 'USD') {
+      const transactionId =
+        await transactionsWallets.createTransactionWithdrawFunds();
+      if (errors.length) {
+        return transactionsWallets.responseError(errors[0]);
+      }
+
+      return NextResponse.json({
+        transactionId,
+        success: 'Funds sent to the specified destination address',
+        type: 'server',
         status: 200,
       });
     }
@@ -112,7 +128,7 @@ class TransactionsWallets extends BaseRoute {
       this.errorInbody('Type not allowed');
       return;
     }
-    if (method !== 'deposit' && method !== 'send') {
+    if (method !== 'deposit' && method !== 'withdraw') {
       this.errorInbody('Method not allowed');
       return;
     }
@@ -185,7 +201,7 @@ class TransactionsWallets extends BaseRoute {
     }
   }
 
-  async createTransactionSendCrypto() {
+  async createTransactionWithdrawCrypto() {
     const { symbol, address, cryptoValue, privateKey } = this.body;
     if (!address || !privateKey) return;
     switch (symbol) {
@@ -216,6 +232,47 @@ class TransactionsWallets extends BaseRoute {
         }
         break;
       }
+    }
+  }
+
+  async createTransactionWithdrawFunds() {
+    const { method, symbol, type, dollarValue, metadataDestination } =
+      this.body;
+    const [, token] = this.authorization!.split(' ');
+    const authData = jwt.decode(token) as { id: string };
+
+    try {
+      const user = await usersModel.findById(authData.id);
+      if (!user) return;
+      if (dollarValue! > calBalance(user.transactions)) {
+        this.errors.push({
+          body: {
+            msg: 'Insufficient funds',
+            type: 'server',
+          },
+          status: 400,
+        });
+        return;
+      }
+
+      user.transactions.push({
+        date: Date.now(),
+        status: 'pending',
+        symbol,
+        title: upperFirst(method),
+        type,
+        dollarValue: -dollarValue!,
+        cryptoValue: 0,
+        metadataDestination,
+      });
+      await user.save();
+      const transaction = user.transactions[
+        user.transactions.length - 1
+      ] as TransactionsType & { _id: string };
+
+      return transaction._id;
+    } catch {
+      this.errorInServer();
     }
   }
 }
