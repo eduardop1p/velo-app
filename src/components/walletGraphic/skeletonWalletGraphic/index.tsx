@@ -3,12 +3,10 @@ import SkeletonUi from '@/components/skeletonUI';
 export default function SkeletonWalletGraphic() {
   return (
     <div className="w-full flex gap-10 items-center">
-      <SkeletonUi
-        height={250}
-        width={250}
-        variant="circular"
-        borderRadius="999px"
-      />
+      <div className="w-[250px] h-[250px] border-[19px] border-solid border-[#212121] rounded-full flex flex-col gap-2 items-center justify-center animate-pulse">
+        <SkeletonUi width={61} height={32} />
+        <SkeletonUi width={97} height={20} />
+      </div>
       <div className="flex flex-col gap-6 w-[300px]">
         <div className="flex justify-between gap-4 items-center">
           <div className="flex flex-col gap-2">

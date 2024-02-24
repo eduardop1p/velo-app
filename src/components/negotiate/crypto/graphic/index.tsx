@@ -39,9 +39,10 @@ export default function Graphic({ cryptoSymbol, cryptoName }: Props) {
   const [cryptoDataHisto, setCryptoDataHisto] = useState<
     HistorHourType[] | null
   >();
-  const cryptoHistoLimit = useRef(
-    !new Date().getUTCHours() ? 1 : new Date().getUTCHours()
-  );
+  // const cryptoHistoLimit = useRef(
+  //   !new Date().getUTCHours() ? 1 : new Date().getUTCHours()
+  // );
+  const cryptoHistoLimit = useRef(24);
 
   const handleGetDataCrypto = useCallback(async () => {
     try {
@@ -186,7 +187,7 @@ export default function Graphic({ cryptoSymbol, cryptoName }: Props) {
             Your wallet
           </Link>
         </div>
-        <CryptpGraphic cryptoDataHisto={cryptoDataHisto} />
+        <CryptoGraphic cryptoDataHisto={cryptoDataHisto} />
       </div>
     </>
   ) : (
@@ -194,7 +195,7 @@ export default function Graphic({ cryptoSymbol, cryptoName }: Props) {
   );
 }
 
-const CryptpGraphic = ({
+const CryptoGraphic = ({
   cryptoDataHisto,
 }: {
   cryptoDataHisto: HistorHourType[];
@@ -216,30 +217,44 @@ const CryptpGraphic = ({
 
   cryptoDataHisto = cryptoDataHisto.map(val => ({
     ...val,
+
     time: `${new Date(val.time).getHours()}h`,
   }));
-  // const newMork = [];
-  // for (let i = 0; i < mork.length; i += 3) {
-  //   newMork.push(mork[i]);
-  // }
-  // cryptoDataHisto = newMork;
 
   return (
-    <ResponsiveContainer width="100%" height={350}>
+    <ResponsiveContainer width="90%" height={400}>
       <LineChart
         data={cryptoDataHisto}
-        margin={{ top: 20, left: 16, bottom: 20, right: 16 }}
+        margin={{ top: 20, left: 16, bottom: 20, right: 20 }}
       >
-        <CartesianGrid
-          strokeDasharray="0"
-          horizontalCoordinatesGenerator={() => [75, 150, 225]}
-          // verticalCoordinatesGenerator={props => {
-
-          // }}
-          stroke="#272a2eff"
+        <CartesianGrid strokeDasharray="0" stroke="#272a2eff" />
+        <XAxis
+          dataKey="time"
+          interval={2}
+          axisLine={false}
+          tickLine={false}
+          tick={{
+            fill: '#fff',
+            opacity: '0.7',
+            fontSize: '13px',
+            fontWeight: 300,
+          }}
+          tickSize={10}
         />
-        <XAxis dataKey="time" />
-        <YAxis type="number" domain={['auto', 'auto']} hide />
+        <YAxis
+          type="number"
+          tickCount={7}
+          domain={['auto', 'auto']}
+          tickLine={{
+            stroke: '#272a2eff',
+          }}
+          axisLine={false}
+          tickSize={5}
+          tickMargin={5}
+          tick={<CustomizedAxisTick />}
+          // padding={{ top: 20, bottom: 20 }}
+          orientation="right"
+        />
         <Line
           type="monotone"
           dataKey="open"
@@ -256,6 +271,35 @@ const CryptpGraphic = ({
     </ResponsiveContainer>
   );
 };
+
+const CustomizedAxisTick = (props: any) => {
+  const { x, y, stroke, payload } = props;
+
+  return (
+    <g transform={`translate(${x},${y})`}>
+      <text
+        x={0}
+        y={0}
+        dy={5}
+        style={{
+          fill: '#fff',
+          opacity: '0.7',
+          fontSize: '13px',
+          fontWeight: 300,
+        }}
+      >
+        {formatPrice(payload.value)}
+      </text>
+    </g>
+  );
+};
+
+// {
+//   fill: '#fff',
+//   opacity: '0.7',
+//   fontSize: '13px',
+//   fontWeight: 300,
+// }
 
 const GraphicSkeleton = () => {
   return (
