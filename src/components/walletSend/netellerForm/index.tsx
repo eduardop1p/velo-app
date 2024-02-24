@@ -160,7 +160,7 @@ export default function NetellerForm({
         className="w-2/3 flex flex-col gap-4"
       >
         <div className="w-full flex gap-8">
-          <div className="flex flex-col gap-[2px] w-1/2">
+          <div className="flex flex-col gap-[2px] w-1/2 mt-[10px]">
             <small className="text-primary-2 font-normal text-xs">Email</small>
             {/* eslint-disable-next-line */}
             <div className={`flex items-center gap-1 border-b-[1.5px] border-solid ${errors.email ? 'border-red-600' : 'border-ffffff33'} pb-[5px] w-full`}>
@@ -231,6 +231,14 @@ export default function NetellerForm({
               className="text-primary w-full h-full font-normal text-sm p-3 resize-none border border-solid border-ffffff33 rounded-lg bg-transparent"
             ></textarea>
           </div>
+        </div>
+        <div className="flex flex-col gap-1 w-1/2">
+          <small className="text-primary-2 font-normal text-xs ">
+            Estimated time
+          </small>
+          <span className="text-[15px] font-normal text-primary whitespace-nowrap">
+            60 minutes
+          </span>
         </div>
 
         <div className="flex flex-col gap-8 mt-4 w-full">

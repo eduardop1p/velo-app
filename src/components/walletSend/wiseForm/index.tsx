@@ -253,6 +253,14 @@ export default function WiseForm({
             </div>
           </div>
         </div>
+        <div className="flex flex-col gap-1 w-1/2">
+          <small className="text-primary-2 font-normal text-xs ">
+            Estimated time
+          </small>
+          <span className="text-[15px] font-normal text-primary whitespace-nowrap">
+            60 minutes
+          </span>
+        </div>
 
         <div className="flex flex-col gap-8 mt-4 w-full">
           <div className="flex self-start gap-4">
