@@ -39,10 +39,10 @@ export default function Graphic({ cryptoSymbol, cryptoName }: Props) {
   const [cryptoDataHisto, setCryptoDataHisto] = useState<
     HistorHourType[] | null
   >();
-  // const cryptoHistoLimit = useRef(
-  //   !new Date().getUTCHours() ? 1 : new Date().getUTCHours()
-  // );
-  const cryptoHistoLimit = useRef(24);
+  const cryptoHistoLimit = useRef(
+    !new Date().getUTCHours() ? 1 : new Date().getUTCHours()
+  );
+  // const cryptoHistoLimit = useRef(24);
 
   const handleGetDataCrypto = useCallback(async () => {
     try {
@@ -188,6 +188,38 @@ export default function Graphic({ cryptoSymbol, cryptoName }: Props) {
           </Link>
         </div>
         <CryptoGraphic cryptoDataHisto={cryptoDataHisto} />
+        <div className="flex gap-6">
+          <button
+            type="button"
+            className="hover:bg-464c51ff hover:shadow-none shadow-effect-3 transition-all  duration-200 text-[13px] font-normal text-primary py-[5px] px-3 rounded cursor-pointer"
+          >
+            24h
+          </button>
+          <button
+            type="button"
+            className="hover:bg-464c51ff hover:shadow-none shadow-effect-3 transition-all  duration-200 text-[13px] font-normal text-primary py-[5px] px-3 rounded cursor-pointer"
+          >
+            7 days
+          </button>
+          <button
+            type="button"
+            className="hover:bg-464c51ff hover:shadow-none shadow-effect-3 transition-all  duration-200 text-[13px] font-normal text-primary py-[5px] px-3 rounded cursor-pointer"
+          >
+            30 days
+          </button>
+          <button
+            type="button"
+            className="hover:bg-464c51ff hover:shadow-none shadow-effect-3 transition-all  duration-200 text-[13px] font-normal text-primary py-[5px] px-3 rounded cursor-pointer"
+          >
+            12 months
+          </button>
+          <button
+            type="button"
+            className="hover:bg-464c51ff hover:shadow-none shadow-effect-3 transition-all  duration-200 text-[13px] font-normal text-primary py-[5px] px-3 rounded cursor-pointer"
+          >
+            YTD
+          </button>
+        </div>
       </div>
     </>
   ) : (
@@ -222,7 +254,7 @@ const CryptoGraphic = ({
   }));
 
   return (
-    <ResponsiveContainer width="90%" height={400}>
+    <ResponsiveContainer width="100%" height={400}>
       <LineChart
         data={cryptoDataHisto}
         margin={{ top: 20, left: 16, bottom: 20, right: 20 }}
@@ -230,7 +262,7 @@ const CryptoGraphic = ({
         <CartesianGrid strokeDasharray="0" stroke="#272a2eff" />
         <XAxis
           dataKey="time"
-          interval={2}
+          interval={1}
           axisLine={false}
           tickLine={false}
           tick={{
@@ -259,7 +291,9 @@ const CryptoGraphic = ({
           type="monotone"
           dataKey="open"
           stroke={handleStrokeLineGraph()}
-          dot={false}
+          dot={
+            <CustomDot data={cryptoDataHisto} fill={handleStrokeLineGraph()} />
+          }
           strokeWidth={2}
         />
         <ReferenceLine
@@ -294,12 +328,17 @@ const CustomizedAxisTick = (props: any) => {
   );
 };
 
-// {
-//   fill: '#fff',
-//   opacity: '0.7',
-//   fontSize: '13px',
-//   fontWeight: 300,
-// }
+const CustomDot = (props: any) => {
+  const { cx, cy, index, data, fill } = props;
+
+  if (index === data.length - 1) {
+    return (
+      <circle cx={cx} cy={cy} r={4} fill={fill} className="animate-pulse" />
+    );
+  }
+
+  return null;
+};
 
 const GraphicSkeleton = () => {
   return (

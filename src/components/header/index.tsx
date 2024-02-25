@@ -30,6 +30,7 @@ export interface CryptoType {
   CHANGEPCTDAY: number;
   CHANGEHOUR: number;
   CHANGEPCTHOUR: number;
+  CHANGEPCT24HOUR: number;
   IMAGEURL: string;
 }
 

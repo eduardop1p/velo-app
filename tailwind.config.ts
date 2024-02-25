@@ -79,6 +79,7 @@ const config: Config = {
       boxShadow: {
         'effect-1': '0 0 0 0.2rem #bfdbfe',
         'effect-2': '0 2px 12px #0000001a',
+        'effect-3': ' 0px 0px 0px 1px #fff',
       },
       borderWidth: {
         '1': '1px',
