@@ -39,9 +39,7 @@ svg:not(.MuiSvgIcon-root, .loading){
   margin-right: 8px;
 }
 
-.recharts-cartesian-grid-vertical > :first-child,
-.recharts-cartesian-grid-horizontal > :first-child, .recharts-cartesian-grid-horizontal > :last-child,
-.recharts-xAxis .recharts-cartesian-axis-tick:first-child,
-.recharts-yAxis .recharts-cartesian-axis-tick:first-child > .recharts-cartesian-axis-tick-line, .recharts-yAxis .recharts-cartesian-axis-tick:last-child > .recharts-cartesian-axis-tick-line{
+
+.recharts-cartesian-grid-horizontal > :last-child{
   display: none !important;
 }

@@ -2,7 +2,13 @@
 'use client';
 
 import Image from 'next/image';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type MutableRefObject,
+} from 'react';
 import { IoMdTime } from 'react-icons/io';
 import { useTimer } from 'react-timer-hook';
 import Link from 'next/link';
@@ -24,10 +30,17 @@ import { ChangePctDay } from '../../cryptosNegotiate';
 import cryptoFee from '@/services/cryptoFee';
 import SkeletonUi from '@/components/skeletonUI';
 import { HistorHourType } from '@/app/home/page';
+import getDaysAgoData from '@/services/getDaysAgoData';
 
 interface Props {
   cryptoSymbol: string;
   cryptoName: string;
+}
+
+interface CryptoTimeType {
+  time: number;
+  type: 'hour' | 'day' | 'months' | 'ytd';
+  value: string;
 }
 
 export default function Graphic({ cryptoSymbol, cryptoName }: Props) {
@@ -35,14 +48,16 @@ export default function Graphic({ cryptoSymbol, cryptoName }: Props) {
     expiryTimestamp: new Date(Date.now() + 30000),
     autoStart: true,
   });
+  const [initialRender, setIntialRender] = useState(true);
   const [cryptoData, setCryptoData] = useState<CryptoType | null>();
   const [cryptoDataHisto, setCryptoDataHisto] = useState<
     HistorHourType[] | null
   >();
-  const cryptoHistoLimit = useRef(
-    !new Date().getUTCHours() ? 1 : new Date().getUTCHours()
-  );
-  // const cryptoHistoLimit = useRef(24);
+  let cryptoTime = useRef<CryptoTimeType>({
+    time: !new Date().getUTCHours() ? 1 : new Date().getUTCHours(),
+    type: 'hour',
+    value: '24h',
+  });
 
   const handleGetDataCrypto = useCallback(async () => {
     try {
@@ -63,8 +78,10 @@ export default function Graphic({ cryptoSymbol, cryptoName }: Props) {
   }, [cryptoSymbol, restart]);
 
   const handleGetDataCryptoHisto = useCallback(async () => {
+    const hourApi = process.env.NEXT_PUBLIC_CRYPTO_API_URL_HISTOHOUR;
+    const dayApi = process.env.NEXT_PUBLIC_CRYPTO_API_URL_HISTODAY;
     const resHistoHour = await fetch(
-      `${process.env.NEXT_PUBLIC_CRYPTO_API_URL_HISTOHOUR}&fsym=${cryptoSymbol}&limit=${cryptoHistoLimit.current}`,
+      `${cryptoTime.current.type === 'hour' ? hourApi : dayApi}&fsym=${cryptoSymbol}&limit=${cryptoTime.current.time}`, // eslint-disable-line
       {
         method: 'GET',
         cache: 'no-cache',
@@ -80,21 +97,28 @@ export default function Graphic({ cryptoSymbol, cryptoName }: Props) {
       })
     );
     setCryptoDataHisto(dataHisto);
-  }, [cryptoSymbol]);
+  }, [cryptoSymbol, cryptoTime]);
 
-  useEffect(() => {
+  const handleSetNewCryptoPageData = useCallback(() => {
+    setCryptoData(null);
+    setCryptoDataHisto(null);
     handleGetDataCrypto();
     handleGetDataCryptoHisto();
   }, [handleGetDataCrypto, handleGetDataCryptoHisto]);
 
+  useEffect(() => {
+    if (initialRender) {
+      handleGetDataCrypto();
+      handleGetDataCryptoHisto();
+      setIntialRender(false);
+    }
+  }, [handleGetDataCrypto, handleGetDataCryptoHisto, initialRender]);
+
   // useEffect(() => {
   //   if (!isRunning) {
-  //     setCryptoData(null);
-  //     setCryptoDataHisto(null);
-  //     handleGetDataCrypto();
-  //     handleGetDataCryptoHisto()
+  //     handleSetNewCryptoPageData();
   //   }
-  // }, [isRunning, handleGetDataCrypto, handleGetDataCryptoHisto]);
+  // }, [isRunning, handleSetNewCryptoPageData]);
 
   const handleFormatTime = (value: number) => {
     return value > 9 ? `00:${value}` : `00:0${value}`;
@@ -187,39 +211,15 @@ export default function Graphic({ cryptoSymbol, cryptoName }: Props) {
             Your wallet
           </Link>
         </div>
-        <CryptoGraphic cryptoDataHisto={cryptoDataHisto} />
-        <div className="flex gap-6">
-          <button
-            type="button"
-            className="hover:bg-464c51ff hover:shadow-none shadow-effect-3 transition-all  duration-200 text-[13px] font-normal text-primary py-[5px] px-3 rounded cursor-pointer"
-          >
-            24h
-          </button>
-          <button
-            type="button"
-            className="hover:bg-464c51ff hover:shadow-none shadow-effect-3 transition-all  duration-200 text-[13px] font-normal text-primary py-[5px] px-3 rounded cursor-pointer"
-          >
-            7 days
-          </button>
-          <button
-            type="button"
-            className="hover:bg-464c51ff hover:shadow-none shadow-effect-3 transition-all  duration-200 text-[13px] font-normal text-primary py-[5px] px-3 rounded cursor-pointer"
-          >
-            30 days
-          </button>
-          <button
-            type="button"
-            className="hover:bg-464c51ff hover:shadow-none shadow-effect-3 transition-all  duration-200 text-[13px] font-normal text-primary py-[5px] px-3 rounded cursor-pointer"
-          >
-            12 months
-          </button>
-          <button
-            type="button"
-            className="hover:bg-464c51ff hover:shadow-none shadow-effect-3 transition-all  duration-200 text-[13px] font-normal text-primary py-[5px] px-3 rounded cursor-pointer"
-          >
-            YTD
-          </button>
-        </div>
+
+        <CryptoGraphic
+          cryptoDataHisto={cryptoDataHisto}
+          cryptoTime={cryptoTime}
+        />
+        <BtnsSelectTime
+          cryptoTime={cryptoTime}
+          handleSetNewCryptoPageData={handleSetNewCryptoPageData}
+        />
       </div>
     </>
   ) : (
@@ -229,9 +229,20 @@ export default function Graphic({ cryptoSymbol, cryptoName }: Props) {
 
 const CryptoGraphic = ({
   cryptoDataHisto,
+  cryptoTime,
 }: {
   cryptoDataHisto: HistorHourType[];
+  cryptoTime: MutableRefObject<CryptoTimeType>;
 }) => {
+  function handleGetDaysMonths() {
+    const year = new Date().getFullYear();
+    const month = new Date().getMonth();
+    const lastDay = new Date(year, month + 1, 0);
+    const daysMonth = lastDay.getDate();
+
+    return daysMonth;
+  }
+
   const handleStrokeLineGraph = () => {
     // console.log(CHANGEPCTDAY > 0);
     if (
@@ -249,20 +260,31 @@ const CryptoGraphic = ({
 
   cryptoDataHisto = cryptoDataHisto.map(val => ({
     ...val,
-
-    time: `${new Date(val.time).getHours()}h`,
+    time: cryptoTime.current.type === 'hour' ? `${new Date(val.time).getHours()}h` : new Date(val.time).toLocaleDateString('en-US', { day: '2-digit', month: '2-digit', }), // eslint-disable-line
   }));
+  let interval: number | undefined = 1;
+  if (cryptoTime.current.value === '7d') interval = undefined;
+  if (cryptoTime.current.value === '30d') interval = 2;
+  if (cryptoTime.current.value === '12m') interval = handleGetDaysMonths();
+  if (cryptoTime.current.value === 'ytd')
+    interval = Math.floor(getDaysAgoData() / 12);
 
   return (
     <ResponsiveContainer width="100%" height={400}>
       <LineChart
         data={cryptoDataHisto}
-        margin={{ top: 20, left: 16, bottom: 20, right: 20 }}
+        margin={{
+          top: -1,
+          left: cryptoTime.current.value === '24h' ? -20 : 20,
+          bottom: 0,
+          right: 20,
+        }}
       >
         <CartesianGrid strokeDasharray="0" stroke="#272a2eff" />
+        <ReferenceLine y={0} stroke="none" />
         <XAxis
           dataKey="time"
-          interval={1}
+          interval={interval}
           axisLine={false}
           tickLine={false}
           tick={{
@@ -284,7 +306,7 @@ const CryptoGraphic = ({
           tickSize={5}
           tickMargin={5}
           tick={<CustomizedAxisTick />}
-          // padding={{ top: 20, bottom: 20 }}
+          padding={{ top: 20, bottom: 20 }}
           orientation="right"
         />
         <Line
@@ -338,6 +360,97 @@ const CustomDot = (props: any) => {
   }
 
   return null;
+};
+
+const BtnsSelectTime = ({
+  cryptoTime,
+  handleSetNewCryptoPageData,
+}: {
+  cryptoTime: MutableRefObject<CryptoTimeType>;
+  handleSetNewCryptoPageData(): void;
+}) => {
+  const handdleGetDaysFullYear = (year: number) => {
+    const firstDay = new Date(year, 0, 1);
+    const lastDay = new Date(year, 11, 31);
+    const calc = +lastDay - +firstDay;
+    const daysYear = Math.ceil(calc / (1000 * 60 * 60 * 24));
+    return daysYear;
+  };
+
+  return (
+    <div className="flex gap-6">
+      <button
+        type="button"
+        className={`${cryptoTime.current.value === '24h' ? 'bg-464c51ff' : 'hover:bg-464c51ff hover:shadow-none shadow-effect-3'} transition-all  duration-200 text-[13px] font-normal text-primary py-[5px] px-3 rounded cursor-pointer`} // eslint-disable-line
+        onClick={() => {
+          cryptoTime.current = {
+            time: !new Date().getUTCHours() ? 1 : new Date().getUTCHours(),
+            type: 'hour',
+            value: '24h',
+          };
+          handleSetNewCryptoPageData();
+        }}
+      >
+        24h
+      </button>
+      <button
+        type="button"
+        className={`${cryptoTime.current.value === '7d' ? 'bg-464c51ff' : 'hover:bg-464c51ff hover:shadow-none shadow-effect-3'} transition-all  duration-200 text-[13px] font-normal text-primary py-[5px] px-3 rounded cursor-pointer`} // eslint-disable-line
+        onClick={() => {
+          cryptoTime.current = {
+            time: 7,
+            type: 'day',
+            value: '7d',
+          };
+          handleSetNewCryptoPageData();
+        }}
+      >
+        7 days
+      </button>
+      <button
+        type="button"
+        className={`${cryptoTime.current.value === '30d' ? 'bg-464c51ff' : 'hover:bg-464c51ff hover:shadow-none shadow-effect-3'} transition-all  duration-200 text-[13px] font-normal text-primary py-[5px] px-3 rounded cursor-pointer`} // eslint-disable-line
+        onClick={() => {
+          cryptoTime.current = {
+            time: 30,
+            type: 'day',
+            value: '30d',
+          };
+          handleSetNewCryptoPageData();
+        }}
+      >
+        30 days
+      </button>
+      <button
+        type="button"
+        className={`${cryptoTime.current.value === '12m' ? 'bg-464c51ff' : 'hover:bg-464c51ff hover:shadow-none shadow-effect-3'} transition-all  duration-200 text-[13px] font-normal text-primary py-[5px] px-3 rounded cursor-pointer`} // eslint-disable-line
+        onClick={() => {
+          cryptoTime.current = {
+            time: handdleGetDaysFullYear(new Date().getFullYear()),
+            type: 'day',
+            value: '12m',
+          };
+          handleSetNewCryptoPageData();
+        }}
+      >
+        12 months
+      </button>
+      <button
+        type="button"
+        className={`${cryptoTime.current.value === 'ytd' ? 'bg-464c51ff' : 'hover:bg-464c51ff hover:shadow-none shadow-effect-3'} transition-all  duration-200 text-[13px] font-normal text-primary py-[5px] px-3 rounded cursor-pointer`} // eslint-disable-line
+        onClick={() => {
+          cryptoTime.current = {
+            time: getDaysAgoData(),
+            type: 'day',
+            value: 'ytd',
+          };
+          handleSetNewCryptoPageData();
+        }}
+      >
+        YTD
+      </button>
+    </div>
+  );
 };
 
 const GraphicSkeleton = () => {
